@@ -565,6 +565,124 @@ jobs:
       #       fi
       #     done
 
+      - name: Run GEO endpoint tests (with server)
+        id: run-geo-tests
+        env:
+          SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
+          SITECORE_EDGE_CONTEXT_ID: ${{ secrets.SITECORE_EDGE_CONTEXT_ID }}
+          NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID }}
+          NEXT_PUBLIC_DEFAULT_SITE_NAME: ${{ vars.NEXT_PUBLIC_DEFAULT_SITE_NAME || 'basic' }}
+          SITECORE_EDITING_SECRET: ${{ secrets.SITECORE_EDITING_SECRET }}
+          NEXT_PUBLIC_SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
+          NEXT_PUBLIC_SITECORE_API_KEY: ${{ secrets.NEXT_PUBLIC_SITECORE_API_KEY }}
+          NEXT_PUBLIC_SITECORE_API_HOST: ${{ secrets.NEXT_PUBLIC_SITECORE_API_HOST }}
+          NEXT_PUBLIC_DEFAULT_LANGUAGE: ${{ vars.NEXT_PUBLIC_DEFAULT_LANGUAGE || 'en' }}
+          NEXT_PUBLIC_PERSONALIZE_SCOPE: ${{ vars.NEXT_PUBLIC_PERSONALIZE_SCOPE }}
+          PERSONALIZE_MIDDLEWARE_EDGE_TIMEOUT: ${{ vars.PERSONALIZE_MIDDLEWARE_EDGE_TIMEOUT || '1000' }}
+        run: |
+          echo "Running GEO endpoint tests (site must be running)..."
+          echo "Per-starter site names: skate-park | solterra | alaris | sync (must match build and exist in XM Cloud)"
+
+          # Why site names are hardcoded below: Each starter maps to the canonical Sitecore site name used by that
+          # kit in the All Things JSS / xmcloud-starter-js repo.
+          # GitHub Actions repository variables/secrets usually expose only ONE default NEXT_PUBLIC_DEFAULT_SITE_NAME;
+          # applying that single value to every starter would inline the wrong site into builds and break GEO tests.
+          # Whenever a site name changes in XM Cloud or in this repository, update the case arms to match — do not
+          # rely on the lone repo variable for per-kit site selection.
+
+          # Fully stop the previous Next.js server and free :3000 before starting the next starter
+          # (npm spawns child processes; killing only $! can leave node listening on the port)
+          stop_geo_server() {
+            local pid="${1:-}"
+            echo "Stopping GEO server (pid=${pid:-none})..."
+            if [ -n "$pid" ]; then
+              kill "$pid" 2>/dev/null || true
+              pkill -P "$pid" 2>/dev/null || true
+            fi
+            pkill -f "next start" 2>/dev/null || true
+            sleep 2
+            for i in $(seq 1 20); do
+              if ! curl -sf -o /dev/null --connect-timeout 1 --max-time 3 http://127.0.0.1:3000/ 2>/dev/null; then
+                echo "Port 3000 is free."
+                return 0
+              fi
+              echo "Waiting for port 3000 to be released ($i/20)..."
+              fuser -k 3000/tcp 2>/dev/null || true
+              sleep 2
+            done
+            echo "⚠️ Port 3000 may still be in use; attempting to continue."
+          }
+
+          SERVER_PID=""
+          for starter in examples/kit-nextjs-skate-park examples/kit-nextjs-article-starter examples/kit-nextjs-location-finder examples/kit-nextjs-product-listing; do
+              if [ -d "$starter" ]; then
+                echo "GEO tests for $starter..."
+                cd "$starter"
+  
+                if grep -q '"test:geo"' package.json 2>/dev/null; then
+                  stop_geo_server "$SERVER_PID"
+                  SERVER_PID=""
+
+                  # sync | solterra | alaris | skate-park — must match XM Cloud + All Things JSS kit (see comment above).
+                  case "$starter" in
+                    examples/kit-nextjs-product-listing)
+                      export NEXT_PUBLIC_DEFAULT_SITE_NAME="sync"
+                      ;;
+                    examples/kit-nextjs-article-starter)
+                      export NEXT_PUBLIC_DEFAULT_SITE_NAME="solterra"
+                      ;;
+                    examples/kit-nextjs-location-finder)
+                      export NEXT_PUBLIC_DEFAULT_SITE_NAME="alaris"
+                      ;;
+                    examples/kit-nextjs-skate-park)
+                      export NEXT_PUBLIC_DEFAULT_SITE_NAME="skate-park"
+                      ;;
+                    *)
+                      export NEXT_PUBLIC_DEFAULT_SITE_NAME="${NEXT_PUBLIC_DEFAULT_SITE_NAME:-basic}"
+                      ;;
+                  esac
+                  echo "NEXT_PUBLIC_DEFAULT_SITE_NAME=${NEXT_PUBLIC_DEFAULT_SITE_NAME}"
+                  # npm run start runs build then next:start (kit package.json). Allow time below for build before :3000 is up.
+                  echo "Starting $starter for GEO (npm run start)..."
+                  npm run start &
+                  SERVER_PID=$!
+  
+                  # Wait for server (npm run start runs build first; large starters may need several minutes)
+                  echo "Waiting for server on http://localhost:3000..."
+                  for i in $(seq 1 120); do
+                    if curl -sf -o /dev/null http://localhost:3000 2>/dev/null; then
+                      echo "Server ready."
+                      break
+                    fi
+                    if [ "$i" -eq 120 ]; then
+                      echo "❌ Server did not become ready in time"
+                      stop_geo_server "$SERVER_PID"
+                      exit 1
+                    fi
+                    sleep 5
+                  done
+  
+                  if GEO_BASE_URL=http://localhost:3000 npm run test:geo; then
+                    echo "✅ GEO tests passed for $starter"
+                  else
+                    echo "❌ GEO tests failed for $starter"
+                    stop_geo_server "$SERVER_PID"
+                    SERVER_PID=""
+                    cd ../..
+                    exit 1
+                  fi
+  
+                  stop_geo_server "$SERVER_PID"
+                  SERVER_PID=""
+                else
+                  echo "⏭️ No test:geo script for $starter, skipping"
+                fi
+  
+                cd ../..
+              fi
+            done
+            stop_geo_server "$SERVER_PID"
+
       - name: Create success notification
         if: success()
         run: |
