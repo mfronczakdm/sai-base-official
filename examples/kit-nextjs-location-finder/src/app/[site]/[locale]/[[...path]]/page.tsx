@@ -211,9 +211,12 @@ export const generateMetadata = async ({ params }: PageProps) => {
     ? keywordsString.split(',').map((k: string) => k.trim())
     : [];
 
+  const metadataAuthor = routeFields?.metadataAuthor?.value?.toString() || 'Sitecore';
+
   return {
     title: metadataTitle,
     description: metadataDescription,
+    authors: [{ name: metadataAuthor }],
     ...(keywords.length > 0 && { keywords }),
     ...(canonicalUrl && {
       alternates: {

@@ -42,7 +42,7 @@ const CdpPageView = (): JSX.Element => {
     }
 
     // Skip page view tracking when Edge API is not configured
-    if (!config.api.edge?.clientContextId) {
+    if (!config?.api?.edge?.clientContextId) {
       return;
     }
 

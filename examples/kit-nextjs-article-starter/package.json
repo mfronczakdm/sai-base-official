@@ -157,10 +157,11 @@
     "start": "cross-env-shell NODE_ENV=production npm-run-all --serial build next:start",
     "test": "jest",
     "test:unit": "jest --testPathIgnorePatterns=geo",
-    "test:geo": "jest --testPathPatterns=geo",
+    "test:geo": "jest --testPathPatterns=geo --coverage=false",
     "test:watch": "jest --watch",
     "test:unit:watch": "jest --watch --testPathIgnorePatterns=geo",
-    "test:geo:watch": "jest --watch --testPathPatterns=geo",
+    "test:coverage:unit": "jest --coverage --testPathIgnorePatterns=geo",
+    "test:geo:watch": "jest --watch --testPathPatterns=geo --coverage=false",
     "test:coverage": "jest --coverage"
   }
 }

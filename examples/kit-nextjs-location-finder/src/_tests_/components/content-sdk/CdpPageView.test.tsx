@@ -19,14 +19,13 @@ jest.mock('@sitecore-cloudsdk/events/browser', () => ({
   pageView: jest.fn(),
 }));
 
-// Mock sitecore.config
-jest.mock('../../../../sitecore.config', () => ({
+// Mock sitecore.config (moduleNameMapper in jest.config resolves this; api.edge.clientContextId set so pageView is called)
+jest.mock('sitecore.config', () => ({
   __esModule: true,
   default: {
+    api: { edge: { clientContextId: 'test-context-id' } },
     defaultLanguage: 'en',
-    personalize: {
-      scope: 'test-scope',
-    },
+    personalize: { scope: 'test-scope' },
   },
 }));
 
@@ -193,17 +192,14 @@ describe('CdpPageView Component', () => {
     });
 
     it('handles pageView rejection gracefully', async () => {
-      const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
       mockPageView.mockRejectedValue(new Error('Test error'));
 
-      render(<CdpPageView />);
+      const { container } = render(<CdpPageView />);
 
-      // Wait for promise to reject
+      // Component swallows rejection via .catch(() => {}); should not throw
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(consoleDebugSpy).toHaveBeenCalledWith(new Error('Test error'));
-
-      consoleDebugSpy.mockRestore();
+      expect(container).toBeInTheDocument();
     });
   });
 

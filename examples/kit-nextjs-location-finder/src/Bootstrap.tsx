@@ -13,11 +13,13 @@ const Bootstrap = ({
 }): JSX.Element | null => {
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console -- intentional debug message for development
       console.debug('Browser Events SDK is not initialized in development environment');
       return;
     }
 
     if (isPreviewMode) {
+      // eslint-disable-next-line no-console -- intentional debug message for preview mode
       console.debug('Browser Events SDK is not initialized in edit and preview modes');
       return;
     }
