@@ -5,23 +5,31 @@ import scConfig from 'sitecore.config';
 import Layout from 'src/Layout';
 import Providers from 'src/Providers';
 import { NextIntlClientProvider } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 export default async function NotFound() {
   const { site, locale } = getCachedPageParams();
 
-  const page = await client.getErrorPage(ErrorPage.NotFound, {
-    site: site || scConfig.defaultSite,
-    locale: locale || scConfig.defaultLanguage,
-  });
+  // Set site and locale for dictionary fetching
+  setRequestLocale(`${site || scConfig.defaultSite}_${locale || scConfig.defaultLanguage}`);
 
-  if (page) {
-    return (
-      <NextIntlClientProvider>
-        <Providers page={page}>
-          <Layout page={page} />
-        </Providers>
-      </NextIntlClientProvider>
-    );
+  try {
+    const page = await client.getErrorPage(ErrorPage.NotFound, {
+      site: site || scConfig.defaultSite,
+      locale: locale || scConfig.defaultLanguage,
+    });
+
+    if (page) {
+      return (
+        <NextIntlClientProvider>
+          <Providers page={page}>
+            <Layout page={page} />
+          </Providers>
+        </NextIntlClientProvider>
+      );
+    }
+  } catch (error) {
+    console.error('Error fetching 404 page:', error);
   }
 
   return (

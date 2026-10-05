@@ -10,20 +10,24 @@ function useVisibility(delay = 0): [boolean, MutableRefObject<HTMLDivElement | n
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setVisible(true), delay);
-        } else {
-          setVisible(false);
+          setTimeout(() => {
+            setVisible(true);
+          }, delay);
+
+          if (domRef.current) {
+            observer.unobserve(domRef.current);
+          }
         }
       });
     });
+
     const currentRef = domRef.current;
     if (currentRef) {
       observer.observe(currentRef);
     }
+
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      observer.disconnect();
     };
   }, [delay]);
 

@@ -5,6 +5,9 @@
       "components/*": [
         "src/components/*"
       ],
+      "shadcd/*": [
+        "shadcn/*"
+      ],
       "lib/*": [
         "src/lib/*"
       ],
@@ -14,13 +17,27 @@
       "assets/*": [
         "src/assets/*"
       ],
+      "enumerations/*": [
+        "src/enumerations/*"
+      ],
+      "types/*": [
+        "src/types/*"
+      ],
       ".sitecore/*": [
         ".sitecore/*"
+      ],
+      "next/*": [
+        "node_modules/next/*"
+      ],
+      "@/*": [
+        "./src/*"
       ]
     },
     "target": "ES2017",
     "types": [
-      "node"
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
     ],
     "lib": [
       "dom",

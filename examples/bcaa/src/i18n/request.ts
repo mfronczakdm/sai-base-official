@@ -14,12 +14,11 @@ export default getRequestConfig(async ({ requestLocale }: GetRequestConfigParams
   const [parsedSite, parsedLocale] = requested?.split('_') || [];
   const locale = hasLocale(routing.locales, parsedLocale) ? parsedLocale : routing.defaultLocale;
 
-  const messages: Record<string, object> = {};
-  messages[parsedSite] = await client.getDictionary({
+  const messages = await client.getDictionary({
     locale,
     site: parsedSite,
   });
-
+  
   return {
     locale,
     messages,

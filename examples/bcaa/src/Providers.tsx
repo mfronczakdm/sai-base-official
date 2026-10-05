@@ -1,12 +1,25 @@
 'use client';
 import React from 'react';
-import { Page, SitecoreProvider } from '@sitecore-content-sdk/nextjs';
-import { ParallaxProvider } from 'react-scroll-parallax';
+import {
+  ComponentPropsCollection,
+  ComponentPropsContext,
+  Page,
+  SitecoreProvider,
+} from '@sitecore-content-sdk/nextjs';
 import scConfig from 'sitecore.config';
 import components from '.sitecore/component-map.client';
-import { SiteTheme } from 'components/utilities/SiteTheme';
+import { ThemeProvider } from '@/components/theme-provider/theme-provider.dev';
+import { VideoProvider } from './contexts/VideoContext';
 
-export default function Providers({ children, page }: { children: React.ReactNode; page: Page }) {
+export default function Providers({
+  children,
+  page,
+  componentProps = {},
+}: {
+  children: React.ReactNode;
+  page: Page;
+  componentProps?: ComponentPropsCollection;
+}) {
   return (
     <SitecoreProvider
       api={scConfig.api}
@@ -14,10 +27,19 @@ export default function Providers({ children, page }: { children: React.ReactNod
       page={page}
       loadImportMap={() => import('.sitecore/import-map.client')}
     >
-      <ParallaxProvider>
-        <SiteTheme siteName={page.siteName} />
-        {children}
-      </ParallaxProvider>
-    </SitecoreProvider>
+      <ComponentPropsContext value={componentProps}>
+          <VideoProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              forcedTheme="light"
+              enableSystem={false}
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </VideoProvider>
+        </ComponentPropsContext>
+      </SitecoreProvider>
   );
 }

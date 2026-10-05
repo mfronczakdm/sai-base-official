@@ -1,39 +1,65 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
-const path = require('path');
-const SassAlias = require('sass-alias');
 
 const nextConfig: NextConfig = {
-  // Enable Turbopack file system caching for faster dev startup (beta)
-  // See: https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-  },
+  // Allow specifying a distinct distDir when concurrently running app in a container
+  distDir: process.env.NEXTJS_DIST_DIR || '.next',
 
-  turbopack: {
-    resolveAlias: {
-      // Bootstrap's `@import "progress"` otherwise hits the npm `progress` package.
-      progress: path.join(process.cwd(), 'node_modules/bootstrap/scss/_progress.scss').replace(/\\/g, '/'),
-    },
-  },
+  productionBrowserSourceMaps: process.env.GENERATE_SOURCEMAP === 'true',
+  
+  // Enable React Strict Mode
+  reactStrictMode: true,
+
+  // Disable the X-Powered-By header. Follows security best practices.
+  poweredByHeader: false,
+
+  // Enable compression
+  compress: true,
 
   // use this configuration to ensure that only images from the whitelisted domains
   // can be served from the Next.js Image Optimization API
   // see https://nextjs.org/docs/app/api-reference/components/image#remotepatterns
   images: {
     remotePatterns: [
-	  {
+      {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'edge*.**',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'xmc-*.**',
+        port: '',
       },
     ],
+    // Optimize image sizes for responsive loading
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Enable modern image formats
+    formats: ['image/avif', 'image/webp'],
+    // Disable image optimization in development to avoid upstream timeouts
+    unoptimized: process.env.NODE_ENV === 'development',
   },
-  // use this configuration to serve the sitemap.xml and robots.txt files from the API route handlers
+  
+  // Sitemap, robots, and AI JSON endpoints via rewrites; handlers live under app/api/
   rewrites: async () => {
     return [
       {
-        source: '/sitemap:id([\\w-]{0,}).xml',
+        // sitemap.xml serves the main sitemap
+        source: '/sitemap.xml',
         destination: '/api/sitemap',
+        locale: false,
+      },
+      {
+        // Numbered sitemap index pages (e.g. /sitemap-0.xml, /sitemap-1.xml)
+        source: '/sitemap-:id(\\d+).xml',
+        destination: '/api/sitemap',
+        locale: false,
+      },
+      {
+        // LLM-optimized sitemap for AI crawler ingestion
+        source: '/sitemap-llm.xml',
+        destination: '/api/sitemap-llm',
         locale: false,
       },
       {
@@ -41,29 +67,39 @@ const nextConfig: NextConfig = {
         destination: '/api/robots',
         locale: false,
       },
+      {
+        source: '/llms.txt',
+        destination: '/api/llms-txt',
+        locale: false,
+      },
+      {
+        source: '/ai/summary.json',
+        destination: '/api/ai/summary',
+        locale: false,
+      },
+      {
+        source: '/ai/faq.json',
+        destination: '/api/ai/faq',
+        locale: false,
+      },
+      {
+        source: '/ai/service.json',
+        destination: '/api/ai/service',
+        locale: false,
+      },
+      {
+        source: '/ai/markdown/:path*',
+        destination: '/api/ai/markdown/:path*',
+        locale: false,
+      },
+      {
+        source: '/.well-known/ai.txt',
+        destination: '/api/well-known/ai-txt',
+        locale: false,
+      },
     ];
-  },
-
-  sassOptions: {
-    loadPaths: [
-      // Bootstrap must come before node_modules so `@import "progress"`
-      // resolves to bootstrap/scss/_progress.scss, not the npm `progress` package.
-      path.join(process.cwd(), 'node_modules/bootstrap/scss'),
-      process.cwd(),
-      path.join(process.cwd(), 'src/assets/sass/abstracts'),
-      path.join(process.cwd(), 'node_modules'),
-    ],
-    importer: new SassAlias({
-      '@globals': path.join(process.cwd(), './src/assets', 'globals'),
-      '@fontawesome': path.join(process.cwd(), './node_modules', 'font-awesome'),
-      '@vars': path.join(process.cwd(), './src/assets/sass/abstracts'),
-    }).getImporter(),
-    // temporary measure until new versions of bootstrap and font-awesome released
-    quietDeps: true,
-    silenceDeprecations: ['import', 'legacy-js-api'],
   },
 };
 
 const withNextIntl = createNextIntlPlugin();
-
 export default withNextIntl(nextConfig);
