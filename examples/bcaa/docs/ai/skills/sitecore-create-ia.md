@@ -9,6 +9,7 @@ Use this skill when the user asks to:
 - "create IA", "create information architecture", "build the site tree", "create pages from IA"
 - create a hierarchy of page/content items under a Sitecore site
 - populate a content tree from a markdown tree spec (e.g. `docs/ai/ia/rockland-ia.md`)
+- fill each new page's rich text **`Content`** field from a supplied live site URL
 
 To **extract** IA from a live website into that markdown file first, use **`get-site-ia`**.
 
@@ -40,6 +41,7 @@ Do **not** start creating items until all required inputs are confirmed. Ask for
 | **Folder template ID** | If folders exist | Template ID for folder nodes (e.g. `shared`). Required when the tree includes non-page containers. |
 | **Default item fields** | Optional | Array of `{ name, value }` applied to every **page** on create. User provides field names and values; validate against template via `get_page_template_by_id`. |
 | **Language** | Optional | Language code for create/read operations. Default: `en`. |
+| **Site URL** | When body copy is wanted | Public site origin, e.g. `https://www.bcaa.com`. Take it from the user or from the IA spec `Source:` line. When present, every created page's rich text **`Content`** field is filled from the matching live page. Do not create title-only pages while a URL is available. |
 
 ### Optional per-node overrides
 The user may specify in the IA spec or separately:
@@ -113,8 +115,8 @@ IA creation progress:
 - [ ] Step 1: Verify MCP + site
 - [ ] Step 2: Resolve content root
 - [ ] Step 3: Validate templates + default fields
-- [ ] Step 4: Parse IA tree
-- [ ] Step 5: Create items (depth-first, parent before child)
+- [ ] Step 4: Parse IA tree and map each node to a live URL
+- [ ] Step 5: Create items (depth-first, parent before child) with Content HTML
 - [ ] Step 6: Update manifest
 - [ ] Step 7: Present summary
 ```
@@ -128,6 +130,7 @@ Collect and restate:
 4. Page template ID (+ folder template ID if needed)
 5. Default fields (if any)
 6. Language (default `en`)
+7. Site URL (user message, or the IA spec `Source:` line). If neither exists, ask before creating. Title-only creates are only for an explicit "titles only" request.
 
 If the user provides a template **name** instead of GUID, resolve it via MCP before proceeding.
 
@@ -147,7 +150,8 @@ If the user provides a template **name** instead of GUID, resolve it via MCP bef
 1. Call `get_page_template_by_id` with the page template ID. Note available field names.
 2. If folder nodes exist, resolve and note the folder template ID.
 3. Validate every **default field** name exists on the page template. Drop or flag unknown fields; ask the user if any required field is missing.
-4. Format default field values per field type (see MCP reference).
+4. Confirm whether the template has a rich text field named **`Content`**. The Page template `{3E1A16A3-1EB9-4EB9-941C-9B0F081A5D76}` does: `Content` is rich text, and `src/components/sxa/PageContent.tsx` renders it. An empty value shows the placeholder `[Content]`.
+5. Format default field values per field type (see MCP reference). Rich text values are HTML fragments, not XML and not plain text.
 
 ### Step 4 — Parse IA tree
 
@@ -158,7 +162,8 @@ If the user provides a template **name** instead of GUID, resolve it via MCP bef
    - the `shared` folder (unless user specifies otherwise)
    - any node the user identifies as a folder-only container
 4. Build the full Sitecore path for each node: `contentRootPath` + `/` + ancestor segments.
-5. Present a **creation plan** (count, depth, shared folder location) and confirm with the user before creating.
+5. When a site URL is in scope, map every node to a live URL before creating anything. See [Content population from live site](#content-population-from-live-site).
+6. Present a **creation plan** (count, depth, shared folder location, how many nodes have a resolved URL) and confirm with the user before creating.
 
 ### Step 5 — Create items (depth-first)
 
@@ -184,7 +189,8 @@ For each node:
    - **Page (alternate):** `create_page` — pass `fields` as a single object in the array: `[{ pageTitle: "...", pageShortTitle: "...", ... }]`. Do **not** use `{ name, value }` pairs with `create_page` (API error: "Cannot find a field with the name name").
    - **Folder:** `create_content_item({ templateId: folderTemplateId, parentId, name: itemName, language, fields })`
    - Merge **default fields** + any **per-node field overrides** into the `fields` array.
-   - Populate content from the **client website** when asked (see [Content population from live site](#content-population-from-live-site)).
+   - When a site URL is in scope and the template has **`Content`**, include `{ name: "Content", value: "<html fragment>" }` from the mapped live page. A user default that sets `Content` to empty must not wipe that HTML.
+   - Services Page templates that have **`Detail`** and no `Content` still use `Detail` for the body (see field map below). If both fields exist, fill **`Content`**.
 
 5. **Verify**
    - Call `get_content_item_by_id` on the returned ID.
@@ -215,6 +221,7 @@ Follow `sitecore-maintain-manifest.md`:
 Show the user:
 - Total items created vs skipped (already existed)
 - Table of created items: display name, item name, full path, item ID
+- How many pages have a non-empty `Content` value on read-back, and which nodes fell back or stayed empty
 - Any failures or insert-option blocks
 - Reminder: shared items live once under `/Home/shared/` (or as specified); wire navigation links separately if needed
 - Next steps: publish, add components to pages, configure navigation
@@ -258,7 +265,8 @@ If `Title` or `NavigationTitle` is empty, set it to the node's display label aft
 | Short title | `pageShortTitle` |
 | Subtitle | `pageSubtitle` |
 | Summary | `pageSummary` |
-| Detail / body | `Detail` (rich text HTML) |
+| Detail / body (Services Page) | `Detail` (rich text HTML) |
+| Body (Page template) | `Content` (rich text HTML) |
 | Image | `image` |
 
 Also set when populating from a live site: `metadataTitle`, `metadataDescription`, `ogTitle`, `ogDescription`.
@@ -283,19 +291,54 @@ When DAM credentials are unavailable:
 
 ## Content population from live site
 
-When the user asks to populate fields from the client site (not empty stubs):
+When a site URL is supplied — in the user message or as the IA spec `Source:` line — fill **`Content`** on every created page from that site. The Page Content rendering shows this field. A title with an empty `Content` value is a stub, and the component prints `[Content]`.
 
-1. Map each IA node to a best-guess URL (`/{kebab}/`, section hubs). **Validate URLs** — live sites often differ from intuition (Quanex uses `/product/` not `/products/`).
-2. Fetch each URL; extract `og:description` / meta description, `<h1>`, `<title>`, `og:image`, and a first meaningful `<p>`.
-3. Build fields:
-   - `pageTitle` / `pageHeaderTitle` ← h1 or label
-   - `pageShortTitle` ← IA label
-   - `pageSubtitle` ← short phrase from description (≤ ~120 chars)
-   - `pageSummary` ← description (≤ ~400 chars)
-   - `Detail` ← `<p>…</p>` plus optional `<p><a href="…">Learn more on …</a></p>`
-   - `image` ← og:image XML (or brand fallback)
-4. For 404s, retry alternate paths or fall back to parent-section copy + label — never invent unrelated marketing claims.
-5. Parallelize **sibling** creates after the parent ID is known (batches of ~5–6 MCP calls). Always create depth-first (parent before child).
+Skip live copy only when the user explicitly asks for titles only.
+
+### Map each node to a real URL first
+
+IA trees often nest items that are siblings on the live site (BCAA plan tiers live beside `/membership/plans`, not under it). Guessing `/{kebab}/` from the label produces 404s.
+
+1. Fetch the homepage with a normal browser user agent. Some sites (BCAA) return a 500 redirect without one.
+2. Collect nav `href`s and their link text. Prefer an exact label match.
+3. Fetch `sitemap.xml` (follow a sitemap index). Normalize double slashes (`/products//…` → `/products/…`).
+4. Match remaining nodes by slug against the sitemap. Record the URL on the node.
+5. If nothing matches, leave that node's `Content` empty and list it in the summary. Do not invent a path or paste a sibling page and pretend it is this page.
+
+### What goes in `Content`
+
+`Content` is rich text. The value is an HTML fragment, the same shape an author would paste into the rich text editor.
+
+Fetch the mapped URL and keep the copy a visitor reads in the main column:
+
+- Intro and the sections under it: `h2`, `h3`, `p`, `ul` / `ol` / `li`, `a`, `strong`, `em`
+- In-content links, rewritten to absolute URLs on the source site
+- Enough of the page to be useful on its own — typically the intro plus the next sections — then stop
+
+Leave out chrome that is not the page body: header, mega-menu, footer, cookie banner, scripts, styles, tracking pixels, quote widgets, and "related" carousels. Do not paste the raw document. Do not repeat the H1 when `Title` / `pageTitle` already carry it.
+
+Cap the fragment around 8–12 blocks or roughly 6,000 characters. Close with `<p><a href="{source url}">Read more on {site name}</a></p>` when the live page continues past what you stored. That keeps the field meaningful without dumping the whole page into Sitecore.
+
+Also set, from the same fetch:
+
+- `pageTitle` / `pageHeaderTitle` / `Title` ← h1, or the IA label when the h1 is empty
+- `pageShortTitle` / `navigationTitle` ← IA label
+- `pageSubtitle` ← a short phrase from the description (≤ ~120 chars), when the template has the field
+- `pageSummary` / `metadataDescription` ← the meta or og description (≤ ~400 chars), when those fields exist
+- Services Page `Detail` ← the same HTML fragment, only when the template has `Detail` and no `Content`
+- `image` ← og:image XML when the template has an image field and the user asked for images
+
+### When the page is missing or thin
+
+- HTTP 404, or a soft 200 whose h1 says the page was not found: do not store that error page. Try one alternate path from the sitemap. If that fails, leave `Content` empty and say so.
+- A page that is only a form or a login wall: store the short intro above the form, plus the source link. Do not invent product claims to fill the gap.
+- Parent-section copy is a last resort, and the summary must say the body came from the parent, not from this URL.
+
+### Write and verify
+
+Send `Content` on `create_content_item` (or `update_fields_on_item` if the item already exists and the user asked to fill it). Then `get_content_item_by_id`. The Page template echoes `Title` and the `page*` title fields. If `Content` comes back empty, the write did not stick — retry once and mark it pending if it is still empty.
+
+Parallelize **sibling** fetches and creates after the parent ID is known (batches of ~5–6 MCP calls). Always create depth-first (parent before child).
 
 ### Item naming
 
@@ -314,6 +357,9 @@ When the user asks to populate fields from the client site (not empty stubs):
 | 2026-08-11 | amesburytruth | Same Services Page insert-option gap + silent page*/metadata*/og*; 81 pages under `/sitecore/content/quanex/amesburytruth/Home`. Live URLs: `/products/windows|doors|weatherseals|extrusions/...` (sitemap may list `/products//…` with double slash). Sanitize `/` in item names (`Casement Awning`, `Hung Sliding`). Brand og:image fallback `https://www.amesburytruth.com/img/fb-post.png`. Soft-200 404s exist (e.g. hung/keepers) — check h1 for "404 Page Not Found" and fall back to parent copy. |
 | 2026-08-25 | amkor | 99 Services Pages under `/sitecore/content/amkor/amkor/Home`. Services Page `{B2B918C3-...}` absent from Home insert options (Article/Audio/Detail/Landing/Product/Page Folder) but `create_content_item` succeeded. MCP silent for page*/metadata*/og*; Detail confirmed. XM Cloud `ItemNameValidation` `^[\w\*\$][\w\s\-\$]*(\(\d{1,}\)){0,1}$` rejects `.` `+` `/` `®` `™` and non-digit parentheses — sanitize item names, keep original labels in pageTitle. Titles from IA names only (no live scrape). Starter Data/Speakers/Video left untouched. Items created in Draft workflow. |
 | 2026-08-25 | lcmc | Live For Patients "Communication and Translation" maps to UMC page `/university-medical-center-new-orleans/patients-visitors/communication-translation/` (no system-level `/for-patients/...` URL). Touro sibling: `/touro/patients-visitors/translation/`. External image XML `<image src="https://www.lcmchealth.org/images/content/Female-patient.jpg" alt="..." />` accepted; no `credentials.local.yaml` so skip DAM. MCP echoes Detail+image only; send page*/metadata*/og* anyway. Test pattern approved for remaining pages only after this item is reviewed. |
+| 2026-10-05 | bcaa | 104 Page items `{3E1A16A3-1EB9-4EB9-941C-9B0F081A5D76}` under `/sitecore/content/bcaa/bcaa/Home`. Page was absent from Home insert options (Article/Audio Product/Detail/Landing/Product/Page Folder) but `create_content_item` succeeded. Unlike Services Page, this Page template echoes `Title`, `pageTitle`, `pageHeaderTitle`, `pageShortTitle`, and `navigationTitle` on read-back. `&` in item names must be spelled `and` (`Health and Dental`). Titles only; no live-site body copy. Starter Data/Speakers/Video left untouched. Items created in Draft. |
+| 2026-10-05 | bcaa | Page template field `Content` is rich text (`get_page_template_by_id`). `PageContent` renders it; empty values show `[Content]`. When a site URL is supplied, create-ia fills `Content` with a cleaned HTML fragment from the matching live page, not a single teaser paragraph and not the raw document. |
+| 2026-10-05 | bcaa | `update_fields_on_item` wrote `Content` on all 104 Page items and MCP read-back echoed the HTML (Membership, Life, School Safety Patrol). Map URLs from nav and sitemap, not from the Sitecore path. `/insurance/travel/trip-cancellation` and `/insurance/small-business/claim` are form shells with no article body. |
 
 ---
 
@@ -323,7 +369,9 @@ When the user asks to populate fields from the client site (not empty stubs):
 - [ ] Content root path resolved via `get_content_item_by_path`
 - [ ] Page template validated via `get_page_template_by_id`
 - [ ] Default fields validated against template
-- [ ] IA tree parsed; creation plan confirmed with user
+- [ ] IA tree parsed; each node mapped to a live URL when a site URL was supplied
+- [ ] `Content` set from that page's body HTML and confirmed on read-back (or listed as empty with a reason)
+- [ ] Creation plan confirmed with user
 - [ ] Items created depth-first; parents before children
 - [ ] Insert options checked before each create
 - [ ] Existing items skipped (not duplicated)
@@ -339,4 +387,6 @@ When the user asks to populate fields from the client site (not empty stubs):
 - Do not guess template IDs or parent item IDs — always resolve via MCP.
 - Do not duplicate shared content under multiple sections.
 - Do not invent pages not listed in the IA spec.
+- Do not invent body copy. `Content` comes from the mapped live page, or it stays empty and the summary says why.
+- Do not leave `Content` empty when a site URL was supplied and the page fetch succeeded.
 - Do not claim success for items that were not verified via MCP read-back.

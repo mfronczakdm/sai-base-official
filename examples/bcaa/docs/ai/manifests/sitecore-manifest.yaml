@@ -4001,6 +4001,155 @@ demoContent:
 
 # Information architecture / page creation batches
 ia:
+  - name: "bcaa-ia-tree"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-05T21:45:00Z"
+    updatedAt: "2026-10-05T22:40:00Z"
+    siteName: "bcaa"
+    contentRootPath: "/sitecore/content/bcaa/bcaa/Home"
+    contentRootItemId: "{CF3083CE-4EAB-4BC1-8E3E-202C02C9D1C3}"
+    pageTemplateId: "{3E1A16A3-1EB9-4EB9-941C-9B0F081A5D76}"
+    pageTemplateName: "Page"
+    iaSource: "docs/ai/ia/bcaa-ia.md"
+    sourceSite: "https://www.bcaa.com/"
+    createdCount: 104
+    skippedCount: 0
+    failedCount: 0
+    notes: >
+      Created 104 Page items under /sitecore/content/bcaa/bcaa/Home from bcaa-ia.md
+      (13 L1, 44 L2, 47 L3). Titles only: Title, pageTitle, pageHeaderTitle,
+      pageShortTitle, navigationTitle set to the IA label. Membership read-back
+      confirmed those fields. Page was not in Home insert options (Article, Audio
+      Product, Detail, Landing, Product, Page Folder); create_content_item still
+      succeeded. Item name "Health & Dental" sanitized to "Health and Dental".
+      Starter Data, Speakers, and Video left untouched. Items are in Draft workflow.
+      2026-10-05 content pass: Content rich text filled from https://www.bcaa.com/
+      for all 104 pages. HTML is headings, paragraphs, and lists from the matching
+      live page, plus a source link. Membership, Life, and School Safety Patrol
+      read-backs returned non-empty Content. Trip Cancellation and Small Business
+      Claim have no article on the live site (form shells); Content says so and
+      links to the form.
+    verification:
+      checkedAt: "2026-10-05T22:40:00Z"
+      passed:
+        - "list_sites confirmed site bcaa"
+        - "Home resolved at /sitecore/content/bcaa/bcaa/Home"
+        - "Template Page {3E1A16A3-1EB9-4EB9-941C-9B0F081A5D76} validated"
+        - "Membership read-back: Title, pageTitle, pageHeaderTitle, pageShortTitle, navigationTitle = Membership; five children present"
+        - "Content read-back non-empty on Membership, Life, and School Safety Patrol"
+      failed: []
+      pendingManual:
+        - "Add Page to Home insert options so authors can create siblings in Content Editor"
+        - "Publish the new pages for Edge"
+        - "Wire navigation separately; this tree does not place components"
+    items:
+      - { name: "Membership", itemId: "{6BF8F32B-3C6F-4751-9104-E5FF3B11C195}", path: "/sitecore/content/bcaa/bcaa/Home/Membership" }
+      - { name: "Plans", itemId: "{A12CBB20-B5CB-4A0E-8598-4A15CB93EF83}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Plans" }
+      - { name: "Basic", itemId: "{5F883052-23D0-4109-8188-58847FEDCE08}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Plans/Basic" }
+      - { name: "Plus", itemId: "{70A7FDF4-71BC-453C-A570-65FEF47FB915}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Plans/Plus" }
+      - { name: "Premier", itemId: "{5459863B-0ACD-480B-9EF0-50F241E8D88A}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Plans/Premier" }
+      - { name: "Go", itemId: "{63CFBE5A-DB38-40D2-BF06-E866D80C2470}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Plans/Go" }
+      - { name: "Ways to Save", itemId: "{3390420C-357D-49C0-BCA3-40B4DD3ED77F}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Ways to Save" }
+      - { name: "Manage Membership", itemId: "{70C13551-7C50-4792-95E0-599005047DE0}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Manage Membership" }
+      - { name: "Mobile App", itemId: "{110E0CE0-F47A-41F8-AAC2-D6329D19AAC5}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Mobile App" }
+      - { name: "Join", itemId: "{BBF62BA8-0DBB-4440-BE45-B308745C6FFD}", path: "/sitecore/content/bcaa/bcaa/Home/Membership/Join" }
+      - { name: "Insurance", itemId: "{B34B7E61-1448-4EE0-83EC-18891055D7D2}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance" }
+      - { name: "Home", itemId: "{0002C758-589F-405E-AF6A-8CCA1B23F8DA}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home" }
+      - { name: "Homeowners", itemId: "{E9A4CF89-0FB2-4593-AB42-CA79D2F601E1}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Homeowners" }
+      - { name: "Condo or Townhouse", itemId: "{DBE23ED4-DE23-462E-8D6D-A81E78ED1D41}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Condo or Townhouse" }
+      - { name: "Renters", itemId: "{C25F0EC8-3405-48EA-8EF6-0B84E929DB17}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Renters" }
+      - { name: "Landlord", itemId: "{5D505E77-566E-4D3F-B037-279BD8A35DE2}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Landlord" }
+      - { name: "Mobile Home", itemId: "{C6AFEE0D-53C2-4E09-AD72-8AE5E94664CB}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Mobile Home" }
+      - { name: "Residential Strata", itemId: "{E4FD95AF-DFAB-4F45-BDE7-59D7B5E46A5D}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Residential Strata" }
+      - { name: "Vacation Property", itemId: "{E1D2EDCF-2AD2-4B77-842F-C409122C7B79}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Vacation Property" }
+      - { name: "Home Insurance Claims", itemId: "{319F050C-7FAF-4F2D-B077-C7E791A592F7}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home/Home Insurance Claims" }
+      - { name: "Car", itemId: "{E96F88EF-43C1-4542-A59C-23077E420ADA}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car" }
+      - { name: "BCAA Optional Car Insurance", itemId: "{A1A17E81-98D2-40BC-BA73-ACA6477285F9}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/BCAA Optional Car Insurance" }
+      - { name: "Car Insurance 101", itemId: "{A8BEAFEF-CCD7-4E3E-BC4F-8932B63DB27E}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/Car Insurance 101" }
+      - { name: "ICBC Autoplan", itemId: "{78755BA6-DFB8-4519-88F6-09254C30674F}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/ICBC Autoplan" }
+      - { name: "Motorcycle Insurance", itemId: "{6BBE9B68-0F49-4705-97EE-3B73F63FEDE0}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/Motorcycle Insurance" }
+      - { name: "RV Insurance", itemId: "{5B796D54-AE84-4479-9FF5-10AE1BFC0C90}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/RV Insurance" }
+      - { name: "Travel", itemId: "{91F51DCE-D53C-487E-A6DA-BEC0A75220B7}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel" }
+      - { name: "Emergency Medical", itemId: "{1761958F-CB60-428C-8021-4EAB84191F12}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel/Emergency Medical" }
+      - { name: "Trip Cancellation", itemId: "{68CD01E0-A13F-4F75-85D8-DC0DFE054A2B}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel/Trip Cancellation" }
+      - { name: "Trip Protection Coverage", itemId: "{E26B89A6-0C24-4733-8782-4BE0AA6C5B11}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel/Trip Protection Coverage" }
+      - { name: "Travel Delay", itemId: "{2A3102DF-D8DF-4157-AB8F-6FA203B5ED6E}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel/Travel Delay" }
+      - { name: "Visitors to Canada", itemId: "{A77C2635-78DE-4196-9C59-64C76A31CEF4}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel/Visitors to Canada" }
+      - { name: "Small Business", itemId: "{15F7EC9C-6EFA-449F-B8E9-02A749A625BF}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Small Business" }
+      - { name: "Businesses We Cover", itemId: "{03599625-4499-4369-9F60-346BE85A5852}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Small Business/Businesses We Cover" }
+      - { name: "Claim", itemId: "{7409A754-679E-497F-A41F-6635B1AF3ADC}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Small Business/Claim" }
+      - { name: "FAQ", itemId: "{BDB1B592-FDE5-43C4-B20D-4CF0F55CE0CD}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Small Business/FAQ" }
+      - { name: "Life", itemId: "{41D1D1AF-AA2C-4F7B-AFA5-F8B54596A887}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Life" }
+      - { name: "Term Life", itemId: "{B334004C-EE9F-4873-8342-F4280DA707D6}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Life/Term Life" }
+      - { name: "Critical Illness", itemId: "{A3816B5F-4BC2-42CF-A800-1D60A2F91869}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Life/Critical Illness" }
+      - { name: "Health and Dental", itemId: "{07E86BC8-4B31-4587-B4C9-21BBAE389C76}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Health and Dental" }
+      - { name: "Pet", itemId: "{835D5B2D-0B5B-4B5B-A50F-997748499222}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Pet" }
+      - { name: "Policy Wordings", itemId: "{DA502E60-788F-47DD-BEDF-27EC597BB26C}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Policy Wordings" }
+      - { name: "Claims", itemId: "{E1794FBB-3F0D-401F-A4DA-F84987DC2FD4}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Claims" }
+      - { name: "Underwriters", itemId: "{18B070C4-6EB5-44A1-9BBF-E5272F20EDEC}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Underwriters" }
+      - { name: "Disclosures", itemId: "{EDF4388A-4DD6-4694-B591-D84C2735F502}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Disclosures" }
+      - { name: "Commitment", itemId: "{D48F10BF-1A08-4C79-A00E-ECAB863EE40E}", path: "/sitecore/content/bcaa/bcaa/Home/Insurance/Commitment" }
+      - { name: "Automotive", itemId: "{5CD7A3CA-8858-4EFE-AE87-E0D1B0D33896}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive" }
+      - { name: "BCAA Auto Service Centres", itemId: "{25B2A392-D531-4381-A96D-EFC882EF5F92}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/BCAA Auto Service Centres" }
+      - { name: "Member Perks", itemId: "{63F07CF8-E9BD-4089-9761-0DBE0EC0A34B}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/BCAA Auto Service Centres/Member Perks" }
+      - { name: "Vehicle Inspections", itemId: "{A39526A4-1B24-4AF8-A23D-E77506153C1A}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/BCAA Auto Service Centres/Vehicle Inspections" }
+      - { name: "Warranty", itemId: "{DBB1F407-4708-4C8D-ADC0-898C80D8583D}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/BCAA Auto Service Centres/Warranty" }
+      - { name: "Evo Car Share", itemId: "{0759F6F2-FC63-4B46-8EBE-3C58F6FBB7F5}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Evo Car Share" }
+      - { name: "Black Book", itemId: "{32C805E7-5592-4FCF-AD3C-BA6E6E61508B}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Black Book" }
+      - { name: "Approved Auto Repair", itemId: "{CCC511C3-41B6-4DFC-8CE3-E83112DD89CF}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Approved Auto Repair" }
+      - { name: "Battery Service", itemId: "{C481BAB2-860B-49A3-AEE4-191B4E770218}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Battery Service" }
+      - { name: "AGM Batteries", itemId: "{AA954DE4-B3EA-4ED0-ACF1-F231E63813A4}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Battery Service/AGM Batteries" }
+      - { name: "Electric Vehicles", itemId: "{09D76416-D6E1-41F7-B592-6F8C653915F4}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Electric Vehicles" }
+      - { name: "Electric Vehicles in Canada", itemId: "{A03F71E0-E006-4A99-9220-C889E9FF9392}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Electric Vehicles/Electric Vehicles in Canada" }
+      - { name: "Engine Options", itemId: "{FE86C1CD-AE4E-4338-969C-9276A915A170}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Electric Vehicles/Engine Options" }
+      - { name: "Rebates and Incentives", itemId: "{39FEBB69-2931-4864-A722-390838885615}", path: "/sitecore/content/bcaa/bcaa/Home/Automotive/Electric Vehicles/Rebates and Incentives" }
+      - { name: "Marketplace", itemId: "{8FD26C3B-904E-4496-9E19-2966C2B659F5}", path: "/sitecore/content/bcaa/bcaa/Home/Marketplace" }
+      - { name: "Task Marketplace", itemId: "{51D5BB1E-79B1-46C4-8846-125A9B3515B2}", path: "/sitecore/content/bcaa/bcaa/Home/Marketplace/Task Marketplace" }
+      - { name: "Auto Marketplace", itemId: "{7C8E23FD-7ED0-4907-BDEB-ED127815F030}", path: "/sitecore/content/bcaa/bcaa/Home/Marketplace/Auto Marketplace" }
+      - { name: "Impact", itemId: "{BCFED7AE-1C7E-4175-8AA7-804ED4B5453E}", path: "/sitecore/content/bcaa/bcaa/Home/Impact" }
+      - { name: "Wildfire Resilience", itemId: "{9A732990-0FB8-4500-B733-6F2E64950D84}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Wildfire Resilience" }
+      - { name: "FireSmart BC", itemId: "{A903C6AE-D720-4CE9-985C-18863A218E3B}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Wildfire Resilience/FireSmart BC" }
+      - { name: "Fireweed", itemId: "{B9CB6480-C8E4-4E62-943E-E8D2E9051058}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Wildfire Resilience/Fireweed" }
+      - { name: "Protecting Heroes", itemId: "{71E372F5-110C-4655-9D66-9285DF13B58D}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Wildfire Resilience/Protecting Heroes" }
+      - { name: "Reforestation", itemId: "{A051B6BE-4462-4311-9B19-AE52A35ADCB0}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Wildfire Resilience/Reforestation" }
+      - { name: "Road Safety", itemId: "{7D7CA616-D6D6-4D15-83B7-F000C39DDA18}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Road Safety" }
+      - { name: "Child Passenger Safety", itemId: "{073CB99E-A41C-4E12-B4B4-39C5266F03E5}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Road Safety/Child Passenger Safety" }
+      - { name: "Distracted Driving", itemId: "{784035AD-B788-4390-811B-4F936EBFA94D}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Road Safety/Distracted Driving" }
+      - { name: "School Safety Patrol", itemId: "{CDE5B5E9-23C1-452E-B3F3-8487074DCB58}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Road Safety/School Safety Patrol" }
+      - { name: "Slow Down Kids Playing", itemId: "{9264CDAD-0728-4239-B490-E2806D00A9A6}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Road Safety/Slow Down Kids Playing" }
+      - { name: "Giving Back", itemId: "{C74338AB-0D24-4394-B09C-623417DF1BCA}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Giving Back" }
+      - { name: "Earthquake Alliance BC", itemId: "{C80AC84B-D894-4703-BC86-306500512091}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Giving Back/Earthquake Alliance BC" }
+      - { name: "HUB Cycling", itemId: "{75F9DA82-D2F3-42EB-B8C4-2733C4C48FE2}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Giving Back/HUB Cycling" }
+      - { name: "United Way", itemId: "{34F272EC-9852-4077-853F-93F74602D67F}", path: "/sitecore/content/bcaa/bcaa/Home/Impact/Giving Back/United Way" }
+      - { name: "BCAA Connect", itemId: "{FAE32285-A504-4A77-AFE4-1777C0307D2A}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Connect" }
+      - { name: "Community Guidelines", itemId: "{A3C09ADE-31CE-477A-85E1-41456D27448E}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Connect/Community Guidelines" }
+      - { name: "BCAA Blog", itemId: "{77866688-BF56-4708-B308-14D3996B9585}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog" }
+      - { name: "Trip Planning", itemId: "{2D54CB90-0F6A-4AD3-802B-44B91E92C004}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning" }
+      - { name: "International Driving Permit", itemId: "{64966BF5-B463-4D91-9FAB-4BC858F96B54}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning/International Driving Permit" }
+      - { name: "Passport Photos", itemId: "{70E58CAA-2A1C-4158-9073-0C4EA1A4942B}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning/Passport Photos" }
+      - { name: "Route and Weather Information", itemId: "{D5596373-C3BE-4E7C-BE15-A7E4D82AB263}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning/Route and Weather Information" }
+      - { name: "New to Canada", itemId: "{DAF6FE80-8596-481D-813A-0B5DE46CCA25}", path: "/sitecore/content/bcaa/bcaa/Home/New to Canada" }
+      - { name: "Home Insurance", itemId: "{3DE9AD8B-559C-4B0B-A958-4BA1F77224BD}", path: "/sitecore/content/bcaa/bcaa/Home/New to Canada/Home Insurance" }
+      - { name: "Membership (New to Canada)", itemId: "{B4B0776A-36FC-4D90-B9ED-C27488DE1569}", path: "/sitecore/content/bcaa/bcaa/Home/New to Canada/Membership" }
+      - { name: "Travel Insurance", itemId: "{D8ACD470-034D-41E9-9C00-A20F313C8A77}", path: "/sitecore/content/bcaa/bcaa/Home/New to Canada/Travel Insurance" }
+      - { name: "Media Centre", itemId: "{34E340CC-9431-4258-B968-BA541C6EEF00}", path: "/sitecore/content/bcaa/bcaa/Home/Media Centre" }
+      - { name: "About BCAA", itemId: "{4AECE1F4-36F7-4371-87B5-7CDEDD9EB0F7}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA" }
+      - { name: "AGM", itemId: "{24BF5FBE-05A6-4224-964C-9E03822EDFC5}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/AGM" }
+      - { name: "Careers", itemId: "{45D2E5AB-CD70-45AB-B1A7-C71BE694E018}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/Careers" }
+      - { name: "DEI", itemId: "{B62EE7B7-C833-4E60-9C0A-EA002B768CBA}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/Careers/DEI" }
+      - { name: "Why Work With Us", itemId: "{A0C1182C-ADC8-4DEB-91BC-7592E1AD60CE}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/Careers/Why Work With Us" }
+      - { name: "Governance", itemId: "{FCABA414-0031-45C2-8539-3E613BD7A343}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/Governance" }
+      - { name: "History", itemId: "{8320F9B5-4D94-4C5A-B398-548CE855A5F9}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/History" }
+      - { name: "Leadership", itemId: "{A37D5F75-AB03-4A81-A9DB-E8C8A96BCB1D}", path: "/sitecore/content/bcaa/bcaa/Home/About BCAA/Leadership" }
+      - { name: "Contact Us", itemId: "{AC2E566B-0819-403B-A7A3-6AE0CD0589CB}", path: "/sitecore/content/bcaa/bcaa/Home/Contact Us" }
+      - { name: "Auto Service Centres", itemId: "{D1216FB6-8F1D-4BA6-B7BC-64A8ABE4BF2F}", path: "/sitecore/content/bcaa/bcaa/Home/Contact Us/Auto Service Centres" }
+      - { name: "Make an Appointment", itemId: "{29623163-0F2C-48C7-BCC0-8A5F5AC6BBB0}", path: "/sitecore/content/bcaa/bcaa/Home/Contact Us/Make an Appointment" }
+      - { name: "Partner Network", itemId: "{33718CFD-9427-4E4C-BE67-75E845283025}", path: "/sitecore/content/bcaa/bcaa/Home/Contact Us/Partner Network" }
+      - { name: "Service Locations", itemId: "{AECA69B1-8B3F-41F7-AC88-444403A46BD2}", path: "/sitecore/content/bcaa/bcaa/Home/Contact Us/Service Locations" }
+      - { name: "Join Email List", itemId: "{2835A72F-A347-41B4-AC1D-FD9EFEE9C833}", path: "/sitecore/content/bcaa/bcaa/Home/Join Email List" }
+
   - name: "quanex-family-hero-multipromo-datasources"
     kind: "content-create"
     category: "Banners"

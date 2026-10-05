@@ -6,36 +6,31 @@ import { Field, ImageField, Page, AppPlaceholder } from '@sitecore-content-sdk/n
 import Scripts from 'src/Scripts';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from 'src/Providers';
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Lora, Nunito_Sans } from 'next/font/google';
 import { DesignLibraryApp } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
 import { generateOrganizationSchema, generateWebSiteSchema } from 'src/lib/structured-data/schema';
 import { StructuredData } from 'src/components/structured-data/StructuredData';
 
-const heading = localFont({
-  src: [
-    {
-      path: './assets/fonts/Boldonse-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
+const heading = Nunito_Sans({
+  weight: ['400', '600', '700'],
   variable: '--font-heading',
+  subsets: ['latin', 'latin-ext'],
   display: 'swap',
   preload: true,
 });
 
-const body = IBM_Plex_Sans({
-  weight: ['400', '500', '600'],
+const body = Nunito_Sans({
+  weight: ['400', '500', '600', '700'],
   variable: '--font-body',
   subsets: ['latin', 'latin-ext'],
   display: 'swap',
   preload: true,
 });
 
-const accent = IBM_Plex_Mono({
-  weight: ['400', '500', '600'],
+const accent = Lora({
+  weight: ['600'],
+  style: ['italic'],
   variable: '--font-accent',
   subsets: ['latin', 'latin-ext'],
   display: 'swap',
