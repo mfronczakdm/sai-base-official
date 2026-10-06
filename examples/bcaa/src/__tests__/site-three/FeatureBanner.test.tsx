@@ -145,6 +145,21 @@ describe('FeatureBanner', () => {
       expect(document.querySelector('section')).toBeInTheDocument();
     });
 
+    it('applies dark theme styles from the Dark Theme styling parameter', () => {
+      const darkThemeProps = {
+        ...mockProps,
+        params: {
+          styles: 'dark-theme',
+        },
+      };
+      render(<FeatureBannerDefault {...darkThemeProps} />);
+
+      const section = document.querySelector('section');
+      expect(section).toHaveAttribute('data-feature-banner-theme', 'dark');
+      expect(section).toHaveClass('bg-primary');
+      expect(section).not.toHaveClass('uppercase');
+    });
+
     it('handles missing title field', () => {
       const missingTitleProps: any = {
         ...mockProps,

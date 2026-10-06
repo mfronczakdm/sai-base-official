@@ -229,3 +229,34 @@ main {
 .partial-editing-mode header {
   @apply static mb-0 overflow-hidden;
 }
+
+/* FeatureBanner Dark Theme.
+   Pages injects this class on [data-class-change] without remounting React,
+   so the look must live in CSS as well as the component className logic. */
+.dark-theme {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding-block: 1.5rem;
+}
+
+.dark-theme h2 {
+  color: var(--color-primary-foreground);
+  font-size: var(--font-size-2xl);
+  font-weight: 400;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+.dark-theme p {
+  color: var(--color-primary-foreground);
+  font-size: var(--font-size-sm);
+}
+
+.dark-theme img {
+  filter: brightness(0) invert(1);
+}
+
+.dark-theme .border-t,
+.dark-theme .border-b {
+  border-color: transparent;
+}

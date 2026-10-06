@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { Default as CarouselDefault } from '../../components/carousel/Carousel';
+import { CTALeft, Default as CarouselDefault } from '../../components/carousel/Carousel';
 import {
   defaultCarouselProps,
   carouselWithSingleSlide,
@@ -221,5 +221,44 @@ describe('Carousel', () => {
     const slide = screen.getByRole('group');
     expect(slide).toHaveAttribute('aria-roledescription', 'slide');
     expect(slide).toHaveAttribute('tabIndex', '0');
+  });
+});
+
+describe('Carousel CTALeft', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+    jest.useRealTimers();
+  });
+
+  it('left-aligns title, body, and CTA without bar controls', () => {
+    render(<CTALeft {...defaultCarouselProps} />);
+
+    const carousel = screen.getByRole('group').closest('[aria-roledescription="carousel"]');
+    expect(carousel).toHaveAttribute('data-carousel-layout', 'ctaLeft');
+    expect(screen.getByText('Sustainable Energy').closest('div')).toHaveClass('text-left');
+    expect(screen.queryByTestId('chevron-left')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('chevron-right')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pause-icon')).not.toBeInTheDocument();
+  });
+
+  it('renders overlay dash indicators and navigates with them', async () => {
+    render(<CTALeft {...defaultCarouselProps} />);
+
+    const indicators = screen.getAllByTestId('carousel-dash-indicator');
+    expect(indicators).toHaveLength(3);
+    expect(indicators[0]).toHaveAttribute('aria-selected', 'true');
+
+    fireEvent.click(indicators[2]);
+
+    await waitFor(() => {
+      expect(indicators[2]).toHaveAttribute('aria-selected', 'true');
+    });
   });
 });

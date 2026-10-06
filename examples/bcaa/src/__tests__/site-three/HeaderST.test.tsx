@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Default as HeaderSTDefault } from '../../components/site-three/HeaderST';
+import { Default as HeaderSTDefault, Version4 as HeaderSTVersion4 } from '../../components/site-three/HeaderST';
+import { mockPageEditing } from '../test-utils/mockPage';
 import {
   defaultHeaderSTProps,
   headerSTPropsBasic,
@@ -35,6 +36,11 @@ jest.mock('@fortawesome/free-solid-svg-icons', () => ({
     iconName: 'shopping-cart',
     prefix: 'fas',
   },
+}));
+
+jest.mock('lucide-react', () => ({
+  User: (props: any) => <svg data-testid="login-icon" {...props} />,
+  Search: (props: any) => <svg data-testid="search-icon" {...props} />,
 }));
 
 // Mock component-map to avoid circular dependency
@@ -501,6 +507,99 @@ describe('HeaderST Component', () => {
       }).not.toThrow();
     });
 
+  });
+
+  describe('Version4', () => {
+    it('renders login and search icons with the hamburger always available', () => {
+      render(
+        <HeaderSTVersion4
+          {...headerSTPropsBasic}
+          fields={{
+            ...headerSTPropsBasic.fields,
+            LoginLink: {
+              value: { href: '/login', text: 'Log in' },
+            },
+          }}
+        />
+      );
+
+      expect(screen.getByTestId('header-st-version4')).toHaveAttribute('data-header-chrome', 'top');
+      expect(screen.getByTestId('header-st-version4').className).toContain('bg-transparent');
+      expect(screen.getByTestId('login-icon')).toBeInTheDocument();
+      expect(screen.getByTestId('search-icon')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Log in' })).toHaveAttribute('href', '/login');
+      expect(screen.getByRole('link', { name: 'Search' })).toHaveAttribute('href', '/search');
+
+      const menuButton = screen.getByRole('button', { name: 'Toggle mobile menu' });
+      expect(menuButton.closest('li')?.className).not.toContain('lg:hidden');
+      expect(screen.queryByTestId('fontawesome-icon')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('mini-cart')).not.toBeInTheDocument();
+    });
+
+    it('keeps showSearchBox and showMiniCart and hides the cart when HideCart is set', () => {
+      const { rerender } = render(
+        <HeaderSTVersion4
+          {...headerSTPropsBasic}
+          params={{ ...headerSTPropsBasic.params, showSearchBox: 'true', showMiniCart: 'true' }}
+        />
+      );
+
+      expect(screen.getByTestId('search-box')).toBeInTheDocument();
+      expect(screen.getByTestId('mini-cart')).toBeInTheDocument();
+      expect(screen.queryByTestId('search-icon')).not.toBeInTheDocument();
+
+      rerender(
+        <HeaderSTVersion4
+          {...headerSTPropsBasic}
+          params={{
+            ...headerSTPropsBasic.params,
+            showSearchBox: 'true',
+            showMiniCart: 'true',
+            HideCart: '1',
+          }}
+        />
+      );
+
+      expect(screen.queryByTestId('mini-cart')).not.toBeInTheDocument();
+    });
+
+    it('turns the bar blue after a short scroll, then hides it further down', () => {
+      render(<HeaderSTVersion4 {...headerSTPropsBasic} />);
+      const header = screen.getByTestId('header-st-version4');
+
+      window.scrollY = 40;
+      fireEvent.scroll(window);
+      expect(header).toHaveAttribute('data-header-chrome', 'solid');
+      expect(header.className).toContain('bg-primary');
+
+      window.scrollY = 400;
+      fireEvent.scroll(window);
+      expect(header).toHaveAttribute('data-header-chrome', 'hidden');
+      expect(header.className).toContain('-translate-y-full');
+
+      window.scrollY = 80;
+      fireEvent.scroll(window);
+      expect(header).toHaveAttribute('data-header-chrome', 'solid');
+
+      window.scrollY = 0;
+    });
+
+    it('stays visible with a blue background while editing', () => {
+      render(<HeaderSTVersion4 {...headerSTPropsBasic} page={mockPageEditing} />);
+      const header = screen.getByTestId('header-st-version4');
+
+      expect(header).toHaveAttribute('data-header-chrome', 'editing');
+      expect(header.className).toContain('bg-primary');
+      expect(header.className).not.toContain('fixed');
+
+      window.scrollY = 400;
+      fireEvent.scroll(window);
+      expect(header).toHaveAttribute('data-header-chrome', 'editing');
+      window.scrollY = 0;
+    });
+  });
+
+  describe('Error Handling parameters', () => {
     it('handles malformed parameter values', () => {
       const propsWithMalformedParams = {
         ...defaultHeaderSTProps,

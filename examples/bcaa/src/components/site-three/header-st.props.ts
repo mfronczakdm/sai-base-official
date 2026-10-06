@@ -6,6 +6,7 @@ export interface HeaderSTFields {
   SupportLink: CompatibleField<LinkField>;
   SearchLink: CompatibleField<LinkField>;
   CartLink: CompatibleField<LinkField>;
+  LoginLink?: CompatibleField<LinkField>;
 }
 
 export type HeaderSTProps = ComponentProps & {

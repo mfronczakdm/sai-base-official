@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-09-10T19:50:00Z"
+lastUpdatedAt: "2026-10-06T13:10:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -4126,6 +4126,16 @@ ia:
       - { name: "BCAA Connect", itemId: "{FAE32285-A504-4A77-AFE4-1777C0307D2A}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Connect" }
       - { name: "Community Guidelines", itemId: "{A3C09ADE-31CE-477A-85E1-41456D27448E}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Connect/Community Guidelines" }
       - { name: "BCAA Blog", itemId: "{77866688-BF56-4708-B308-14D3996B9585}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog" }
+      - { name: "How to maximize your BC summer road trip", itemId: "{7AD64539-A3CC-48E5-9353-AA5AC40F03E9}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to maximize your BC summer road trip" }
+      - { name: "Six tips when you protect your trip with Travel Insurance", itemId: "{3087710E-9790-4663-ACCF-11865A042F1C}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Six tips when you protect your trip with Travel Insurance" }
+      - { name: "New to British Columbia Join BCAA Connect", itemId: "{AFABC1CF-4EEC-4725-9E4C-6D2279199C1B}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/New to British Columbia Join BCAA Connect" }
+      - { name: "How to protect yourself from online scams", itemId: "{99B4E352-A317-48D9-9B1D-CB68B7F70FEE}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to protect yourself from online scams" }
+      - { name: "Increase your propertys wildfire resiliency", itemId: "{E1BDAFB5-D391-4DA6-8C02-91355E4C37AD}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Increase your propertys wildfire resiliency" }
+      - { name: "Spring break staycations", itemId: "{F3C75B1E-18F6-4274-A936-515DCABA22B0}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Spring break staycations" }
+      - { name: "How to keep your EV running efficiently all winter", itemId: "{3BC0AAA3-B95E-474A-9E88-B0006838467F}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to keep your EV running efficiently all winter" }
+      - { name: "Ready to buy or sell a home 2026", itemId: "{6EBA5EEC-773E-479B-986F-E666BE1B611A}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Ready to buy or sell a home 2026" }
+      - { name: "Earthquakes in BC", itemId: "{351F13CC-3607-44BC-A462-2E379A67BB19}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Earthquakes in BC" }
+      - { name: "Beat the heat summer checklist", itemId: "{C3528652-4FE4-480A-A860-5BF899B716DF}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Beat the heat summer checklist" }
       - { name: "Trip Planning", itemId: "{2D54CB90-0F6A-4AD3-802B-44B91E92C004}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning" }
       - { name: "International Driving Permit", itemId: "{64966BF5-B463-4D91-9FAB-4BC858F96B54}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning/International Driving Permit" }
       - { name: "Passport Photos", itemId: "{70E58CAA-2A1C-4158-9073-0C4EA1A4942B}", path: "/sitecore/content/bcaa/bcaa/Home/Trip Planning/Passport Photos" }
@@ -7858,7 +7868,7 @@ ia:
     category: "SiteThree"
     status: "complete"
     createdAt: "2026-08-17T17:30:00Z"
-    updatedAt: "2026-08-19T23:45:00Z"
+    updatedAt: "2026-10-06T09:15:00Z"
     siteName: "era"
     siteCollection: "quanex"
     notes:
@@ -7866,6 +7876,9 @@ ia:
       - "2026-08-17: Populated era Data/Feature Banners/Home Services with 5 FeatureItem children from Content Hub public URLs (mrfbasech2). Removed placeholder Feature1."
       - "Parent path note: item is named Home Services (not Home Services for Era)."
       - "2026-08-19: Created dfs Data/Feature Banners folder + Portal Features parent + 7 FeatureItem children (foodservice copy; Image left empty for public URLs)."
+      - "2026-10-06: Populated bcaa Data/Feature Banners/Main Home with 8 FeatureItem children matching the homepage I would like to bar. Title set to I would like to:. Links point at existing IA pages. Shared SV icon reused. Sort order matches screenshot."
+      - "2026-10-06: Added Presentation/Styles/FeatureBanner/Dark Theme (Value=dark-theme, Allowed Renderings=FeatureBanner). Default/Vertical apply bg-primary, primary-foreground text, compact bar, inverted icons when params.styles includes dark-theme. Select Dark Theme in Pages Styling — MCP cannot set instance Styles."
+      - "2026-10-06: Pages canvas only toggles the dark-theme class on [data-class-change] and does not remount React with updated params.styles. Added CSS for .dark-theme plus a MutationObserver so the editor canvas matches preview."
     react:
       filePath: "src/components/site-three/FeatureBanner.tsx"
       componentMapKey: "FeatureBanner"
@@ -7911,6 +7924,20 @@ ia:
       - { name: "Free Delivery Over 250", itemId: "{F84AF504-7D84-4B3A-9480-E312621FAAC5}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/68d39f69a69a4cfaae1e972a7d8192e8?v=8f4054ef" }
       - { name: "Sales Support POS and Marketing", itemId: "{6818693D-B48C-4318-A51B-1EA17E7BEC5D}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/f8b4f46f14404d65a7c133afdb9eb53b?v=8598f3ad" }
       - { name: "Quick and Easy Online Ordering", itemId: "{6F650F16-585F-4120-ABB9-D8A734163A05}", imageUrl: "https://mrfbasech2.sitecoresandbox.cloud/api/public/content/73575553154246b7b153fd0474bea440?v=5c5a8e3b" }
+    bcaaExample:
+      name: "Main Home"
+      path: "/sitecore/content/bcaa/bcaa/Data/Feature Banners/Main Home"
+      itemId: "{1F821FC6-A6F1-48F2-A2CE-C70F1C2E0713}"
+      title: "I would like to:"
+    bcaaExampleChildren:
+      - { name: "Join BCAA", itemId: "{A92D90C4-B832-4258-B18B-62E433A54AD4}", heading: "Join BCAA", link: "/sitecore/content/bcaa/bcaa/Home/Membership/Join" }
+      - { name: "Renew", itemId: "{F1F871EB-CAAD-4263-BB2A-1B1E2535A0E8}", heading: "Renew", link: "/sitecore/content/bcaa/bcaa/Home/Membership/Manage Membership" }
+      - { name: "Buy Travel Insurance", itemId: "{23490EE7-9670-4692-A68E-EF01DA344294}", heading: "Buy Travel Insurance", link: "/sitecore/content/bcaa/bcaa/Home/Insurance/Travel" }
+      - { name: "Buy Home Insurance", itemId: "{378646F3-3B60-42EE-9940-78E03153F935}", heading: "Buy Home Insurance", link: "/sitecore/content/bcaa/bcaa/Home/Insurance/Home" }
+      - { name: "Renew ICBC", itemId: "{C6834520-78C6-47D5-ABD0-E855F41E6519}", heading: "Renew ICBC", link: "/sitecore/content/bcaa/bcaa/Home/Insurance/Car/ICBC Autoplan" }
+      - { name: "Book Auto Repair", itemId: "{885B0E5D-442D-4B48-B153-D5969F9BA1C1}", heading: "Book Auto Repair", link: "/sitecore/content/bcaa/bcaa/Home/Automotive/Approved Auto Repair" }
+      - { name: "Book an Appointment", itemId: "{4DBDDDE5-C029-4F4D-B0DB-4D7B79A006CB}", heading: "Book an Appointment", link: "/sitecore/content/bcaa/bcaa/Home/Contact Us/Make an Appointment" }
+      - { name: "Small Business Quote", itemId: "{408B3368-6B57-45F2-8923-98E6CDD8D392}", heading: "Small Business Quote", link: "/sitecore/content/bcaa/bcaa/Home/Insurance/Small Business" }
     dfsExampleChildren:
       - { name: "Same-Day Kitchen Delivery", itemId: "{320881F9-1C13-4212-9E21-9CD872C97940}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/Same-Day Kitchen Delivery", heading: "Same-day delivery for kitchens" }
       - { name: "National Foodservice Catalog", itemId: "{1124B683-35B5-4EDE-B0EB-309370C78D38}", path: "/sitecore/content/dfs/dfs/Data/Feature Banners/Portal Features/National Foodservice Catalog", heading: "100,000+ foodservice SKUs" }
@@ -9229,7 +9256,7 @@ ia:
     category: "Global Elements"
     status: "complete"
     createdAt: "2026-08-19T18:30:00Z"
-    updatedAt: "2026-09-09T19:30:00Z"
+    updatedAt: "2026-10-06T00:15:00Z"
 
     react:
       filePath: "src/components/site-three/HeaderST.tsx"
@@ -9240,6 +9267,7 @@ ia:
         - "Version1"
         - "Version2"
         - "Version3"
+        - "Version4"
 
     sitecoreEnvironment:
       siteName: "dfs"
@@ -9334,6 +9362,13 @@ ia:
         - { name: "Version2", itemId: "{7289C108-E76F-439A-8E0C-96CBF1DBA1B0}" }
         - { name: "Version3", itemId: "{75F2C76E-BD06-4664-B0ED-0C8782B39ECA}" }
 
+    headlessVariantsBcaa:
+      containerPath: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/HeaderST"
+      containerId: "{69CD41AA-547A-414B-BBFF-ADC5F778D4F2}"
+      variants:
+        - { name: "Default", itemId: "{B9FEDA61-BC77-4054-AD6E-FA8C65C9BAFE}" }
+        - { name: "Version4", itemId: "{8EFB1919-BAB1-4883-99F7-321AF3D97188}" }
+
     datasourceExample:
       name: "Header"
       path: "/sitecore/content/dfs/dfs/Presentation/Partial Designs/Global/Header/Data/Header"
@@ -9349,6 +9384,7 @@ ia:
     verification:
       checkedAt: "2026-09-09T19:30:00Z"
       passed:
+        - "2026-10-06: bcaa HeaderST Headless Variants container, Default, and Version4 verified via get_content_item_by_path"
         - "LoginLink field created on HeaderST datasource template"
         - "Headless Variants container + Default + LoginRequired verified via MCP"
         - "Header partial design datasource LoginLink populated"
@@ -9374,6 +9410,8 @@ ia:
         - "2026-09-09: LCMC Version3 Spanish locale is es-CO (Colombia); es-ES remains Atlanta Apparel Version2"
       failed: []
       pendingManual:
+        - "Select Version4 on the bcaa Header partial design HeaderST rendering in Pages (variant {8EFB1919-BAB1-4883-99F7-321AF3D97188}). Leave showSearchBox and showMiniCart off so login and search stay icons and the cart stays hidden."
+        - "Publish the bcaa Header partial so Version4 reaches the editing host and Experience Edge."
         - "Select Version3 on lcmc Header partial design HeaderST rendering in Pages"
         - "On Version3: check Show Search Box; check Hide Cart; leave ReverseTheme off"
         - "Publish the lcmc Header partial"
@@ -9391,6 +9429,7 @@ ia:
         - "Optional: add postLogoutRedirect to HeaderST rendering parameters template"
 
     notes:
+      - "2026-10-06: Version4 for the BCAA header. Single fixed row, light logo plate, centered L1, login/search/hamburger icons. Transparent at the top of the page, bg-primary after 12px of scroll, slides away after 180px of downward scroll, returns on scroll up. Created bcaa Headless Variants/HeaderST {69CD41AA-547A-414B-BBFF-ADC5F778D4F2}, Default {B9FEDA61-BC77-4054-AD6E-FA8C65C9BAFE}, Version4 {8EFB1919-BAB1-4883-99F7-321AF3D97188}. Default layout unchanged. No new datasource fields or rendering params. FieldNames cannot be set via MCP."
       - "2026-09-09: Version3 Spanish flag hrefs use Sitecore Colombia language es-CO (/es-CO/{path}), not es-ES. Added COLOMBIAN_SPANISH_LOCALE to src/lib/locale.ts SUPPORTED_LOCALES so next-intl / LocaleProxy / app-locale cookie treat /es-CO like other non-default locales. Atlanta Apparel Version2 keeps SPANISH_LOCALE es-ES. Default/LoginRequired/Version1/Version2 UI unchanged; no new Sitecore items."
       - "2026-09-09: Version3 EN/ES flag language switcher for the LCMC demo. US flag → English, Spain flag → Español. Placement: right cluster immediately left of search (does not wrap primary nav). Reuses existing useLanguageSwitcher + buildLanguageSwitchPathname; Sitecore Spanish language name is es-CO (Colombia), so hrefs are /en/… and /es-CO/…. No new Sitecore items, variants, or rendering params. Default/LoginRequired/Version1/Version2 unchanged."
       - "2026-09-04: Atlanta Apparel HeaderST Version2 language dropdown (top-right of the dark utility row). Confirmed on Header partial {506BF874-2F4C-4415-8A7B-A17014A1E65C} FieldNames={F0F3B5E5-DA94-4B53-A6BD-143F3F9B5538} (Version2). Dropdown is gated to atlanta-apparel via page.siteName / context.site.name / ?site= so americasmart Version2 is unchanged. Languages: English (en), Japanese (ja-JP), Spanish (es-ES) — Sitecore tenant language names; prefers layout context.languages when that list includes en+ja+es, else this fallback. Href pattern matches Version1: /{locale}{path}?{query} via buildLanguageSwitchPathname. Added SPANISH_LOCALE to src/lib/locale.ts SUPPORTED_LOCALES so next-intl / LocaleProxy / app-locale cookie treat /es-ES the same as /ja-JP. No new Sitecore items, variants, or rendering params. Default/LoginRequired/Version1/Version3 unchanged."
@@ -12800,3 +12839,272 @@ externalImageOptimizerAudit:
     - "Redeploy the Default editing host so Sitecore Pages picks up the loader fix - the deployed host still runs an older build"
     - "Optional cleanup: next.config.ts images.remotePatterns is dead config while loader is custom; consider removing or documenting it"
     - "Optional: fix the pre-existing ArticleContent kmpage test, which still asserts the ImageWrapper branch for sitecoresandbox URLs"
+
+  - name: "bcaa-header-nav"
+    kind: "content-update"
+    category: "Navigation"
+    status: "partial"
+    createdAt: "2026-10-05T22:10:00Z"
+    updatedAt: "2026-10-06T00:45:00Z"
+    siteName: "bcaa"
+    notes: >
+      Rebuilt the main mega menu under
+      /sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Header/Data
+      to the five BCAA L1s (MEMBERSHIP, INSURANCE, AUTOMOTIVE, MARKETPLACE, IMPACT).
+      Existing starter renderings were rebound from local:/Data/Speakers|Headphones|Amps|Pro|Artist Services
+      to new MegaMenuItem datasources. Childless L2s are Header primary link lists.
+      L2s with children are link-list groups (Title = L2 label, children = L3 links).
+      Every link is an internal general link to the matching Home page GUID.
+      Health & Dental link text targets Health and Dental {07E86BC8-4B31-4587-B4C9-21BBAE389C76}.
+      Deleted starter nav items Speakers, Headphones, Amps, Pro, Artist Services and their
+      link lists (Speakers/Headphones/Amps Primary Links, Loud for less, By feature, More speakers).
+      HeaderST datasource and Image 1 were left in place. Home page items were not deleted.
+      L2 column titles are plain text (Link List Title), so those overview pages are not
+      separate hyperlinks. Two leftover Membership secondary Link List renderings
+      (9d4e8e3d, 15ef7e71) are bound to Empty Link List because MCP cannot remove renderings.
+      Newly added Link List renderings use the Default variant; MCP cannot set FieldNames.
+      2026-10-06T00:45:00Z: Re-read Header partial {4895B993-C924-4AB2-94EC-2BD51FB92FA6}.
+      Marketplace and Impact datasources, child links, and placeholder placement already match
+      the Automotive pattern (primary for childless L2s, secondary groups for L2s with L3s).
+      No new items were created. They still render LinkList Default
+      {75AE684A-CAE4-4C16-8557-89C21ACC7150} with Bootstrap grid col-12
+      {7465D855-992E-4DC2-9855-A03250DFA74B}. Automotive primary and its first two secondary
+      lists use HeaderPrimaryLinks / HeaderSecondaryLinks and Tailwind basis-full
+      {F61E01E9-711A-4C99-AE30-4E28463E1DF7}. bcaa variant items are
+      HeaderPrimaryLinks {F9BAC9A4-C555-431E-934A-2A543DAC63B7} and
+      HeaderSecondaryLinks {E5924085-BB84-4D83-8C8F-2EED815BA3DD}
+      under /sitecore/content/bcaa/bcaa/Presentation/Headless Variants/LinkList.
+      Earlier notes cited {3276D5F3-F463-476E-BA7C-7FD1BC9D286B} and
+      {94F4D3BC-A4E9-4A1D-9C7B-924B0CB41925}; those IDs are what Automotive's layout
+      still stores, and get_content_item_by_id returns 404 for them in this site context.
+      In Pages, pick the variants by name. Impact secondary order on the placeholder is
+      Road Safety, Wildfire Resilience, Giving Back (IA order is Wildfire, Road Safety, Giving Back).
+      MCP cannot reorder or set FieldNames.
+    relatedItems:
+      headerPartialDesignId: "{4895B993-C924-4AB2-94EC-2BD51FB92FA6}"
+      headerDataFolderId: "{F9A2F2AC-FD65-4572-B5CD-1D7867A82ACB}"
+      megaMenus:
+        - { itemName: "Membership", itemId: "{2BFB18CD-C041-4C06-9F66-03EAD58F4E6A}", title: "MEMBERSHIP", pageId: "{6BF8F32B-3C6F-4751-9104-E5FF3B11C195}", renderingId: "{898E5A97-3114-4B68-9F9F-07A6A1FDD2F0}" }
+        - { itemName: "Insurance", itemId: "{386A55B7-68C0-4A85-8BF8-09233D977ECF}", title: "INSURANCE", pageId: "{B34B7E61-1448-4EE0-83EC-18891055D7D2}", renderingId: "{3C130AF0-CC34-4F9F-B25E-08C7CA21B1A7}" }
+        - { itemName: "Automotive", itemId: "{3FD1CB13-2C97-48F2-A2A3-0C4E9213BBBF}", title: "AUTOMOTIVE", pageId: "{5CD7A3CA-8858-4EFE-AE87-E0D1B0D33896}", renderingId: "{5B384AB7-B895-4CD9-8EFE-449B066C2FBE}" }
+        - { itemName: "Marketplace", itemId: "{F8456E76-38D9-4635-A6F5-3BEE9DE2E663}", title: "MARKETPLACE", pageId: "{8FD26C3B-904E-4496-9E19-2966C2B659F5}", renderingId: "{0B048106-D634-4491-9FD0-90C55BA008AE}" }
+        - { itemName: "Impact", itemId: "{7757CEDC-017F-460D-ACAC-B63B97C41D7F}", title: "IMPACT", pageId: "{BCFED7AE-1C7E-4175-8AA7-804ED4B5453E}", renderingId: "{967BBDB8-1E6C-4391-BE79-5BEC378CD09C}" }
+      primaryLinkLists:
+        - { itemName: "Membership Primary Links", itemId: "{182A95EE-2DF2-419C-95EE-D0ECDF919BA4}", path: "/sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Header/Data/Membership Primary Links" }
+        - { itemName: "Insurance Primary Links", itemId: "{11DF34D7-081B-440C-B204-DB19C301C731}", path: "/sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Header/Data/Insurance Primary Links" }
+        - { itemName: "Automotive Primary Links", itemId: "{426FEE43-B542-4C1C-91C8-F8FD6A2BBE7B}", path: "/sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Header/Data/Automotive Primary Links" }
+        - { itemName: "Marketplace Primary Links", itemId: "{3DAA9D03-901A-4080-948D-29CF332C42E3}", path: "/sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Header/Data/Marketplace Primary Links" }
+      secondaryLinkLists:
+        - { itemName: "Membership Plans", itemId: "{D3429226-909A-4DEA-8F0C-DDDE62356052}", title: "Plans" }
+        - { itemName: "Insurance Home", itemId: "{6B3C4D7A-CCE9-4432-AD83-82816C48F0C7}", title: "Home" }
+        - { itemName: "Insurance Car", itemId: "{D8358A9B-ACD8-4632-9910-E774C5168E0D}", title: "Car" }
+        - { itemName: "Insurance Travel", itemId: "{20F3960A-13CB-466E-B61B-689C6FB052DC}", title: "Travel" }
+        - { itemName: "Insurance Small Business", itemId: "{8350C8D2-4A55-4FEC-A92B-A9202FC6AB20}", title: "Small Business" }
+        - { itemName: "Insurance Life", itemId: "{0FFD7E66-95DB-441F-AA3D-54CEE10747B8}", title: "Life" }
+        - { itemName: "Automotive Auto Service Centres", itemId: "{B7A6662B-7638-4EEE-8B5C-D660F0A265B3}", title: "BCAA Auto Service Centres" }
+        - { itemName: "Automotive Battery Service", itemId: "{676163C6-8563-4E2D-811F-1766EEEC64B6}", title: "Battery Service" }
+        - { itemName: "Automotive Electric Vehicles", itemId: "{AC6ABE17-197C-413A-BFC3-9EF55B39C1FB}", title: "Electric Vehicles" }
+        - { itemName: "Impact Wildfire Resilience", itemId: "{FF1A9C2D-EB03-416E-807B-55B89BC31AEB}", title: "Wildfire Resilience" }
+        - { itemName: "Impact Road Safety", itemId: "{F7F58CD0-6043-448F-B1C8-0924E3EEEC30}", title: "Road Safety" }
+        - { itemName: "Impact Giving Back", itemId: "{5B6A1628-99AE-4EDE-A30D-3CC510E9C3A7}", title: "Giving Back" }
+        - { itemName: "Empty Link List", itemId: "{92059066-2B9C-491C-9E12-69304C9B58EE}", title: "", note: "Bound by two leftover Membership secondary renderings" }
+      linkListVariants:
+        - { name: "HeaderPrimaryLinks", itemId: "{F9BAC9A4-C555-431E-934A-2A543DAC63B7}", path: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/LinkList/HeaderPrimaryLinks" }
+        - { name: "HeaderSecondaryLinks", itemId: "{E5924085-BB84-4D83-8C8F-2EED815BA3DD}", path: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/LinkList/HeaderSecondaryLinks" }
+        - { name: "Default", itemId: "{75AE684A-CAE4-4C16-8557-89C21ACC7150}", path: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/LinkList/Default", note: "Currently on Marketplace primary and all three Impact secondary renderings" }
+    verification:
+      checkedAt: "2026-10-06T00:45:00Z"
+      passed:
+        - "get_components_on_page shows five MegaMenuItems: MEMBERSHIP, INSURANCE, AUTOMOTIVE, MARKETPLACE, IMPACT"
+        - "Each L1 Link field is an internal link to the matching Home page GUID"
+        - "Primary and secondary link lists read back with the IA labels and page GUIDs"
+        - "Health & Dental link text targets {07E86BC8-4B31-4587-B4C9-21BBAE389C76}"
+        - "Starter Speakers, Headphones, Amps, Pro, and Artist Services items deleted"
+        - "Marketplace Primary Links {3DAA9D03-901A-4080-948D-29CF332C42E3} is on mega-menu-item-primary-links-4 (Marketplace DynamicPlaceholderId 4) with Task Marketplace {51D5BB1E-79B1-46C4-8846-125A9B3515B2} and Auto Marketplace {7C8E23FD-7ED0-4907-BDEB-ED127815F030}"
+        - "Impact secondary lists are on mega-menu-item-secondary-links-3 (Impact DynamicPlaceholderId 3): Wildfire Resilience, Road Safety, Giving Back, and each L3 link GUID matches Home/Impact children"
+        - "Marketplace has no L2s with children, so no secondary groups; Impact has no childless L2s, so no primary list. Same rule as Automotive."
+      failed: []
+      pendingManual:
+        - "Publish Header Partial Design and Header/Data so Edge serves the new menu"
+        - "Remove the two empty Membership secondary Link List renderings (9d4e8e3d and 15ef7e71) in Experience Editor; MCP cannot delete renderings"
+        - "In Pages Design tab, set Marketplace Primary Links rendering {96BE9874-8D51-49E5-88FE-4DE2078A7216} variant to HeaderPrimaryLinks (bcaa item {F9BAC9A4-C555-431E-934A-2A543DAC63B7}). It is currently LinkList Default {75AE684A-CAE4-4C16-8557-89C21ACC7150}."
+        - "Set Impact secondary Link List variants to HeaderSecondaryLinks (bcaa item {E5924085-BB84-4D83-8C8F-2EED815BA3DD}): Wildfire Resilience rendering {A8B1208B-A393-43A4-A617-3E168A1999B5}, Road Safety {AD5307DD-EFC1-494F-9F7B-A1B1FBC9B40C}, Giving Back {7B8A8B17-3FA2-4DCD-9F43-39E2B3E003C2}. MCP cannot set FieldNames."
+        - "Optional: reorder Impact secondary lists to IA order Wildfire Resilience, Road Safety, Giving Back. Current placeholder order is Road Safety, Wildfire Resilience, Giving Back."
+        - "Optional: Automotive Electric Vehicles rendering {D62DD89B-AE81-4CFA-AACA-2AD4899C6E9F} is also LinkList Default; Auto Service Centres and Battery Service already use HeaderSecondaryLinks."
+        - "L2 groups with children (Plans, Home, Car, Travel, Small Business, Life, BCAA Auto Service Centres, Battery Service, Electric Vehicles, Wildfire Resilience, Road Safety, Giving Back) are column titles, not hyperlinks"
+
+  - name: "Carousel"
+    kind: "list"
+    category: "Carousel"
+    status: "complete"
+    createdAt: "2026-10-06T08:50:00Z"
+    updatedAt: "2026-10-06T09:06:00Z"
+    notes:
+      - "2026-10-06: Created click-click-launch Carousel templates to match Image Carousel / Image Carousel Item / Image Carousels Folder."
+      - "2026-10-06: Created JSON Rendering, Rendering Parameters (Image Carousel four bases), Data/Carousels folder, example parent + two slides, Headless Variants Default, and appended to Available Renderings/click-click-launch next to ImageCarousel."
+      - "2026-10-06: Added CTALeft variant (Sitecore item + named export). Left-aligns title/body/CTA and uses overlay dash indicators. Home Carousel FieldNames still Default — select CTALeft in Pages. MCP cannot set rendering FieldNames."
+
+    react:
+      filePath: "src/components/carousel/Carousel.tsx"
+      componentMapKey: "Carousel"
+      variants:
+        - "Default"
+        - "CTALeft"
+
+    templates:
+      datasource:
+        name: "Carousel"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Carousel"
+        itemId: "{3C63EB85-D4FC-45B6-BB40-AA545D1E55F7}"
+        sectionName: "Carousel"
+        sectionItemId: "{A471AD88-6794-4AD3-9CD3-8D749B3D6215}"
+        baseTemplatesSet: true
+        fields:
+          - { name: "title", type: "Single-Line Text", itemId: "{BA6143EE-2FB2-4EDD-9494-402C397A22F9}" }
+          - { name: "tagLine", type: "Single-Line Text", itemId: "{2530BE48-23C2-4153-B61B-7E31724E4A7D}" }
+        standardValues:
+          itemId: "{9324441D-A74C-447D-BAC0-3BA0833BB408}"
+          linked: true
+          masters: ["Carousel Item"]
+
+      child:
+        name: "Carousel Item"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Carousel Item"
+        itemId: "{81DB50D2-33D2-4BB4-BD94-81F1FDE0F3FA}"
+        sectionName: "Carousel Item"
+        sectionItemId: "{06901461-0F38-45F4-B339-92FCD78759B6}"
+        fields:
+          - { name: "slideImage", type: "Image", itemId: "{5CD68016-31DB-4F78-BA55-CA0F93EBF3DB}" }
+          - { name: "title", type: "Single-Line Text", itemId: "{BAEFAB36-584F-4CB3-BB14-05E3081ACCB8}" }
+          - { name: "bodyText", type: "Multi-Line Text", itemId: "{FD5EB549-B79A-49AD-96AC-70D2163FC12D}" }
+          - { name: "callToAction", type: "General Link", itemId: "{0EB6F102-5942-41F7-AA39-8317C07B4907}" }
+        standardValues:
+          itemId: "{538B904B-9388-45F2-BFED-1C517128D0E8}"
+          linked: true
+
+      folder:
+        name: "Carousels Folder"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Carousels Folder"
+        itemId: "{CAA5C2A1-9AC6-4921-B1B1-F851E8E756E9}"
+        standardValues:
+          itemId: "{3BE58573-2F10-4F1D-87A5-6B17347706E2}"
+          linked: true
+          masters: ["Carousel"]
+
+      renderingParams:
+        name: "Carousel"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Rendering Parameters/Carousel"
+        itemId: "{7EB64CDA-8C50-4D0F-9ED0-2CE88F301511}"
+        folderItemId: "{DFAFCB20-3E57-441C-A77C-BF6D9C40A717}"
+        folderPath: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Rendering Parameters"
+        baseTemplatesSet: true
+        baseTemplates: "{8CA06D6A-B353-44E8-BC31-B528C7306971}|{5C74E985-E055-43FF-B28C-DB6C6A6450A2}|{44A022DB-56D3-419A-B43B-E27E4D8E9C41}|{A9F8A74E-5F7D-4506-8661-B08E7B9A7B91}"
+        standardValues:
+          itemId: "{2EFE8513-963A-4E5D-906C-448B38ED3584}"
+          linked: true
+
+    datasourceFolder:
+      name: "Carousels"
+      path: "/sitecore/content/bcaa/bcaa/Data/Carousels"
+      itemId: "{C475A415-4B4B-4D4E-9894-BA07C618B557}"
+      insertOptionsSet: true
+      exampleItem:
+        name: "Carousel"
+        itemId: "{AB20B797-3FBB-4DF3-B8E5-B1DD163E462C}"
+        children:
+          - { name: "Slide 1", itemId: "{1E465DA9-2E91-471E-BAD6-534A81B7E297}" }
+          - { name: "Slide 2", itemId: "{11632646-97AC-4C5B-9505-4E5C7B8467B5}" }
+
+    rendering:
+      name: "Carousel"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Carousel/Carousel"
+      itemId: "{79823B84-9278-43FE-912E-A248A01A3987}"
+      folderItemId: "{39A5BCA4-6C3E-4475-819A-FEA96CB4BE42}"
+      componentName: "Carousel"
+      datasourceTemplatePath: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Carousel"
+      datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='Carousels Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='Carousels Folder']"
+      parametersTemplateId: "{7EB64CDA-8C50-4D0F-9ED0-2CE88F301511}"
+      componentQuery: "query Carousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"title\") { jsonValue } tagLine: field(name: \"tagLine\") { jsonValue } children { results { id title: field(name: \"title\") { jsonValue } bodyText: field(name: \"bodyText\") { jsonValue } slideImage: field(name: \"slideImage\") { jsonValue } callToAction: field(name: \"callToAction\") { jsonValue } } } } }"
+      addFieldEditorButton: "1"
+      otherProperties: "IsRenderingsWithDynamicPlaceholders=true"
+      pageEditorButtons: "{2071B781-D609-4005-98C9-9518FE96F30C}"
+      registeredInAvailableRenderings: true
+      availableRenderingsGroup: "click-click-launch"
+      availableRenderingsItemId: "{0101102F-25A6-4191-B1C6-8D66A14D2C13}"
+
+    headlessVariants:
+      containerPath: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/Carousel"
+      containerId: "{4B444B6C-3F9D-4F48-ACEB-32C8450A48CF}"
+      variants:
+        - { name: "Default", itemId: "{7069ED58-C22D-4BD1-9B7B-F887465BF87A}" }
+        - { name: "CTALeft", itemId: "{47958CCA-51FE-4662-A229-4E753F5E1A72}" }
+
+    verification:
+      checkedAt: "2026-10-06T09:00:00Z"
+      passed:
+        - "Carousel folder already existed at /sitecore/templates/Project/click-click-launch/Components/Carousel {B6B9D5DE-7889-49FF-B85F-61E3D29F2339}"
+        - "Parent, child, and folder templates created and verified via get_content_item_by_path"
+        - "Parent base templates match Image Carousel (Standard + Grid + HorizonDatasourceGrouping + PublishingGrouping)"
+        - "Child base template matches Image Carousel Item (Standard Template)"
+        - "Field Types verified: title/tagLine Single-Line Text; slideImage Image query:$siteMedia; bodyText Multi-Line Text; callToAction General Link"
+        - "__Standard Values created for all three templates; parent title default is $name"
+        - "Rendering Parameters folder and template created; bases match Image Carousel RP"
+        - "JSON Rendering created at /sitecore/layout/Renderings/Project/click-click-launch/Carousel/Carousel {79823B84-9278-43FE-912E-A248A01A3987}"
+        - "componentName=Carousel; Parameters Template GUID; Datasource Template full path; Datasource Location Carousels Folder query"
+        - "ComponentQuery uses field(name:) for title/tagLine and children.results id/title/bodyText/slideImage/callToAction"
+        - "Data/Carousels folder created; list_avail_insertopts returns Carousel parent template"
+        - "Example parent Carousel + Slide 1 + Slide 2 created under Data/Carousels"
+        - "Headless Variants container + Default Variant Definition created"
+        - "Available Renderings/click-click-launch concatenated with {79823B84-9278-43FE-912E-A248A01A3987}; MCP read-back confirmed"
+      failed: []
+      pendingManual:
+        - "Confirm __Masters in Content Editor: Carousel SV → Carousel Item; Carousels Folder SV → Carousel (MCP insert-options read is site-scoped and cannot verify template SVs)"
+        - "Confirm Rendering Parameters template __Standard values link in Content Editor (MCP silent-write)"
+        - "No Image Carousel-style Branch template was created; Datasource Template points at the Carousel datasource template path"
+
+  - name: "bcaa-blog-articles"
+    kind: "content-update"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-06T13:00:00Z"
+    updatedAt: "2026-10-06T13:10:00Z"
+    siteName: "bcaa"
+    siteCollection: "bcaa"
+    contentRootPath: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog"
+    blogParentId: "{77866688-BF56-4708-B308-14D3996B9585}"
+    pageTemplateId: "{098AF197-50F1-48DB-B9C1-1698EFEE7E58}"
+    pageTemplateName: "Article Page"
+    sourceSite: "https://www.bcaa.com/blog"
+    language: "en"
+    notes: >
+      Created 10 Article Page items under BCAA Blog from the latest bcaa.com/blog
+      posts (homepage featured + 2026 dated articles). Fields filled: Content (HTML),
+      pageTitle, pageHeaderTitle, pageShortTitle, pageSubtitle, pageSummary,
+      navigationTitle, pageDisplayDate, pageReadTime, metadata*, baseMetadata*,
+      baseOgTitle, baseOgDescription, baseOgType=article. Skipped taxAuthor, taxTopic,
+      pageThumbnail (need taxonomy IDs / media). Workflow: Draft. create_page failed
+      (GraphQL field name); create_content_item succeeded despite Page+Redirect-only
+      insert options on the parent.
+    blogPages:
+      - { title: "How to maximize your BC summer road trip (and save on the way)", itemId: "{7AD64539-A3CC-48E5-9353-AA5AC40F03E9}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to maximize your BC summer road trip", date: "2026-07-01", source: "https://www.bcaa.com/blog/membership/great-bc-road-trips-for-your-bucket-list" }
+      - { title: "Six tips when you protect your trip with Travel Insurance", itemId: "{3087710E-9790-4663-ACCF-11865A042F1C}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Six tips when you protect your trip with Travel Insurance", date: "2026-06-15", source: "https://www.bcaa.com/blog/travel/six-tips-to-protect-your-trip-with-travel-insurance" }
+      - { title: "New to British Columbia? Join a welcoming community on BCAA Connect", itemId: "{AFABC1CF-4EEC-4725-9E4C-6D2279199C1B}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/New to British Columbia Join BCAA Connect", date: "2026-08-01", source: "https://www.bcaa.com/blog" }
+      - { title: "How to protect yourself from online scams", itemId: "{99B4E352-A317-48D9-9B1D-CB68B7F70FEE}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to protect yourself from online scams", date: "2026-04-21", source: "https://www.bcaa.com/blog/membership/how-to-protect-yourself-from-phishing-scams" }
+      - { title: "Increase your property's wildfire resiliency with smart landscaping choices", itemId: "{E1BDAFB5-D391-4DA6-8C02-91355E4C37AD}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Increase your propertys wildfire resiliency", date: "2026-03-18", source: "https://www.bcaa.com/blog/community/firesmart-plants" }
+      - { title: "Spring break staycations: how to take a break in beautiful BC", itemId: "{F3C75B1E-18F6-4274-A936-515DCABA22B0}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Spring break staycations", date: "2026-02-13", source: "https://www.bcaa.com/blog/membership/spring-break-in-beautiful-bc" }
+      - { title: "How to keep your EV running efficiently all winter", itemId: "{3BC0AAA3-B95E-474A-9E88-B0006838467F}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/How to keep your EV running efficiently all winter", date: "2026-01-05", source: "https://www.bcaa.com/blog/membership/how-to-keep-your-ev-running-efficiently-all-winter" }
+      - { title: "Ready to buy or sell a home? Here's our guide for your dream move in 2026", itemId: "{6EBA5EEC-773E-479B-986F-E666BE1B611A}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Ready to buy or sell a home 2026", date: "2026-01-20", source: "https://www.bcaa.com/blog/insurance/top-tips-for-your-dream-move-in" }
+      - { title: "Earthquakes in BC: how prepared are you?", itemId: "{351F13CC-3607-44BC-A462-2E379A67BB19}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Earthquakes in BC", date: "2026-09-15", source: "https://www.bcaa.com/blog/community/earthquakes-in-bc" }
+      - { title: "Beat the heat with our stay cool summer checklist", itemId: "{C3528652-4FE4-480A-A860-5BF899B716DF}", path: "/sitecore/content/bcaa/bcaa/Home/BCAA Blog/Beat the heat summer checklist", date: "2026-07-15", source: "https://www.bcaa.com/blog/membership/summer-checklist" }
+    verification:
+      checkedAt: "2026-10-06T13:10:00Z"
+      passed:
+        - "10 Article Page items under /sitecore/content/bcaa/bcaa/Home/BCAA Blog"
+        - "Template {098AF197-50F1-48DB-B9C1-1698EFEE7E58} on all 10"
+        - "Content HTML + titles + metadata + baseOgType=article verified on road trip, home buying, and spring break read-backs"
+      failed: []
+      pendingManual:
+        - "Publish BCAA Blog subtree for Edge"
+        - "Add Article Page to BCAA Blog insert options (__Masters) so authors can create siblings in Content Editor"
+        - "Assign taxAuthor, taxTopic, and pageThumbnail when DAM/taxonomy items exist"
+        - "Exact live URL for the New to British Columbia homepage teaser was not found; body uses listing copy plus BCAA Connect join steps"

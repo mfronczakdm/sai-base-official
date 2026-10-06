@@ -15,24 +15,61 @@ import { cn } from 'lib/utils';
 import type { CarouselsProps } from './carousel.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 
-export const Default = (props: CarouselsProps): JSX.Element => {
+type CarouselLayout = 'default' | 'ctaLeft';
+
+const CarouselFallback = (): JSX.Element => (
+  <div className="component carousel">
+    <div className="component-content">
+      <span className="is-empty-hint">Carousel</span>
+    </div>
+  </div>
+);
+
+const CarouselView = ({
+  props,
+  layout,
+}: {
+  props: CarouselsProps;
+  layout: CarouselLayout;
+}): JSX.Element => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
-  const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+  const [direction, setDirection] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const isCtaLeft = layout === 'ctaLeft';
 
   const slides = useMemo(() => datasource?.children?.results ?? [], [datasource?.children?.results]);
 
-  if (!datasource || slides.length === 0) {
-    return <></>;
-  }
+  const goToSlide = (index: number, dir: number) => {
+    setDirection(dir);
+    setCurrentSlide(index);
+    setTimeout(() => {
+      // slideRefs.current[index]?.focus();
+    }, 900);
+  };
+
+  const goToNextSlide = () => {
+    if (slides.length === 0) return;
+    const newIndex = (currentSlide + 1) % slides.length;
+    goToSlide(newIndex, 1);
+  };
+
+  const goToPrevSlide = () => {
+    if (slides.length === 0) return;
+    const newIndex = (currentSlide - 1 + slides.length) % slides.length;
+    goToSlide(newIndex, -1);
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   useEffect(() => {
-    if (!isPlaying || isFocused) {
+    if (!isPlaying || isFocused || slides.length === 0) {
       return;
     }
 
@@ -41,9 +78,8 @@ export const Default = (props: CarouselsProps): JSX.Element => {
     }, 15000);
 
     return () => clearInterval(interval);
-  }, [isPlaying, currentSlide, isFocused]);
+  }, [isPlaying, currentSlide, isFocused, slides.length]);
 
-  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!carouselRef.current?.contains(document.activeElement)) return;
@@ -70,73 +106,56 @@ export const Default = (props: CarouselsProps): JSX.Element => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide]);
+  }, [currentSlide, slides.length]);
 
-  const goToSlide = (index: number, dir: number) => {
-    setDirection(dir);
-    setCurrentSlide(index);
-    // Focus the slide for screen readers after animation completes
-    setTimeout(() => {
-      // slideRefs.current[index]?.focus();
-    }, 900);
-  };
-
-  const goToNextSlide = () => {
-    const newIndex = (currentSlide + 1) % slides.length;
-    goToSlide(newIndex, 1);
-  };
-
-  const goToPrevSlide = () => {
-    const newIndex = (currentSlide - 1 + slides.length) % slides.length;
-    goToSlide(newIndex, -1);
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  // Animation variants
   const slideVariants = {
-    enter: (direction: number) => {
-      return {
-        x: direction > 0 ? '100%' : '-100%',
-        opacity: 1, // Start fully opaque to prevent white flash
-      };
-    },
+    enter: (dir: number) => ({
+      x: dir > 0 ? '100%' : '-100%',
+      opacity: 1,
+    }),
     center: {
       x: 0,
       opacity: 1,
     },
-    exit: (direction: number) => {
-      return {
-        x: direction < 0 ? '100%' : '-100%',
-        opacity: 1, // Stay fully opaque to prevent white flash
-      };
-    },
+    exit: (dir: number) => ({
+      x: dir < 0 ? '100%' : '-100%',
+      opacity: 1,
+    }),
   };
 
-  // Simpler fade animation for users who prefer reduced motion
   const fadeVariants = {
     enter: { opacity: 0 },
     center: { opacity: 1 },
     exit: { opacity: 0 },
   };
 
-  // Use appropriate animation based on user preference
   const variants = prefersReducedMotion ? fadeVariants : slideVariants;
+
+  if (!datasource || slides.length === 0) {
+    return <CarouselFallback />;
+  }
+
+  const activeSlide = slides[currentSlide];
+  const slideTitle = getFieldValue(activeSlide.title);
 
   return (
     <div
       ref={carouselRef}
-      className={`relative w-full ${props.params.styles}`}
+      className={cn('relative w-full', props.params.styles)}
       data-class-change
+      data-carousel-layout={layout}
       aria-roledescription="carousel"
       aria-label="Sustainability initiatives carousel"
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
-      {/* Carousel slides container */}
-      <div className="relative w-full overflow-hidden bg-white" style={{ height: '500px' }}>
+      <div
+        className={cn(
+          'relative w-full overflow-hidden',
+          isCtaLeft ? 'min-h-[32rem] bg-foreground md:min-h-[36rem] lg:min-h-[40rem]' : 'bg-white'
+        )}
+        style={isCtaLeft ? undefined : { height: '500px' }}
+      >
         <AnimatePresence initial={false} custom={direction} mode="sync">
           <motion.div
             key={currentSlide}
@@ -157,103 +176,170 @@ export const Default = (props: CarouselsProps): JSX.Element => {
               }}
               className="relative h-full w-full"
               aria-roledescription="slide"
-              aria-label={`Slide ${currentSlide + 1} of ${slides.length}: ${
-                slides[currentSlide].title
-              }`}
+              aria-label={`Slide ${currentSlide + 1} of ${slides.length}: ${slideTitle?.value ?? ''}`}
               tabIndex={0}
               role="group"
             >
-              {/* Full-size background image */}
               <div className="absolute inset-0 h-full w-full">
                 <ContentSdkImage
-                  field={getFieldValue(slides[currentSlide].slideImage)}
+                  field={getFieldValue(activeSlide.slideImage)}
                   className="h-full w-full object-cover"
                 />
               </div>
 
-              {/* Gradient overlay to ensure text readability */}
               <div
-                className="absolute inset-0 bg-gradient-to-r from-black/10 to-black/40"
+                className={cn(
+                  'absolute inset-0',
+                  isCtaLeft
+                    ? 'bg-gradient-to-r from-foreground/55 via-foreground/20 to-transparent'
+                    : 'bg-gradient-to-r from-black/10 to-black/40'
+                )}
                 aria-hidden="true"
               />
 
-              {/* Text content overlay - positioned on the right side */}
-              <div className="absolute inset-y-0 right-0 flex w-full items-center justify-end md:w-1/2 lg:w-2/5">
+              <div
+                className={cn(
+                  'absolute inset-0 flex',
+                  isCtaLeft
+                    ? 'items-center justify-start'
+                    : 'inset-y-0 right-0 w-full items-center justify-end md:left-auto md:w-1/2 lg:w-2/5'
+                )}
+              >
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: isCtaLeft ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3, duration: 0.7 }}
-                  className="p-8 md:p-10"
+                  className={cn(
+                    isCtaLeft
+                      ? 'w-full max-w-7xl px-6 py-16 text-left md:px-12 lg:px-16'
+                      : 'p-8 md:p-10'
+                  )}
                 >
-                  <h2 className="mb-4 text-3xl font-bold">
-                    <ContentSdkText field={getFieldValue(slides[currentSlide].title)} />
-                  </h2>
-                  <p className="mb-6">
-                    <ContentSdkText field={getFieldValue(slides[currentSlide].bodyText)} />
-                  </p>
-                  <Button size="lg" className="bold py-3 text-lg" asChild>
-                    <ContentSdkLink
-                      field={getFieldValue(slides[currentSlide].callToAction)!}
-                      className="inline-flex items-center py-2 text-lg"
-                      prefetch={false}
-                    />
-                  </Button>
+                  <div className={cn(isCtaLeft && 'max-w-xl text-left')}>
+                    <h2
+                      className={cn(
+                        'mb-4 font-bold',
+                        isCtaLeft
+                          ? 'text-4xl leading-tight text-white md:text-5xl lg:text-6xl'
+                          : 'text-3xl'
+                      )}
+                    >
+                      <ContentSdkText field={getFieldValue(activeSlide.title)} />
+                    </h2>
+                    <p
+                      className={cn(
+                        'mb-6',
+                        isCtaLeft && 'max-w-md text-base leading-relaxed text-white/90 md:text-lg'
+                      )}
+                    >
+                      <ContentSdkText field={getFieldValue(activeSlide.bodyText)} />
+                    </p>
+                    <Button
+                      size={isCtaLeft ? 'default' : 'lg'}
+                      className={cn(isCtaLeft ? 'px-6 py-2.5 font-semibold' : 'bold py-3 text-lg')}
+                      asChild
+                    >
+                      <ContentSdkLink
+                        field={getFieldValue(activeSlide.callToAction)!}
+                        className={cn(
+                          'inline-flex items-center',
+                          isCtaLeft ? 'text-sm' : 'py-2 text-lg'
+                        )}
+                        prefetch={false}
+                      />
+                    </Button>
+                  </div>
                 </motion.div>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {isCtaLeft && (
+          <div
+            className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2"
+            role="tablist"
+            aria-label="Slide selection"
+          >
+            {slides.map((_, index) => (
+              <button
+                key={`indicator-${index}`}
+                type="button"
+                onClick={() => goToSlide(index, index > currentSlide ? 1 : -1)}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-selected={currentSlide === index}
+                role="tab"
+                data-testid="carousel-dash-indicator"
+                className={cn(
+                  'h-0.5 rounded-full transition-all',
+                  currentSlide === index
+                    ? 'w-8 bg-white'
+                    : 'w-6 bg-white/40 hover:bg-white/70'
+                )}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Carousel controls - Positioned below the slides */}
-      <div className="flex items-center justify-center gap-4 bg-white py-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={togglePlayPause}
-          aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
-          className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
-        >
-          {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-        </Button>
+      {!isCtaLeft && (
+        <div className="flex items-center justify-center gap-4 bg-white py-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={togglePlayPause}
+            aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
+            className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          </Button>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={goToPrevSlide}
-          aria-label="Previous slide"
-          className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={goToPrevSlide}
+            aria-label="Previous slide"
+            className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
 
-        {/* Slide indicators */}
-        <div className="flex gap-2" role="tablist" aria-label="Slide selection">
-          {slides.map((_, index) => (
-            <button
-              key={`indicator-${index}`}
-              onClick={() => goToSlide(index, index > currentSlide ? 1 : -1)}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-selected={currentSlide === index}
-              role="tab"
-              className={cn(
-                'h-2 w-2 rounded-full transition-all',
-                currentSlide === index ? 'bg-gray-900' : 'bg-gray-400 hover:bg-gray-600'
-              )}
-            />
-          ))}
+          <div className="flex gap-2" role="tablist" aria-label="Slide selection">
+            {slides.map((_, index) => (
+              <button
+                key={`indicator-${index}`}
+                type="button"
+                onClick={() => goToSlide(index, index > currentSlide ? 1 : -1)}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-selected={currentSlide === index}
+                role="tab"
+                className={cn(
+                  'h-2 w-2 rounded-full transition-all',
+                  currentSlide === index ? 'bg-gray-900' : 'bg-gray-400 hover:bg-gray-600'
+                )}
+              />
+            ))}
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={goToNextSlide}
+            aria-label="Next slide"
+            className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={goToNextSlide}
-          aria-label="Next slide"
-          className="h-8 w-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+      )}
     </div>
   );
 };
+
+export const Default = (props: CarouselsProps): JSX.Element => (
+  <CarouselView props={props} layout="default" />
+);
+
+export const CTALeft = (props: CarouselsProps): JSX.Element => (
+  <CarouselView props={props} layout="ctaLeft" />
+);

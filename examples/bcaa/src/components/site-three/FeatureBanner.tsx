@@ -1,39 +1,108 @@
 'use client';
 
 import { Text as ContentSdkText, NextImage as ContentSdkImage } from '@sitecore-content-sdk/nextjs';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FeatureBannerProps, FeatureItemFields } from './feature-banner.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import { NoDataFallback } from '@/utils/NoDataFallback';
+import { cn } from '@/lib/utils';
 
-const FeatureItem = (props: FeatureItemFields) => {
+const DARK_THEME_CLASS = 'dark-theme';
+
+const isDarkThemeStyle = (styles?: string): boolean =>
+  Boolean(
+    styles
+      ?.split(/[\s|]+/)
+      .map((token) => token.trim())
+      .includes(DARK_THEME_CLASS)
+  );
+
+const useDarkTheme = (styles?: string) => {
+  const ref = useRef<HTMLElement | null>(null);
+  const fromParams = isDarkThemeStyle(styles);
+  const [fromDom, setFromDom] = useState(fromParams);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) {
+      setFromDom(fromParams);
+      return;
+    }
+
+    const sync = () =>
+      setFromDom(element.classList.contains(DARK_THEME_CLASS) || fromParams);
+
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(element, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, [fromParams]);
+
+  return { ref, isDarkTheme: fromParams || fromDom };
+};
+
+const FeatureItem = ({
+  isDarkTheme,
+  ...props
+}: FeatureItemFields & { isDarkTheme?: boolean }) => {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <ContentSdkImage field={getFieldValue(props?.image)} className="w-6 h-6 object-contain" />
-      <p className="text-base text-center">
+    <div
+      className={cn(
+        'flex flex-col items-center gap-1',
+        isDarkTheme && 'text-primary-foreground'
+      )}
+    >
+      <ContentSdkImage
+        field={getFieldValue(props?.image)}
+        className={cn('h-6 w-6 object-contain', isDarkTheme && 'brightness-0 invert')}
+      />
+      <p className={cn('text-center', isDarkTheme ? 'text-sm text-primary-foreground' : 'text-base')}>
         <ContentSdkText field={getFieldValue(props?.heading)} />
       </p>
     </div>
   );
 };
 
+const FeatureBannerFallback = () => <NoDataFallback componentName="FeatureBanner" />;
+
 export const Default = (props: FeatureBannerProps) => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
+  const { ref, isDarkTheme } = useDarkTheme(props?.params?.styles);
 
   if (!datasource) {
-    return <NoDataFallback componentName="FeatureBanner" />;
+    return <FeatureBannerFallback />;
   }
 
   return (
-    <section className={`py-16 ${props?.params?.styles}`} data-class-change>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-8 py-12 border-t border-b border-border">
-          <h2 className="text-2xl lg:text-5xl uppercase">
+    <section
+      ref={ref}
+      className={cn(
+        isDarkTheme ? 'bg-primary py-6' : 'py-16',
+        props?.params?.styles,
+        isDarkTheme && DARK_THEME_CLASS
+      )}
+      data-class-change
+      data-feature-banner-theme={isDarkTheme ? 'dark' : 'default'}
+    >
+      <div className={cn(isDarkTheme ? 'w-full px-6 lg:px-12' : 'container mx-auto px-4')}>
+        <div
+          className={cn(
+            'flex flex-col items-center justify-between gap-8 lg:flex-row',
+            isDarkTheme ? 'py-2' : 'border-b border-t border-border py-12'
+          )}
+        >
+          <h2
+            className={cn(
+              isDarkTheme
+                ? 'text-xl font-normal text-primary-foreground lg:text-2xl'
+                : 'text-2xl uppercase lg:text-5xl'
+            )}
+          >
             <ContentSdkText field={getFieldValue(datasource?.title)} />
           </h2>
-          <div className="flex flex-wrap lg:flex-nowrap justify-center items-start gap-8">
+          <div className="flex flex-wrap items-start justify-center gap-8 lg:flex-nowrap">
             {datasource?.children?.results?.map((item) => (
-              <FeatureItem key={item.id} {...item} />
+              <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
             )) || []}
           </div>
         </div>
@@ -44,21 +113,42 @@ export const Default = (props: FeatureBannerProps) => {
 
 export const Vertical = (props: FeatureBannerProps) => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
+  const { ref, isDarkTheme } = useDarkTheme(props?.params?.styles);
 
   if (!datasource) {
-    return <NoDataFallback componentName="FeatureBanner" />;
+    return <FeatureBannerFallback />;
   }
 
   return (
-    <section className={`py-16 ${props?.params?.styles}`} data-class-change>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center gap-8 lg:gap-12 py-12 border-t border-b border-border">
-          <h2 className="text-2xl lg:text-5xl uppercase">
+    <section
+      ref={ref}
+      className={cn(
+        isDarkTheme ? 'bg-primary py-6' : 'py-16',
+        props?.params?.styles,
+        isDarkTheme && DARK_THEME_CLASS
+      )}
+      data-class-change
+      data-feature-banner-theme={isDarkTheme ? 'dark' : 'default'}
+    >
+      <div className={cn(isDarkTheme ? 'w-full px-6 lg:px-12' : 'container mx-auto px-4')}>
+        <div
+          className={cn(
+            'flex flex-col items-center gap-8 lg:gap-12',
+            isDarkTheme ? 'py-2' : 'border-b border-t border-border py-12'
+          )}
+        >
+          <h2
+            className={cn(
+              isDarkTheme
+                ? 'text-xl font-normal text-primary-foreground lg:text-2xl'
+                : 'text-2xl uppercase lg:text-5xl'
+            )}
+          >
             <ContentSdkText field={getFieldValue(datasource?.title)} />
           </h2>
-          <div className="flex flex-wrap lg:flex-nowrap justify-center items-start gap-10">
+          <div className="flex flex-wrap items-start justify-center gap-10 lg:flex-nowrap">
             {datasource?.children?.results?.map((item) => (
-              <FeatureItem key={item.id} {...item} />
+              <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
             )) || []}
           </div>
         </div>
@@ -69,25 +159,38 @@ export const Vertical = (props: FeatureBannerProps) => {
 
 export const Accent = (props: FeatureBannerProps) => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
+  const { ref, isDarkTheme } = useDarkTheme(props?.params?.styles);
 
   if (!datasource) {
-    return <NoDataFallback componentName="FeatureBanner" />;
+    return <FeatureBannerFallback />;
   }
 
   return (
     <section
-      className={`py-16 border-t border-b border-border ${props?.params?.styles}`}
+      ref={ref}
+      className={cn(
+        'border-b border-t border-border py-16',
+        isDarkTheme && 'border-transparent',
+        props?.params?.styles,
+        isDarkTheme && DARK_THEME_CLASS
+      )}
       data-class-change
+      data-feature-banner-theme={isDarkTheme ? 'dark' : 'default'}
     >
       <div className="bg-primary">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-8 py-12">
-            <h2 className="text-2xl lg:text-5xl uppercase">
+          <div className="flex flex-col items-center justify-between gap-8 py-12 lg:flex-row">
+            <h2
+              className={cn(
+                'text-2xl uppercase lg:text-5xl',
+                isDarkTheme && 'text-primary-foreground'
+              )}
+            >
               <ContentSdkText field={getFieldValue(datasource?.title)} />
             </h2>
-            <div className="flex flex-wrap lg:flex-nowrap justify-center items-start gap-8">
+            <div className="flex flex-wrap items-start justify-center gap-8 lg:flex-nowrap">
               {datasource?.children?.results?.map((item) => (
-                <FeatureItem key={item.id} {...item} />
+                <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
               )) || []}
             </div>
           </div>

@@ -1,9 +1,14 @@
 'use client';
 
 import { useToggleWithClickOutside } from '@/hooks/useToggleWithClickOutside';
+import { cn } from '@/lib/utils';
 import type { MobileMenuWrapperProps } from './mobile-menu-wrapper.props';
 
-export const MobileMenuWrapper = ({ children }: MobileMenuWrapperProps) => {
+export const MobileMenuWrapper = ({
+  children,
+  alwaysVisible = false,
+  className,
+}: MobileMenuWrapperProps) => {
   const {
     isVisible: isMobileMenuVisible,
     setIsVisible: setIsMobileMenuVisible,
@@ -13,7 +18,11 @@ export const MobileMenuWrapper = ({ children }: MobileMenuWrapperProps) => {
   return (
     <li
       ref={ref}
-      className="lg:hidden flex justify-center items-center p-4 cursor-pointer relative"
+      className={cn(
+        'flex justify-center items-center p-4 cursor-pointer relative',
+        !alwaysVisible && 'lg:hidden',
+        className
+      )}
     >
       {/* Mobile Menu Toggle Button */}
       <button
@@ -46,10 +55,11 @@ export const MobileMenuWrapper = ({ children }: MobileMenuWrapperProps) => {
         className={`${
           isMobileMenuVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }
-          fixed top-14 left-0 right-0
+          fixed left-0 right-0
+          ${alwaysVisible ? 'top-[4.5rem] h-[calc(100vh-4.5rem)]' : 'top-14 h-[calc(100vh-3.5rem)]'}
           flex flex-col items-center justify-center
-          h-[calc(100vh-3.5rem)] p-4
-          overflow-auto bg-background transition-all duration-300 ease-in-out z-50`}
+          p-4
+          overflow-auto bg-background text-foreground transition-all duration-300 ease-in-out z-50`}
       >
         {children}
       </div>
