@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-06T13:10:00Z"
+lastUpdatedAt: "2026-10-06T13:35:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -13108,3 +13108,40 @@ externalImageOptimizerAudit:
         - "Add Article Page to BCAA Blog insert options (__Masters) so authors can create siblings in Content Editor"
         - "Assign taxAuthor, taxTopic, and pageThumbnail when DAM/taxonomy items exist"
         - "Exact live URL for the New to British Columbia homepage teaser was not found; body uses listing copy plus BCAA Connect join steps"
+
+  - name: "bcaa-basic-workflow-approved"
+    kind: "content-update"
+    category: "Workflow"
+    status: "complete"
+    createdAt: "2026-10-06T13:20:00Z"
+    updatedAt: "2026-10-06T13:35:00Z"
+    siteName: "bcaa"
+    siteCollection: "bcaa"
+    workflowName: "Basic Workflow"
+    workflowId: "{B4F49B23-4BBA-4C79-BA22-F89F5F0D4E4F}"
+    draftStateId: "{57CC7DCE-E6B1-4564-9581-0E5850B8BDF2}"
+    approvedStateId: "{F7FE5BDD-A991-4A58-9735-CD08F9B097AB}"
+    approvedStatePath: "/sitecore/system/Workflows/Basic Workflow/Approved"
+    approvedStateFinal: true
+    method: "MCP update_fields_on_item __Workflow state (no publish, no workflow action execution)"
+    counts:
+      pagesAttempted: 120
+      pagesVerifiedSpotCheck: 13
+      headerMegaMenuUpdated: 5
+      alreadyApprovedDatasources: 12
+      noWorkflowSkipped: 83
+      failed: 0
+    notes: >
+      All get_all_pages_by_site BCAA pages set to Basic Workflow/Approved.
+      Header MegaMenu items Automotive/Impact/Insurance/Marketplace/Membership
+      were Draft and are now Approved. Feature Banner Main Home, HeaderST, and
+      Image Carousels were already Approved. Carousel datasource and Header
+      Link Lists have no workflow assigned (inert). Approval does not publish to Edge.
+    verification:
+      checkedAt: "2026-10-06T13:35:00Z"
+      passed:
+        - "Membership, Home, blog articles, and L2/L3 page spot-checks return workflow.workflowState Approved final=true"
+        - "Five Header MegaMenu items verified Approved after write"
+      failed: []
+      pendingManual:
+        - "Publish BCAA pages and Data/Presentation in Pages for Experience Edge"

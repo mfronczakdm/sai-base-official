@@ -215,7 +215,7 @@ const CarouselView = ({
                       : 'p-8 md:p-10'
                   )}
                 >
-                  <div className={cn(isCtaLeft && 'max-w-xl text-left')}>
+                  <div className={cn(isCtaLeft && 'max-w-xl text-left text-white')}>
                     <h2
                       className={cn(
                         'mb-4 font-bold',
@@ -229,7 +229,8 @@ const CarouselView = ({
                     <p
                       className={cn(
                         'mb-6',
-                        isCtaLeft && 'max-w-md text-base leading-relaxed text-white/90 md:text-lg'
+                        isCtaLeft &&
+                          'max-w-md text-base leading-relaxed text-white md:text-lg [&_span]:text-white'
                       )}
                     >
                       <ContentSdkText field={getFieldValue(activeSlide.bodyText)} />

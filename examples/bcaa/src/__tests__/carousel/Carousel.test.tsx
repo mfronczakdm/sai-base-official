@@ -243,6 +243,10 @@ describe('Carousel CTALeft', () => {
     const carousel = screen.getByRole('group').closest('[aria-roledescription="carousel"]');
     expect(carousel).toHaveAttribute('data-carousel-layout', 'ctaLeft');
     expect(screen.getByText('Sustainable Energy').closest('div')).toHaveClass('text-left');
+    expect(screen.getByText('Sustainable Energy').closest('div')).toHaveClass('text-white');
+    expect(screen.getByText('Committed to renewable energy sources').closest('p')).toHaveClass(
+      'text-white'
+    );
     expect(screen.queryByTestId('chevron-left')).not.toBeInTheDocument();
     expect(screen.queryByTestId('chevron-right')).not.toBeInTheDocument();
     expect(screen.queryByTestId('pause-icon')).not.toBeInTheDocument();
