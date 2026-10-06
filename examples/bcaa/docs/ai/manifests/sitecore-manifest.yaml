@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-06T13:35:00Z"
+lastUpdatedAt: "2026-10-06T15:20:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -12938,11 +12938,12 @@ externalImageOptimizerAudit:
     category: "Carousel"
     status: "complete"
     createdAt: "2026-10-06T08:50:00Z"
-    updatedAt: "2026-10-06T09:06:00Z"
+    updatedAt: "2026-10-06T15:20:00Z"
     notes:
       - "2026-10-06: Created click-click-launch Carousel templates to match Image Carousel / Image Carousel Item / Image Carousels Folder."
       - "2026-10-06: Created JSON Rendering, Rendering Parameters (Image Carousel four bases), Data/Carousels folder, example parent + two slides, Headless Variants Default, and appended to Available Renderings/click-click-launch next to ImageCarousel."
       - "2026-10-06: Added CTALeft variant (Sitecore item + named export). Left-aligns title/body/CTA and uses overlay dash indicators. Home Carousel FieldNames still Default — select CTALeft in Pages. MCP cannot set rendering FieldNames."
+      - "2026-10-06: Slide counter showed 1 dash in Pages with 3 Carousel Item children. ComponentQuery now children(first: 20). React reads children.results, children.nodes, or a children array. CTALeft dashes sit outside overflow-hidden in a dark pill so inactive marks stay visible."
 
     react:
       filePath: "src/components/carousel/Carousel.tsx"
@@ -13014,6 +13015,7 @@ externalImageOptimizerAudit:
         children:
           - { name: "Slide 1", itemId: "{1E465DA9-2E91-471E-BAD6-534A81B7E297}" }
           - { name: "Slide 2", itemId: "{11632646-97AC-4C5B-9505-4E5C7B8467B5}" }
+          - { name: "Slide 3", itemId: "{70FC9B4C-8406-4FA4-BF4B-C3C8D8C1AF0A}" }
 
     rendering:
       name: "Carousel"
@@ -13024,7 +13026,7 @@ externalImageOptimizerAudit:
       datasourceTemplatePath: "/sitecore/templates/Project/click-click-launch/Components/Carousel/Carousel"
       datasourceLocationQuery: "query:$site/*[@@name='Data']/*[@@templatename='Carousels Folder']|query:$sharedSites/*[@@name='Data']/*[@@templatename='Carousels Folder']"
       parametersTemplateId: "{7EB64CDA-8C50-4D0F-9ED0-2CE88F301511}"
-      componentQuery: "query Carousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"title\") { jsonValue } tagLine: field(name: \"tagLine\") { jsonValue } children { results { id title: field(name: \"title\") { jsonValue } bodyText: field(name: \"bodyText\") { jsonValue } slideImage: field(name: \"slideImage\") { jsonValue } callToAction: field(name: \"callToAction\") { jsonValue } } } } }"
+      componentQuery: "query Carousel($datasource: String!, $language: String!) { datasource: item(path: $datasource, language: $language) { title: field(name: \"title\") { jsonValue } tagLine: field(name: \"tagLine\") { jsonValue } children(first: 20) { results { id title: field(name: \"title\") { jsonValue } bodyText: field(name: \"bodyText\") { jsonValue } slideImage: field(name: \"slideImage\") { jsonValue } callToAction: field(name: \"callToAction\") { jsonValue } } } } }"
       addFieldEditorButton: "1"
       otherProperties: "IsRenderingsWithDynamicPlaceholders=true"
       pageEditorButtons: "{2071B781-D609-4005-98C9-9518FE96F30C}"
@@ -13051,7 +13053,9 @@ externalImageOptimizerAudit:
         - "Rendering Parameters folder and template created; bases match Image Carousel RP"
         - "JSON Rendering created at /sitecore/layout/Renderings/Project/click-click-launch/Carousel/Carousel {79823B84-9278-43FE-912E-A248A01A3987}"
         - "componentName=Carousel; Parameters Template GUID; Datasource Template full path; Datasource Location Carousels Folder query"
-        - "ComponentQuery uses field(name:) for title/tagLine and children.results id/title/bodyText/slideImage/callToAction"
+        - "ComponentQuery uses field(name:) for title/tagLine and children(first: 20).results id/title/bodyText/slideImage/callToAction"
+        - "Home Carousel datasource {AB20B797} has 3 Carousel Item children (Slide 1–3), verified via get_content_item_by_id"
+        - "CTALeft dash indicators map getSlideItems (results, nodes, or array); 14/14 Carousel tests passed"
         - "Data/Carousels folder created; list_avail_insertopts returns Carousel parent template"
         - "Example parent Carousel + Slide 1 + Slide 2 created under Data/Carousels"
         - "Headless Variants container + Default Variant Definition created"

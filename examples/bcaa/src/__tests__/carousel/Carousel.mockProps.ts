@@ -142,6 +142,50 @@ export const carouselWithSingleSlide = {
   },
 };
 
+export const carouselWithChildrenNodes = {
+  params: { styles: '' },
+  fields: {
+    data: {
+      datasource: {
+        children: {
+          nodes: [mockSlide1, mockSlide2, mockSlide3],
+        },
+        title: {
+          jsonValue: {
+            value: 'Sustainability Initiatives',
+          },
+        } as IGQLTextField,
+        tagLine: {
+          jsonValue: {
+            value: 'Building a greener future',
+          },
+        } as IGQLTextField,
+      },
+    },
+  },
+};
+
+export const carouselWithChildrenArray = {
+  params: { styles: '' },
+  fields: {
+    data: {
+      datasource: {
+        children: [mockSlide1, mockSlide2, mockSlide3],
+        title: {
+          jsonValue: {
+            value: 'Sustainability Initiatives',
+          },
+        } as IGQLTextField,
+        tagLine: {
+          jsonValue: {
+            value: 'Building a greener future',
+          },
+        } as IGQLTextField,
+      },
+    },
+  },
+};
+
 // Carousel with custom styles
 export const carouselWithStyles = {
   params: { styles: 'custom-carousel-class' },

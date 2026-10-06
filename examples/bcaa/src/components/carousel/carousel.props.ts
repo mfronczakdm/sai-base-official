@@ -9,10 +9,13 @@ export interface CarouselFields {
   slideImage: CompatibleField<ImageField>;
 }
 
+export interface CarouselChildren {
+  results?: Array<CarouselFields | null | undefined>;
+  nodes?: Array<CarouselFields | null | undefined>;
+}
+
 export interface CarouselDatasourceFields {
-  children: {
-    results: CarouselFields[];
-  };
+  children?: CarouselChildren | CarouselFields[];
   title: CompatibleField<Field<string>>;
   tagLine: CompatibleField<Field<string>>;
 }

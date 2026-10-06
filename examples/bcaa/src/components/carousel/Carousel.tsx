@@ -12,10 +12,21 @@ import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
-import type { CarouselsProps } from './carousel.props';
+import type { CarouselDatasourceFields, CarouselFields, CarouselsProps } from './carousel.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 
 type CarouselLayout = 'default' | 'ctaLeft';
+
+const getSlideItems = (datasource: CarouselDatasourceFields | undefined): CarouselFields[] => {
+  const children = datasource?.children;
+  if (!children) {
+    return [];
+  }
+
+  const raw = Array.isArray(children) ? children : (children.results ?? children.nodes ?? []);
+
+  return raw.filter((slide): slide is CarouselFields => Boolean(slide));
+};
 
 const CarouselFallback = (): JSX.Element => (
   <div className="component carousel">
@@ -42,7 +53,7 @@ const CarouselView = ({
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const isCtaLeft = layout === 'ctaLeft';
 
-  const slides = useMemo(() => datasource?.children?.results ?? [], [datasource?.children?.results]);
+  const slides = useMemo(() => getSlideItems(datasource), [datasource]);
 
   const goToSlide = (index: number, dir: number) => {
     setDirection(dir);
@@ -256,32 +267,39 @@ const CarouselView = ({
           </motion.div>
         </AnimatePresence>
 
-        {isCtaLeft && (
+      </div>
+
+      {isCtaLeft && (
+        <div
+          className="pointer-events-none absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2"
+        >
           <div
-            className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2"
+            className="pointer-events-auto flex items-center gap-2 rounded-full bg-foreground/55 px-3 py-2 shadow-md backdrop-blur-sm"
             role="tablist"
-            aria-label="Slide selection"
+            aria-label={`Slide selection, ${slides.length} slides`}
           >
-            {slides.map((_, index) => (
+            {slides.map((slide, index) => (
               <button
-                key={`indicator-${index}`}
+                key={slide.id || `indicator-${index}`}
                 type="button"
                 onClick={() => goToSlide(index, index > currentSlide ? 1 : -1)}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={`Go to slide ${index + 1} of ${slides.length}`}
                 aria-selected={currentSlide === index}
                 role="tab"
                 data-testid="carousel-dash-indicator"
-                className={cn(
-                  'h-0.5 rounded-full transition-all',
-                  currentSlide === index
-                    ? 'w-8 bg-white'
-                    : 'w-6 bg-white/40 hover:bg-white/70'
-                )}
-              />
+                className="inline-flex h-4 shrink-0 items-center justify-center"
+              >
+                <span
+                  className={cn(
+                    'block h-1 rounded-full shadow-sm transition-all',
+                    currentSlide === index ? 'w-8 bg-white' : 'w-5 bg-white/70 hover:bg-white'
+                  )}
+                />
+              </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {!isCtaLeft && (
         <div className="flex items-center justify-center gap-4 bg-white py-4">

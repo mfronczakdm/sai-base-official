@@ -5,6 +5,8 @@ import {
   defaultCarouselProps,
   carouselWithSingleSlide,
   carouselWithStyles,
+  carouselWithChildrenNodes,
+  carouselWithChildrenArray,
 } from './Carousel.mockProps';
 
 // Mock lucide-react icons
@@ -264,5 +266,21 @@ describe('Carousel CTALeft', () => {
     await waitFor(() => {
       expect(indicators[2]).toHaveAttribute('aria-selected', 'true');
     });
+  });
+
+  it('renders a dash for each slide when children use nodes', () => {
+    render(<CTALeft {...carouselWithChildrenNodes} />);
+
+    expect(screen.getAllByTestId('carousel-dash-indicator')).toHaveLength(3);
+    expect(screen.getByRole('tablist')).toHaveAttribute(
+      'aria-label',
+      'Slide selection, 3 slides'
+    );
+  });
+
+  it('renders a dash for each slide when children is an array', () => {
+    render(<CTALeft {...carouselWithChildrenArray} />);
+
+    expect(screen.getAllByTestId('carousel-dash-indicator')).toHaveLength(3);
   });
 });

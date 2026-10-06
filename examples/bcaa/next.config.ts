@@ -31,6 +31,26 @@ const nextConfig: NextConfig = {
         hostname: 'xmc-*.**',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: '*.sitecoresandbox.cloud',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.sitecorecontenthub.cloud',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.stylelabs.cloud',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.stylelabs.io',
+        port: '',
+      },
     ],
     // Optimize image sizes for responsive loading
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
