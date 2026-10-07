@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-06T15:20:00Z"
+lastUpdatedAt: "2026-10-07T18:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -3228,6 +3228,37 @@ pageTemplates:
       - "2026-09-09: Guest Confirm appointment sends Appointment-Booked (type Appointment-Booked, label Appointment Booked). My LCMC login confirm does not send this event."
 
 lookups:
+  - path: "/sitecore/layout/Renderings/Project/click-click-launch"
+    itemId: "{9DBE8119-926F-400A-A738-6F3A43F86F75}"
+    lastReadAt: "2026-10-07T17:40:00Z"
+  - path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content"
+    itemId: "{372FEFA0-5F01-4DEA-A4F1-F9F0059B2920}"
+    lastReadAt: "2026-10-07T17:40:00Z"
+  - path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/Rendering Parameters"
+    itemId: "{7A5E63A2-441C-4A71-AF77-9A79A212DCB5}"
+    lastReadAt: "2026-10-07T17:40:00Z"
+  - path: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants"
+    itemId: "{B8DFE369-DBE2-43B4-ABBF-A01FD32EF939}"
+    lastReadAt: "2026-10-07T17:40:00Z"
+  - path: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/MultiPromo"
+    itemId: "{403B606D-7DB5-4CE8-BC13-D7D74D2F3410}"
+    lastReadAt: "2026-10-07T18:00:00Z"
+    note: "bcaa MultiPromo variants Default, SingleColumn, Stacked, FlexColumn"
+  - path: "/sitecore/content/bcaa/bcaa/Data"
+    itemId: "{6E9E76AA-FD90-4C36-A3D1-5B332867BA4D}"
+    lastReadAt: "2026-10-07T18:00:00Z"
+  - path: "/sitecore/content/bcaa/bcaa/Data/MultiPromos"
+    itemId: "{3EF9B94F-581E-46FC-8AF5-D231D3AA9016}"
+    lastReadAt: "2026-10-07T18:00:00Z"
+    note: "Preexisting MultiPromo Folder for bcaa sample datasources"
+  - path: "/sitecore/content/bcaa/bcaa/Presentation/Available Renderings/Page Content"
+    itemId: "{B0C76346-9DDC-4BE7-BFC0-48CF79CF263C}"
+    lastReadAt: "2026-10-07T17:45:00Z"
+    note: "Available Renderings — NEVER replace, always concatenate"
+  - path: "/sitecore/content/bcaa/bcaa/Presentation/Available Renderings/click-click-launch"
+    itemId: "{0101102F-25A6-4191-B1C6-8D66A14D2C13}"
+    lastReadAt: "2026-10-07T17:45:00Z"
+    note: "Available Renderings — NEVER replace, always concatenate. lastKnownValue ends with ArticleContent {3835A3FE-0943-407F-ACD3-6818F9AFA8A0}"
   - path: "/sitecore/content/progressive/pkm/Data"
     itemId: "{D37965BE-ED74-4694-9040-57AD038A3B70}"
     lastReadAt: "2026-08-24T12:30:00Z"
@@ -7868,7 +7899,7 @@ ia:
     category: "SiteThree"
     status: "complete"
     createdAt: "2026-08-17T17:30:00Z"
-    updatedAt: "2026-10-06T09:15:00Z"
+    updatedAt: "2026-10-06T15:55:00Z"
     siteName: "era"
     siteCollection: "quanex"
     notes:
@@ -7879,6 +7910,7 @@ ia:
       - "2026-10-06: Populated bcaa Data/Feature Banners/Main Home with 8 FeatureItem children matching the homepage I would like to bar. Title set to I would like to:. Links point at existing IA pages. Shared SV icon reused. Sort order matches screenshot."
       - "2026-10-06: Added Presentation/Styles/FeatureBanner/Dark Theme (Value=dark-theme, Allowed Renderings=FeatureBanner). Default/Vertical apply bg-primary, primary-foreground text, compact bar, inverted icons when params.styles includes dark-theme. Select Dark Theme in Pages Styling — MCP cannot set instance Styles."
       - "2026-10-06: Pages canvas only toggles the dark-theme class on [data-class-change] and does not remount React with updated params.styles. Added CSS for .dark-theme plus a MutationObserver so the editor canvas matches preview."
+      - "2026-10-06: Large-viewport Default/Accent packed the item group to the right (justify-between + shrink-wrapped nowrap). Items row is now flex-1 justify-evenly; each FeatureItem is flex-1 basis-0 so links share remaining width evenly and wrap on smaller viewports."
     react:
       filePath: "src/components/site-three/FeatureBanner.tsx"
       componentMapKey: "FeatureBanner"
@@ -11556,7 +11588,7 @@ ia:
     category: "Promos"
     status: "complete"
     createdAt: "2026-08-25T13:45:00Z"
-    updatedAt: "2026-09-01T13:50:00Z"
+    updatedAt: "2026-10-07T18:00:00Z"
 
     react:
       filePath: "src/components/site-three/MultiPromo.tsx"
@@ -11570,7 +11602,8 @@ ia:
         - "TopTabsNoImage"
         - "Version1"
         - "Version2"
-      note: "Version1 named export implemented 2026-08-25. Teal/white split, three-up overlapping cards, optional portrait with concave white mask, carousel when more than 3 children. LCMC Headless Variants synced 2026-09-10 including tab variants and Version2."
+        - "FlexColumn"
+      note: "Version1 named export implemented 2026-08-25. Teal/white split, three-up overlapping cards, optional portrait with concave white mask, carousel when more than 3 children. LCMC Headless Variants synced 2026-09-10 including tab variants and Version2. 2026-10-07: FlexColumn added for bcaa (centered title + brand-red underline + horizontal overflow cards). Existing Default/Stacked/SingleColumn unchanged."
 
     sitecoreEnvironment:
       siteName: "lcmc"
@@ -11642,6 +11675,26 @@ ia:
         - { name: "TopTabsNoImage", itemId: "{DF48F113-B9D5-4503-8A2A-F51D9C6E7E65}", preexisting: true }
         - { name: "Version1", itemId: "{01E26641-D6DE-4468-86F1-47F5EBAA23D0}" }
 
+    headlessVariantsBcaa:
+      containerPath: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/MultiPromo"
+      containerId: "{403B606D-7DB5-4CE8-BC13-D7D74D2F3410}"
+      variants:
+        - { name: "Default", itemId: "{59ECD4A2-791F-4154-A58D-4E6119E4CECD}", preexisting: true }
+        - { name: "SingleColumn", itemId: "{E00A6EAB-C191-4BCF-BCB8-BE83DDC47BE0}", preexisting: true }
+        - { name: "Stacked", itemId: "{4EC07248-0172-45B2-9FE9-6DB1CE5E7382}", preexisting: true }
+        - { name: "FlexColumn", itemId: "{5180EB38-43FD-4059-B558-40D378FA820B}", displayName: "Flex column" }
+
+    bcaaSampleDatasource:
+      name: "Moving British Columbians Forward"
+      itemId: "{6D545555-EDD2-419C-8707-02EB092E17B1}"
+      path: "/sitecore/content/bcaa/bcaa/Data/MultiPromos/Moving British Columbians Forward"
+      templateId: "{775D6354-CF01-4F34-9713-D34645079C88}"
+      suggestedVariant: "FlexColumn"
+      children:
+        - { name: "Membership", itemId: "{251AB085-8D2F-4974-860F-0BE67ABC1741}", path: "/sitecore/content/bcaa/bcaa/Data/MultiPromos/Moving British Columbians Forward/Membership", imageMediaId: "{E16E4730-117A-43B0-B2E4-CA702EC9862C}", linkPageId: "{6BF8F32B-3C6F-4751-9104-E5FF3B11C195}", linkText: "Learn more" }
+        - { name: "Insurance", itemId: "{75995E82-B0C3-4FAB-935E-FA63C339D21E}", path: "/sitecore/content/bcaa/bcaa/Data/MultiPromos/Moving British Columbians Forward/Insurance", imageMediaId: "{5EDE601F-8913-497E-8C9D-51A972F2D3B3}", linkPageId: "{B34B7E61-1448-4EE0-83EC-18891055D7D2}", linkText: "Learn more" }
+        - { name: "Automotive", itemId: "{F94D9215-75F9-4A5C-8B7B-44D44137D5C2}", path: "/sitecore/content/bcaa/bcaa/Data/MultiPromos/Moving British Columbians Forward/Automotive", imageMediaId: "{8BDD11E3-C90C-4CFE-99F8-E8838D36B49A}", linkPageId: "{5CD7A3CA-8858-4EFE-AE87-E0D1B0D33896}", linkText: "Learn more" }
+
     leftoverDatasource:
       name: "MultiPromo 2"
       itemId: "{A48AADE0-A051-4865-932E-0A1D5FF7633B}"
@@ -11659,7 +11712,7 @@ ia:
       currentFieldNamesNote: "Default variant. set_component_datasource variantId failed (404 � that API is personalization, not Headless Variants). Select Version1 in Pages."
 
     verification:
-      checkedAt: "2026-08-25T13:56:00Z"
+      checkedAt: "2026-10-07T18:00:00Z"
       passed:
         - "lcmc MultiPromo Version1 Variant Definition preexisting {06714DB7-4BC2-430E-8990-82F264AA101F}"
         - "site-base MultiPromo Version1 Variant Definition preexisting {2716D50F-0FA0-42C8-9915-363AB5D1631B}"
@@ -11669,9 +11722,18 @@ ia:
         - "ComponentQuery updated with backgroundImage field(name: BackgroundImage)"
         - "React export const Version1 added; Jest 52 passed (site-three/MultiPromo)"
         - "MultiPromo added to LCMC Home FINAL headless-main after ListingBlock"
+        - "bcaa FlexColumn Variant Definition {5180EB38-43FD-4059-B558-40D378FA820B} created and verified via get_content_item_by_path"
+        - "bcaa sample MultiPromo parent + 3 SimplePromo children created under Data/MultiPromos"
+        - "React export const FlexColumn added; Jest 26 passed (site-three/MultiPromo)"
+        - "FlexColumn hover: image fades, description + promo link reveal; sample CTA text Learn more; Jest 27 passed"
       failed: []
       pendingManual:
         - "Publish Headless Variants (lcmc, site-base, pkm) + MultiPromo template/rendering + Home/Data/MultiPromo for Edge"
+        - "Publish bcaa Presentation/Headless Variants/MultiPromo/FlexColumn and Data/MultiPromos/Moving British Columbians Forward for Edge"
+        - "In Pages, drop MultiPromo and assign Moving British Columbians Forward; select FlexColumn (MCP cannot set FieldNames)"
+        - "Approve Draft workflow on the bcaa FlexColumn sample datasource and children"
+        - "__Sortorder on Membership/Insurance/Automotive is silent-write; confirm Content Editor order is Membership, Insurance, Automotive"
+        - "__Display name Flex column on FlexColumn variant is silent-write; confirm in Content Editor"
         - "In Pages on LCMC Home, select variant Version1 (FieldNames = {06714DB7-4BC2-430E-8990-82F264AA101F})"
         - "Check Advanced styling ? Background image (ShowBackgroundImage) when a portrait is assigned"
         - "Add three SimplePromo children under Home/Data/MultiPromo; leave BackgroundImage empty until a DAM asset is available (do not invent media IDs)"
@@ -13149,3 +13211,83 @@ externalImageOptimizerAudit:
       failed: []
       pendingManual:
         - "Publish BCAA pages and Data/Presentation in Pages for Experience Edge"
+
+  - name: "ArticleContent"
+    kind: "context"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-07T17:40:00Z"
+    updatedAt: "2026-10-07T17:50:00Z"
+    siteName: "bcaa"
+    siteCollection: "bcaa"
+    notes: >
+      Context-only component that renders Article Page route fields (pageShortTitle,
+      pageHeaderTitle with pageTitle fallback, pageSubtitle, pageDisplayDate,
+      pageReadTime, pageSummary, Content). No datasource and no ComponentQuery.
+      Placed on Beat the heat summer checklist {C3528652-4FE4-480A-A860-5BF899B716DF}
+      in /headless-main/container-seventy-4 after the empty Rich Text. Default variant
+      FieldNames is {2F6EE827-E1D1-4463-90A8-20A61FE089C7}.
+
+    react:
+      filePath: "src/components/uiim/article/ArticleContent.tsx"
+      componentMapKey: "ArticleContent"
+      variants:
+        - "Default"
+
+    templates:
+      renderingParams:
+        name: "ArticleContent"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/Rendering Parameters/ArticleContent"
+        itemId: "{2C3D447E-3E64-4F9C-BC3A-24B2F5794766}"
+        baseTemplatesSet: true
+        baseTemplates: "{4247AAD4-EBDE-4994-998F-E067A51B1FE4}|{5C74E985-E055-43FF-B28C-DB6C6A6450A2}|{44A022DB-56D3-419A-B43B-E27E4D8E9C41}|{3DB3EB10-F8D0-4CC9-BE26-18CE7B139EC8}"
+        standardValues:
+          itemId: "{B9FBB6FA-3906-499C-8850-9B2A30EDF361}"
+          linked: true
+
+    rendering:
+      name: "ArticleContent"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/ArticleContent"
+      itemId: "{3835A3FE-0943-407F-ACD3-6818F9AFA8A0}"
+      componentName: "ArticleContent"
+      datasourceTemplatePath: ""
+      datasourceLocationQuery: ""
+      parametersTemplateId: "{2C3D447E-3E64-4F9C-BC3A-24B2F5794766}"
+      componentQuery: ""
+      addFieldEditorButton: "1"
+      registeredInAvailableRenderings: true
+      availableRenderingsGroup: "Page Content"
+      availableRenderingsItemId: "{B0C76346-9DDC-4BE7-BFC0-48CF79CF263C}"
+      clickClickLaunchAvailableRenderingsItemId: "{0101102F-25A6-4191-B1C6-8D66A14D2C13}"
+
+    headlessVariants:
+      containerPath: "/sitecore/content/bcaa/bcaa/Presentation/Headless Variants/ArticleContent"
+      containerId: "{83317A98-9437-4313-9787-6862063E5F08}"
+      variants:
+        - { name: "Default", itemId: "{2F6EE827-E1D1-4463-90A8-20A61FE089C7}" }
+
+    samplePlacement:
+      pageName: "Beat the heat summer checklist"
+      pageId: "{C3528652-4FE4-480A-A860-5BF899B716DF}"
+      instanceId: "{DA6A774A-2885-4009-84A3-82F57983FC1F}"
+      placeholder: "/headless-main/container-seventy-4"
+
+    verification:
+      checkedAt: "2026-10-07T17:50:00Z"
+      passed:
+        - "JSON Rendering exists; componentName=ArticleContent; Parameters Template GUID"
+        - "Datasource Template, Datasource Location, and ComponentQuery are empty"
+        - "get_component datasourceRequired=false"
+        - "Rendering Parameters has four required bases and __Standard Values child"
+        - "Headless Variants container + Default variant created"
+        - "Registered in Available Renderings/Page Content and click-click-launch (concatenated)"
+        - "Placed on Beat the heat sample page with Default FieldNames and no datasource"
+        - "React file at src/components/uiim/article/ArticleContent.tsx; Default named export"
+        - "Component map registered ArticleContent (props sidecar excluded)"
+        - "5/5 ArticleContent unit tests passed"
+      failed: []
+      pendingManual:
+        - "Confirm __Standard values link on the RP template in Content Editor (MCP silent-write)"
+        - "Publish ArticleContent rendering, Headless Variants, Available Renderings, and Beat the heat page for Edge"
+        - "Optional: remove empty Rich Text {D61AB6FE-6379-4953-B42A-797F650313EE} from the sample page; MCP cannot delete renderings"
+        - "Optional: place ArticleContent on remaining BCAA Blog Article Pages"

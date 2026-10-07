@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 // We'll dynamically import ArticleHeader after mocks are set up so mocks apply reliably
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let ArticleHeader: React.ComponentType<any>;
-import { fullProps, minimalProps, noFieldsProps } from './ArticleHeader.mockProps';
+import { fullProps, graphQLProps, minimalProps, noFieldsProps } from './ArticleHeader.mockProps';
 
 // Mock lucide-react icons (ESM) to avoid transform issues in Jest
 jest.mock('lucide-react', () => ({
@@ -150,6 +150,17 @@ describe('ArticleHeader', () => {
     expect(screen.getByText('Article Title')).toBeInTheDocument();
     // Component renders multiple image wrappers (background + featured); ensure at least one exists
     expect(screen.getAllByTestId('image-wrapper').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('unwraps ComponentQuery jsonValue fields so the hero image and title render', () => {
+    render(<ArticleHeader {...graphQLProps} />);
+
+    expect(
+      screen.getByText('Beat the heat with our stay cool summer checklist')
+    ).toBeInTheDocument();
+    const images = screen.getAllByTestId('image-wrapper');
+    expect(images.length).toBeGreaterThanOrEqual(1);
+    expect(images[0]).toHaveAttribute('src', '/image.jpg');
   });
 
   it('renders minimal content when minimal props provided', () => {

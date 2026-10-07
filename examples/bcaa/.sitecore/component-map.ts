@@ -8,6 +8,7 @@ import { Form } from '@sitecore-content-sdk/nextjs';
 // end of built-in import section
 import * as ZipcodeModaldev from 'src/components/zipcode-modal/zipcode-modal.dev';
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
+import * as ArticleContent from 'src/components/uiim/article/ArticleContent';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
 import * as ThemeProviderdev from 'src/components/theme-provider/theme-provider.dev';
@@ -218,6 +219,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Form', { ...Form, componentType: 'client' }],
   ['zipcode-modal', { ...ZipcodeModaldev }],
   ['VerticalImageAccordion', { ...VerticalImageAccordion, componentType: 'client' }],
+  ['ArticleContent', { ...ArticleContent }],
   ['TopicListing', { ...TopicListing }],
   ['TopicItem', { ...TopicItemdev }],
   ['theme-provider', { ...ThemeProviderdev }],

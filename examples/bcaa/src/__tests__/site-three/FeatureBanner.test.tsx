@@ -160,6 +160,15 @@ describe('FeatureBanner', () => {
       expect(section).not.toHaveClass('uppercase');
     });
 
+    it('distributes feature items evenly across the remaining width', () => {
+      render(<FeatureBannerDefault {...mockProps} />);
+
+      const itemsRow = screen.getByTestId('feature-banner-items');
+      expect(itemsRow).toHaveClass('w-full', 'flex-1', 'flex-wrap', 'justify-evenly');
+      expect(itemsRow).not.toHaveClass('lg:flex-nowrap');
+      expect(itemsRow.firstElementChild).toHaveClass('flex-1', 'basis-0');
+    });
+
     it('handles missing title field', () => {
       const missingTitleProps: any = {
         ...mockProps,

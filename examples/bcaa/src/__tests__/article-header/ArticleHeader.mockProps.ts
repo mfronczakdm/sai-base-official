@@ -48,6 +48,26 @@ export const minimalProps: ArticleHeaderProps = {
   page: mockPageNormal,
 };
 
+export const graphQLProps: ArticleHeaderProps = {
+  rendering: { componentName: 'ArticleHeader', params: {} },
+  params: {},
+  fields: {
+    data: {
+      datasource: {
+        imageRequired: { jsonValue: sampleImage },
+        eyebrowOptional: { jsonValue: { value: 'Solar Power' } },
+      },
+      externalFields: {
+        pageHeaderTitle: { jsonValue: { value: 'Beat the heat with our stay cool summer checklist' } },
+        pageReadTime: { jsonValue: { value: '10 min' } },
+        pageDisplayDate: { jsonValue: { value: '20260715T000000Z' } },
+      },
+    },
+  } as unknown as ArticleHeaderProps['fields'],
+  externalFields: undefined as unknown as ArticleHeaderProps['externalFields'],
+  page: mockPageNormal,
+};
+
 export const noFieldsProps: ArticleHeaderProps = {
   rendering: { componentName: 'ArticleHeader', params: {} },
   params: {},

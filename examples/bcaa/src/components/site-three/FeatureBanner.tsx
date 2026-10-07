@@ -41,6 +41,9 @@ const useDarkTheme = (styles?: string) => {
   return { ref, isDarkTheme: fromParams || fromDom };
 };
 
+const featureItemsRowClassName =
+  'flex w-full min-w-0 flex-1 flex-wrap items-start justify-evenly';
+
 const FeatureItem = ({
   isDarkTheme,
   ...props
@@ -48,7 +51,7 @@ const FeatureItem = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-1',
+        'flex min-w-[6.5rem] flex-1 basis-0 flex-col items-center justify-start gap-1 px-2',
         isDarkTheme && 'text-primary-foreground'
       )}
     >
@@ -87,12 +90,13 @@ export const Default = (props: FeatureBannerProps) => {
       <div className={cn(isDarkTheme ? 'w-full px-6 lg:px-12' : 'container mx-auto px-4')}>
         <div
           className={cn(
-            'flex flex-col items-center justify-between gap-8 lg:flex-row',
+            'flex w-full flex-col items-stretch gap-6 lg:flex-row lg:items-center',
             isDarkTheme ? 'py-2' : 'border-b border-t border-border py-12'
           )}
         >
           <h2
             className={cn(
+              'shrink-0 text-center lg:text-left',
               isDarkTheme
                 ? 'text-xl font-normal text-primary-foreground lg:text-2xl'
                 : 'text-2xl uppercase lg:text-5xl'
@@ -100,7 +104,7 @@ export const Default = (props: FeatureBannerProps) => {
           >
             <ContentSdkText field={getFieldValue(datasource?.title)} />
           </h2>
-          <div className="flex flex-wrap items-start justify-center gap-8 lg:flex-nowrap">
+          <div className={featureItemsRowClassName} data-testid="feature-banner-items">
             {datasource?.children?.results?.map((item) => (
               <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
             )) || []}
@@ -146,7 +150,7 @@ export const Vertical = (props: FeatureBannerProps) => {
           >
             <ContentSdkText field={getFieldValue(datasource?.title)} />
           </h2>
-          <div className="flex flex-wrap items-start justify-center gap-10 lg:flex-nowrap">
+          <div className={featureItemsRowClassName} data-testid="feature-banner-items">
             {datasource?.children?.results?.map((item) => (
               <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
             )) || []}
@@ -179,16 +183,16 @@ export const Accent = (props: FeatureBannerProps) => {
     >
       <div className="bg-primary">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-between gap-8 py-12 lg:flex-row">
+          <div className="flex w-full flex-col items-stretch gap-6 py-12 lg:flex-row lg:items-center">
             <h2
               className={cn(
-                'text-2xl uppercase lg:text-5xl',
+                'shrink-0 text-center text-2xl uppercase lg:text-left lg:text-5xl',
                 isDarkTheme && 'text-primary-foreground'
               )}
             >
               <ContentSdkText field={getFieldValue(datasource?.title)} />
             </h2>
-            <div className="flex flex-wrap items-start justify-center gap-8 lg:flex-nowrap">
+            <div className={featureItemsRowClassName} data-testid="feature-banner-items">
               {datasource?.children?.results?.map((item) => (
                 <FeatureItem key={item.id} {...item} isDarkTheme={isDarkTheme} />
               )) || []}

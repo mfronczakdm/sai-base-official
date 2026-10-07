@@ -5,6 +5,7 @@ import {
   Default as MultiPromoDefault,
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
+  FlexColumn as MultiPromoFlexColumn,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -292,6 +293,73 @@ describe('MultiPromo', () => {
     it('renders NoDataFallback when fields are missing', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoSingleColumn {...emptyProps} />);
+      expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('FlexColumn variant', () => {
+    it('renders centered title, underline, and description', () => {
+      render(<MultiPromoFlexColumn {...mockProps} />);
+      expect(screen.getByTestId('multipromo-flexcolumn')).toBeInTheDocument();
+      expect(screen.getByText('Featured Products')).toBeInTheDocument();
+      expect(screen.getByText('Explore our selection')).toBeInTheDocument();
+      expect(screen.getByTestId('multipromo-flexcolumn-underline')).toBeInTheDocument();
+    });
+
+    it('renders all promo cards with images, titles, and links', () => {
+      render(<MultiPromoFlexColumn {...mockProps} />);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Product 2')).toBeInTheDocument();
+      expect(screen.getAllByRole('img')).toHaveLength(2);
+      const links = screen.getAllByRole('link');
+      expect(links).toHaveLength(2);
+      expect(links[0]).toHaveAttribute('href', '/product1');
+    });
+
+    it('keeps promo descriptions and links in the hover overlay', () => {
+      render(<MultiPromoFlexColumn {...mockProps} />);
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByText('Description 2')).toBeInTheDocument();
+      const cards = screen.getAllByTestId('multipromo-flexcolumn-card');
+      expect(cards[0]).toHaveClass('group');
+      const fadedImage = screen.getAllByRole('img')[0];
+      expect(fadedImage).toHaveClass('group-hover:opacity-30');
+    });
+
+    it('makes the card row keyboard-focusable for overflow scrolling', () => {
+      render(<MultiPromoFlexColumn {...mockProps} />);
+      const scroller = screen.getByTestId('multipromo-flexcolumn-scroller');
+      expect(scroller).toHaveAttribute('tabindex', '0');
+      expect(scroller).toHaveClass('overflow-x-auto');
+    });
+
+    it('applies custom styles from params', () => {
+      const { container } = render(<MultiPromoFlexColumn {...mockProps} />);
+      const section = container.querySelector('section');
+      expect(section).toHaveClass('test-styles');
+    });
+
+    it('renders without items when children array is empty', () => {
+      const emptyProps = {
+        params: {},
+        fields: {
+          data: {
+            datasource: {
+              title: { jsonValue: { value: 'Empty Title' } },
+              description: { jsonValue: { value: 'Empty Description' } },
+              children: { results: [] },
+            },
+          },
+        },
+      };
+      render(<MultiPromoFlexColumn {...emptyProps} />);
+      expect(screen.getByText('Empty Title')).toBeInTheDocument();
+      expect(screen.getByTestId('multipromo-flexcolumn-scroller')).toBeInTheDocument();
+    });
+
+    it('renders NoDataFallback when fields are missing', () => {
+      const emptyProps = { params: {}, fields: undefined } as any;
+      render(<MultiPromoFlexColumn {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
     });
   });

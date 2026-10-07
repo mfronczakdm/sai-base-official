@@ -7,7 +7,7 @@ import { Facebook, Linkedin, Twitter, Link, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Text } from '@sitecore-content-sdk/nextjs';
 import { NoDataFallback } from '@/utils/NoDataFallback';
-import type { ArticleHeaderProps } from './article-header.props';
+import type { ArticleHeaderExternalFields, ArticleHeaderProps } from './article-header.props';
 import { Badge } from '@/components/ui/badge';
 import { Default as ImageWrapper } from '@/components/image/ImageWrapper.dev';
 import { ButtonBase } from '../button-component/ButtonComponent';
@@ -17,10 +17,34 @@ import { Toaster } from '@/components/ui/toaster';
 import { generateArticleSchema } from '@/lib/structured-data/schema';
 import { StructuredData } from '@/components/structured-data/StructuredData';
 import { hasDocument, hasNavigator, isBrowser } from '@/utils/browser';
+import { getDatasource, getFieldValue } from '@/lib/component-props';
 
-export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields }) => {
-  const { imageRequired, eyebrowOptional } = fields;
-  const { pageHeaderTitle, pageReadTime, pageDisplayDate, pageAuthor } = externalFields || {};
+type ArticleHeaderGraphQLFields = {
+  data?: {
+    datasource?: {
+      imageRequired?: { jsonValue?: ArticleHeaderProps['fields']['imageRequired'] };
+      eyebrowOptional?: { jsonValue?: ArticleHeaderProps['fields']['eyebrowOptional'] };
+    };
+    externalFields?: {
+      pageHeaderTitle?: { jsonValue?: ArticleHeaderExternalFields['pageHeaderTitle'] };
+      pageReadTime?: { jsonValue?: ArticleHeaderExternalFields['pageReadTime'] };
+      pageDisplayDate?: { jsonValue?: ArticleHeaderExternalFields['pageDisplayDate'] };
+      pageAuthor?: { jsonValue?: ArticleHeaderExternalFields['pageAuthor'] };
+    };
+  };
+};
+
+export const Default: React.FC<ArticleHeaderProps> = (props) => {
+  const datasource = getDatasource(props.fields);
+  const graphExternal = (props.fields as ArticleHeaderGraphQLFields | undefined)?.data?.externalFields;
+  const external = props.externalFields ?? graphExternal;
+  const imageRequired = getFieldValue(datasource?.imageRequired) ?? datasource?.imageRequired;
+  const eyebrowOptional = getFieldValue(datasource?.eyebrowOptional) ?? datasource?.eyebrowOptional;
+  const pageHeaderTitle = getFieldValue(external?.pageHeaderTitle) ?? external?.pageHeaderTitle;
+  const pageReadTime = getFieldValue(external?.pageReadTime) ?? external?.pageReadTime;
+  const pageDisplayDate = getFieldValue(external?.pageDisplayDate) ?? external?.pageDisplayDate;
+  const pageAuthor = getFieldValue(external?.pageAuthor) ?? external?.pageAuthor;
+  const fields = datasource ?? props.fields;
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const headerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -216,10 +240,10 @@ export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields }
           className={cn('@container article-header relative mb-[86px] overflow-hidden')}
           ref={headerRef}
         >
-          <article className="  relative z-0 h-[auto] overflow-hidden bg-black" itemScope itemType="https://schema.org/Article">
+          <article className="relative z-0 h-[auto] overflow-hidden bg-black" itemScope itemType="https://schema.org/Article">
             {/* Background Image with Parallax */}
             <figure
-              className="z-5 absolute inset-0 h-[120%] w-[120%] bg-cover bg-center opacity-70 transition-transform duration-200 ease-out"
+              className="z-5 absolute inset-0 h-[120%] w-[120%] bg-cover bg-center transition-transform duration-200 ease-out"
               style={parallaxStyle}
             >
               <ImageWrapper
@@ -232,8 +256,8 @@ export const Default: React.FC<ArticleHeaderProps> = ({ fields, externalFields }
                 itemProp="image"
               />
             </figure>
-            {/* Blur overlay - separate for better performance */}
-            <div className="absolute inset-0 backdrop-blur-md"></div>
+            {/* Light scrim so white title text stays readable without hiding the photo */}
+            <div className="absolute inset-0 bg-black/35"></div>
             {/* White Section */}
             {/* in order to be fully responsive the hight of this section needs to be half of the height of the image */}
             <div className="@xs:h-[125px] @sm:h-[150px] @md:h-[140px] @lg:h-[140px] absolute bottom-0 h-[90px] w-full  bg-white"></div>
