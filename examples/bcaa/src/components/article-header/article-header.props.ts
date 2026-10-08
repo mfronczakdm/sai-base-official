@@ -32,7 +32,7 @@ interface ArticleHeaderFields {
   pageAuthor?: Field<string>;
 }
 
-interface ArticleHeaderExternalFields {
+export interface ArticleHeaderExternalFields {
   pageHeaderTitle: Field<string>;
   pageReadTime?: Field<string>;
   pageDisplayDate?: Field<string>;

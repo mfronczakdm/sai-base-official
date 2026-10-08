@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react';
 import {
   Default as FooterSTDefault,
   Centered as FooterSTCentered,
+  Version2 as FooterSTVersion2,
 } from '@/components/site-three/FooterST';
 import { mockPage } from '../test-utils/mockPage';
 
@@ -128,6 +129,24 @@ describe('FooterST', () => {
       render(<FooterSTCentered {...mockProps} />);
       expect(screen.getByTestId('placeholder-footer-primary-links-test-id')).toBeInTheDocument();
       expect(screen.getByTestId('placeholder-footer-secondary-links-test-id')).toBeInTheDocument();
+    });
+  });
+
+  describe('Version2 variant', () => {
+    it('renders the multi-column BCAA footer layout', () => {
+      render(<FooterSTVersion2 {...mockProps} />);
+      expect(screen.getByTestId('footerst-version2')).toBeInTheDocument();
+      expect(screen.getByText('Footer Title')).toBeInTheDocument();
+      expect(screen.getByText('Follow BCAA')).toBeInTheDocument();
+      expect(screen.getByLabelText('BCAA')).toBeInTheDocument();
+    });
+
+    it('renders social icons and placeholders', () => {
+      render(<FooterSTVersion2 {...mockProps} />);
+      expect(screen.getByTestId('footerst-version2-social')).toBeInTheDocument();
+      expect(screen.getByTestId('placeholder-footer-primary-links-test-id')).toBeInTheDocument();
+      expect(screen.getByTestId('placeholder-footer-secondary-links-test-id')).toBeInTheDocument();
+      expect(screen.getAllByTestId('font-awesome-icon').length).toBeGreaterThanOrEqual(4);
     });
   });
 });

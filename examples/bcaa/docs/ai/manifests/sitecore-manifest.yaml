@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-07T18:00:00Z"
+lastUpdatedAt: "2026-10-08T14:20:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -13291,3 +13291,62 @@ externalImageOptimizerAudit:
         - "Publish ArticleContent rendering, Headless Variants, Available Renderings, and Beat the heat page for Edge"
         - "Optional: remove empty Rich Text {D61AB6FE-6379-4953-B42A-797F650313EE} from the sample page; MCP cannot delete renderings"
         - "Optional: place ArticleContent on remaining BCAA Blog Article Pages"
+
+  - name: "bcaa-footer-version2"
+    kind: "content-update"
+    category: "Footer"
+    status: "complete"
+    createdAt: "2026-10-08T13:50:00Z"
+    updatedAt: "2026-10-08T14:20:00Z"
+    siteName: "bcaa"
+    siteCollection: "bcaa"
+    notes: >
+      FooterST Version2 (shared TSX, Default unchanged; Version1 reserved for Amkor) plus
+      LinkList FooterColumn, FooterUtility, FooterCtas. Footer PD {6865348D} now has
+      Membership/Insurance/Automotive/Impact/Utility LinkLists in footer-primary-links-1
+      and Location CTAs in footer-secondary-links-1. FooterST Title/Copyright/social updated.
+    react:
+      filePath: "src/components/site-three/FooterST.tsx"
+      variants:
+        - "Default"
+        - "LogoLeft"
+        - "LogoRight"
+        - "Centered"
+        - "Version2"
+      extra:
+        - "src/components/sxa/LinkList.tsx FooterColumn FooterUtility FooterCtas"
+    sitecore:
+      footerPartial:
+        path: "/sitecore/content/bcaa/bcaa/Presentation/Partial Designs/Global/Footer"
+        itemId: "{6865348D-8DDD-4B32-89A7-154811DBA325}"
+      footerst:
+        instanceId: "{66995A97-0155-4EEB-951B-67CE56B5231B}"
+        datasourceId: "{99BD6DFB-CE6C-4F9B-814A-8AD699ABB634}"
+        variantItemId: "{296B682D-EC3A-48B5-AEBB-F2A0956F26CF}"
+      linkListVariants:
+        - { name: "FooterColumn", itemId: "{1C61DC98-9CC8-4D8C-99AA-5FA6C8C53E98}" }
+        - { name: "FooterUtility", itemId: "{D77EBFB6-A23D-4DD6-ABA6-3DFFCF58CF0E}" }
+        - { name: "FooterCtas", itemId: "{F6713F30-6466-4E76-89CD-66971FA0575D}" }
+      datasources:
+        - { name: "Membership (Primary Links)", itemId: "{62B911EE-20F9-4431-8734-1AB2070965A7}" }
+        - { name: "Insurance", itemId: "{B30DCA32-3CA6-4491-A620-3D52B4EB23E2}" }
+        - { name: "Automotive", itemId: "{C60CEE46-2568-4603-B3A5-07FC532E184B}" }
+        - { name: "Impact", itemId: "{CF79333B-DF88-4EBD-81C1-47F34CC8D816}" }
+        - { name: "Utility", itemId: "{E4CD7DB0-B6A3-428F-96EF-18FA48337F19}" }
+        - { name: "Location (Secondary Links)", itemId: "{11CFF84F-07A8-4B1F-9FC8-27C4466EB4B7}" }
+    verification:
+      checkedAt: "2026-10-08T14:20:00Z"
+      passed:
+        - "FooterST Version2 and LinkList FooterColumn/FooterUtility/FooterCtas React exports"
+        - "32 FooterST+LinkList unit tests passed"
+        - "FooterST Title Find a BCAA Location; BCAA copyright and socials"
+        - "Primary Links remapped to Membership children; Secondary remapped to location CTAs"
+        - "Insurance/Automotive/Impact/Utility LinkLists placed on Footer PD"
+      failed: []
+      pendingManual:
+        - "In Pages, set FooterST FieldNames to Version2 {296B682D}"
+        - "Set Membership/Insurance/Automotive/Impact FieldNames to FooterColumn {1C61DC98}"
+        - "Set Utility FieldNames to FooterUtility {D77EBFB6}"
+        - "Set Secondary Links FieldNames to FooterCtas {F6713F30}"
+        - "Publish Footer partial design and Data folder for Edge"
+        - "MCP cannot set FieldNames; variantId on set_component_datasource is personalization only"

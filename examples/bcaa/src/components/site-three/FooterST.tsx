@@ -1,4 +1,10 @@
-import { faFacebook, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import {
+  faFacebook,
+  faInstagram,
+  faLinkedinIn,
+  faXTwitter,
+  faYoutube,
+} from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   RichText as ContentSdkRichText,
@@ -232,6 +238,101 @@ export const Centered = (props: FooterSTProps) => {
             <div>
               <ContentSdkRichText field={getFieldValue(fields?.CopyrightText)} />
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const BCAA_SOCIAL = [
+  { href: 'https://www.facebook.com/BCAA', label: 'Facebook', icon: faFacebook },
+  { href: 'https://x.com/BCAA', label: 'X', icon: faXTwitter },
+  { href: 'https://www.youtube.com/user/BCAA', label: 'YouTube', icon: faYoutube },
+  { href: 'https://www.instagram.com/bcaa/', label: 'Instagram', icon: faInstagram },
+] as const;
+
+export const Version2 = (props: FooterSTProps) => {
+  const fields = getDatasource(props.fields);
+  const placeholderId = props.params?.DynamicPlaceholderId;
+  const facebookField = getFieldValue(fields?.FacebookLink);
+  const instagramField = getFieldValue(fields?.InstagramLink);
+
+  const socialItems = [
+    {
+      href: hasValidLink(facebookField) ? facebookField!.value.href : BCAA_SOCIAL[0].href,
+      label: 'Facebook',
+      icon: faFacebook,
+    },
+    BCAA_SOCIAL[1],
+    BCAA_SOCIAL[2],
+    {
+      href: hasValidLink(instagramField) ? instagramField!.value.href : BCAA_SOCIAL[3].href,
+      label: 'Instagram',
+      icon: faInstagram,
+    },
+  ];
+
+  return (
+    <section
+      className={`bg-primary text-primary-foreground ${props.params?.styles || ''}`}
+      data-class-change
+      data-testid="footerst-version2"
+    >
+      <div className="container mx-auto px-4 py-12 lg:py-16">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+          <div
+            className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-9 lg:grid-cols-5 [&_a]:text-primary-foreground [&_h2]:text-primary-foreground [&_h3]:text-primary-foreground"
+            data-testid="footerst-version2-columns"
+          >
+            <AppPlaceholder
+              name={`footer-primary-links-${placeholderId}`}
+              rendering={props.rendering}
+              page={props.page}
+              componentMap={componentMap}
+            />
+          </div>
+          <div className="flex flex-col gap-8 lg:col-span-3">
+            <div>
+              <h2 className="mb-4 text-sm font-bold uppercase tracking-wide">
+                <ContentSdkText field={getFieldValue(fields?.Title)} />
+              </h2>
+              <AppPlaceholder
+                name={`footer-secondary-links-${placeholderId}`}
+                rendering={props.rendering}
+                page={props.page}
+                componentMap={componentMap}
+              />
+            </div>
+            <div>
+              <p className="mb-3 text-sm font-bold uppercase tracking-wide">Follow BCAA</p>
+              <div className="flex items-center gap-4" data-testid="footerst-version2-social">
+                {socialItems.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    aria-label={item.label}
+                    className="text-primary-foreground hover:opacity-80"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <FontAwesomeIcon icon={item.icon} width={18} height={18} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr className="my-10 border-primary-foreground/25" />
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+          <div
+            className="inline-flex shrink-0 items-center border border-primary-foreground px-3 py-1 text-sm font-bold tracking-[0.35em]"
+            aria-label="BCAA"
+          >
+            BCAA
+          </div>
+          <div className="max-w-3xl text-xs leading-relaxed text-primary-foreground/80 [&_a]:underline [&_p]:mb-3">
+            <ContentSdkRichText field={getFieldValue(fields?.CopyrightText)} />
           </div>
         </div>
       </div>

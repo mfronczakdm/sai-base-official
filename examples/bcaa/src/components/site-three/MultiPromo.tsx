@@ -162,7 +162,7 @@ const FlexColumnCard = (promo: PromoItemProps) => {
                 <ContentSdkText field={descriptionField} />
               </p>
             )}
-            {hasLink && (
+            {linkField && hasLink && (
               <ContentSdkLink
                 field={linkField}
                 className="mt-4 inline-flex items-center justify-center bg-background px-5 py-2 text-sm font-bold uppercase tracking-wide text-primary no-underline hover:bg-background/90"

@@ -12,7 +12,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   },
   Text: ({ field, tag: Tag = 'span' }: { field?: { value?: string }; tag?: string }) => {
     if (!field?.value) return null;
-    return <Tag>{field.value}</Tag>;
+    return React.createElement(Tag, {}, field.value);
   },
 }));
 

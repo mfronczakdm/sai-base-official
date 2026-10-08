@@ -11,6 +11,9 @@ import {
   FooterLinks,
   HeaderPrimaryLinks,
   HeaderSecondaryLinks,
+  FooterColumn,
+  FooterUtility,
+  FooterCtas,
 } from 'components/sxa/LinkList';
 import {
   defaultLinkListProps,
@@ -20,6 +23,23 @@ import {
   linkListPropsMinimal,
   linkListPropsNullFields,
 } from './LinkList.mockProps';
+
+jest.mock('lucide-react', () => {
+  const icon = (name: string) => (props: React.SVGProps<SVGSVGElement>) =>
+    React.createElement('svg', { 'data-testid': `lucide-${name}`, ...props });
+  return {
+    Briefcase: icon('briefcase'),
+    Camera: icon('camera'),
+    CircleHelp: icon('circle-help'),
+    Globe: icon('globe'),
+    Info: icon('info'),
+    Mail: icon('mail'),
+    Map: icon('map'),
+    MessageCircle: icon('message-circle'),
+    Newspaper: icon('newspaper'),
+    Phone: icon('phone'),
+  };
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
@@ -262,6 +282,35 @@ describe('LinkList Component', () => {
       expect(ul).toBeInTheDocument();
       const links = ul!.querySelectorAll('a');
       expect(links).toHaveLength(3);
+    });
+  });
+
+  describe('FooterColumn Variant', () => {
+    it('renders a titled vertical column of links', () => {
+      render(<FooterColumn {...defaultLinkListProps} />);
+      expect(screen.getByTestId('linklist-footer-column')).toBeInTheDocument();
+      expect(screen.getByText('Navigation Links')).toBeInTheDocument();
+      expect(screen.getByText('Home')).toBeInTheDocument();
+      expect(screen.getAllByRole('link')).toHaveLength(3);
+    });
+  });
+
+  describe('FooterUtility Variant', () => {
+    it('renders uppercase utility links', () => {
+      render(<FooterUtility {...defaultLinkListProps} />);
+      expect(screen.getByTestId('linklist-footer-utility')).toBeInTheDocument();
+      expect(screen.getByText('Home')).toBeInTheDocument();
+      expect(screen.getAllByRole('link')).toHaveLength(3);
+    });
+  });
+
+  describe('FooterCtas Variant', () => {
+    it('renders full-width call-to-action links', () => {
+      render(<FooterCtas {...defaultLinkListProps} />);
+      expect(screen.getByTestId('linklist-footer-ctas')).toBeInTheDocument();
+      const links = screen.getAllByRole('link');
+      expect(links).toHaveLength(3);
+      expect(links[0]).toHaveClass('uppercase');
     });
   });
 
