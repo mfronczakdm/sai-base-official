@@ -145,6 +145,35 @@ describe('MultiPromo', () => {
       expect(links[1]).toHaveAttribute('href', '/product2');
     });
 
+    it('keeps the title and description centered by default', () => {
+      render(<MultiPromoDefault {...mockProps} />);
+      const header = screen.getByTestId('multipromo-header');
+      expect(header).toHaveClass('multipromo-header');
+      expect(header).toHaveClass('text-center');
+    });
+
+    it('applies Text Justified layout from the TextAlignment rendering parameter', () => {
+      const justifiedProps = {
+        ...mockProps,
+        params: { styles: 'test-styles', TextAlignment: 'Text Justified' },
+      };
+      const { container } = render(<MultiPromoDefault {...justifiedProps} />);
+      expect(container.querySelector('section')).toHaveClass('text-justified');
+      const header = screen.getByTestId('multipromo-header');
+      expect(header).toHaveClass('text-left');
+      expect(header).not.toHaveClass('text-center');
+    });
+
+    it('applies Text Justified layout when styles include text-justified', () => {
+      const justifiedProps = {
+        ...mockProps,
+        params: { styles: 'text-justified' },
+      };
+      const { container } = render(<MultiPromoDefault {...justifiedProps} />);
+      expect(container.querySelector('section')).toHaveClass('text-justified');
+      expect(screen.getByTestId('multipromo-header')).toHaveClass('text-left');
+    });
+
     it('applies custom styles from params', () => {
       const { container } = render(<MultiPromoDefault {...mockProps} />);
       const section = container.querySelector('section');
@@ -304,6 +333,41 @@ describe('MultiPromo', () => {
       expect(screen.getByText('Featured Products')).toBeInTheDocument();
       expect(screen.getByText('Explore our selection')).toBeInTheDocument();
       expect(screen.getByTestId('multipromo-flexcolumn-underline')).toBeInTheDocument();
+      const header = screen.getByTestId('multipromo-header');
+      expect(header).toHaveClass('text-center');
+    });
+
+    it('keeps the header centered when Text Centered is selected', () => {
+      const centeredProps = {
+        ...mockProps,
+        params: { styles: 'test-styles', TextAlignment: 'Text Centered' },
+      };
+      render(<MultiPromoFlexColumn {...centeredProps} />);
+      expect(screen.getByTestId('multipromo-header')).toHaveClass('text-center');
+    });
+
+    it('applies Text Justified layout from the TextAlignment rendering parameter', () => {
+      const justifiedProps = {
+        ...mockProps,
+        params: { styles: 'test-styles', TextAlignment: 'Text Justified' },
+      };
+      const { container } = render(<MultiPromoFlexColumn {...justifiedProps} />);
+      expect(container.querySelector('section')).toHaveClass('text-justified');
+      expect(screen.getByTestId('multipromo-header')).toHaveClass('text-left');
+      expect(screen.getByTestId('multipromo-flexcolumn-underline')).toHaveClass('ml-0');
+    });
+
+    it('applies Text Justified layout when styles include text-justified', () => {
+      const justifiedProps = {
+        ...mockProps,
+        params: { styles: 'text-justified' },
+      };
+      const { container } = render(<MultiPromoFlexColumn {...justifiedProps} />);
+      expect(container.querySelector('section')).toHaveClass('text-justified');
+      expect(screen.getByTestId('multipromo-header')).toHaveClass('text-left');
+      expect(screen.getByTestId('multipromo-flexcolumn-underline')).toHaveClass(
+        'multipromo-header-underline'
+      );
     });
 
     it('renders all promo cards with images, titles, and links', () => {

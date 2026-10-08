@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-08T14:20:00Z"
+lastUpdatedAt: "2026-10-08T15:25:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -11588,7 +11588,7 @@ ia:
     category: "Promos"
     status: "complete"
     createdAt: "2026-08-25T13:45:00Z"
-    updatedAt: "2026-10-07T18:00:00Z"
+    updatedAt: "2026-10-08T15:25:00Z"
 
     react:
       filePath: "src/components/site-three/MultiPromo.tsx"
@@ -11603,7 +11603,7 @@ ia:
         - "Version1"
         - "Version2"
         - "FlexColumn"
-      note: "Version1 named export implemented 2026-08-25. Teal/white split, three-up overlapping cards, optional portrait with concave white mask, carousel when more than 3 children. LCMC Headless Variants synced 2026-09-10 including tab variants and Version2. 2026-10-07: FlexColumn added for bcaa (centered title + brand-red underline + horizontal overflow cards). Existing Default/Stacked/SingleColumn unchanged."
+      note: "Version1 named export implemented 2026-08-25. Teal/white split, three-up overlapping cards, optional portrait with concave white mask, carousel when more than 3 children. LCMC Headless Variants synced 2026-09-10 including tab variants and Version2. 2026-10-07: FlexColumn added for bcaa (centered title + brand-red underline + horizontal overflow cards). Existing Default/Stacked/SingleColumn unchanged. 2026-10-08: TextAlignment Droplist on MultiPromo Parameters Styling (Pages Advanced styling, same pattern as Number of Columns). Default + FlexColumn swap header classes from params.TextAlignment; MutationObserver + CSS cover Pages class toggles without a full refresh."
 
     sitecoreEnvironment:
       siteName: "lcmc"
@@ -11618,6 +11618,7 @@ ia:
       parametersTemplatePath: "/sitecore/templates/Project/click-click-launch/Components/Promos/Rendering Parameters/MultiPromo Parameters"
       parametersFields:
         - { name: "numColumns", type: "Droplist", itemId: "{22DF33A8-4FC8-456D-BA02-05FE614B9F90}", preexisting: true }
+        - { name: "TextAlignment", type: "Droplist", itemId: "{149D6C88-94F0-4A93-9917-D0D56245CE77}", title: "Text Alignment", source: "query:$site/Presentation/Enumerations/Promos/Text Alignment/*", note: "Added 2026-10-08 under the same Styling section as Number of Columns (Pages Advanced styling). Empty / Text Centered keeps centered header. Text Justified is title left, description right." }
         - { name: "ShowBackgroundImage", type: "Checkbox", itemId: "{EE3BE048-388B-4294-A034-546382395972}", title: "Background image", note: "Added 2026-08-25 under Advanced styling; default off" }
         - { name: "ImagePosition", type: "Droplist", itemId: "{9BB25D0B-59E0-4DFF-B2BA-2325E11478D6}", title: "Image Position", source: "query:$site/Presentation/Enumerations/Promos/Image Positions/*", note: "Added 2026-09-01 under Advanced styling. Empty / Image Top keeps historical image-on-top. Image Left and Image Right are side-by-side. Shared=1 Type=Droplist verified." }
       componentQueryUpdated: true
@@ -11684,6 +11685,14 @@ ia:
         - { name: "Stacked", itemId: "{4EC07248-0172-45B2-9FE9-6DB1CE5E7382}", preexisting: true }
         - { name: "FlexColumn", itemId: "{5180EB38-43FD-4059-B558-40D378FA820B}", displayName: "Flex column" }
 
+    bcaaTextAlignmentEnumerations:
+      path: "/sitecore/content/bcaa/bcaa/Presentation/Enumerations/Promos/Text Alignment"
+      itemId: "{2B213E63-F034-492D-88AC-ADB19EEC7157}"
+      items:
+        - { name: "Text Centered", itemId: "{9B4B4507-8CA2-4DB5-A11A-8273C7143B1F}", value: "text-centered" }
+        - { name: "Text Justified", itemId: "{2C6775FE-70AA-47A2-B173-9A5F763FF7F9}", value: "text-justified" }
+      note: "2026-10-08: Replaced Presentation/Styles droplist (Styling panel, required full refresh) with MultiPromo Parameters TextAlignment Droplist next to Number of Columns. Deleted Styles/MultiPromo/Text Alignment."
+
     bcaaSampleDatasource:
       name: "Moving British Columbians Forward"
       itemId: "{6D545555-EDD2-419C-8707-02EB092E17B1}"
@@ -11712,7 +11721,7 @@ ia:
       currentFieldNamesNote: "Default variant. set_component_datasource variantId failed (404 � that API is personalization, not Headless Variants). Select Version1 in Pages."
 
     verification:
-      checkedAt: "2026-10-07T18:00:00Z"
+      checkedAt: "2026-10-08T15:25:00Z"
       passed:
         - "lcmc MultiPromo Version1 Variant Definition preexisting {06714DB7-4BC2-430E-8990-82F264AA101F}"
         - "site-base MultiPromo Version1 Variant Definition preexisting {2716D50F-0FA0-42C8-9915-363AB5D1631B}"
@@ -11726,6 +11735,10 @@ ia:
         - "bcaa sample MultiPromo parent + 3 SimplePromo children created under Data/MultiPromos"
         - "React export const FlexColumn added; Jest 26 passed (site-three/MultiPromo)"
         - "FlexColumn hover: image fades, description + promo link reveal; sample CTA text Learn more; Jest 27 passed"
+        - "TextAlignment Droplist {149D6C88-94F0-4A93-9917-D0D56245CE77} Type=Droplist Shared=1 Title=Text Alignment Source=query:$site/Presentation/Enumerations/Promos/Text Alignment/*"
+        - "bcaa enumerations Text Centered {9B4B4507-8CA2-4DB5-A11A-8273C7143B1F} and Text Justified {2C6775FE-70AA-47A2-B173-9A5F763FF7F9}"
+        - "Deleted Presentation/Styles/MultiPromo/Text Alignment grouping so it is not a Styling-panel style"
+        - "React Default + FlexColumn apply TextAlignment / text-justified via swapped header classes and MutationObserver"
       failed: []
       pendingManual:
         - "Publish Headless Variants (lcmc, site-base, pkm) + MultiPromo template/rendering + Home/Data/MultiPromo for Edge"
@@ -11742,6 +11755,8 @@ ia:
         - "2026-09-01: In Pages on Amkor Memory MultiPromo (instance {0D18DAC4-DA8A-4759-88A7-BEF26588168B}), Advanced styling → Image Position → Image Right. MCP cannot patch this page's __Final Renderings safely (HeroST + MultiPromo + two DownloadLists)."
         - "Publish MultiPromo Parameters template, Image Positions enumerations (amkor/quanex/era/amesburytruth/pillsbury), and Amkor Memory page for Edge"
         - "Confirm Pages preview of /Packaging/Memory after publish: white/teal tabs, image beside copy on the right"
+        - "Publish MultiPromo Parameters TextAlignment field and bcaa Presentation/Enumerations/Promos/Text Alignment for Edge"
+        - "In Pages, close/reopen the MultiPromo so Advanced styling shows Text Alignment next to Number of Columns. MCP cannot set instance rendering parameters."
 
     headlessVariantsAmkor:
       containerPath: "/sitecore/content/amkor/amkor/Presentation/Headless Variants/MultiPromo"

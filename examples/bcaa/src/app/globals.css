@@ -260,3 +260,35 @@ main {
 .dark-theme .border-b {
   border-color: transparent;
 }
+
+/* MultiPromo Text Justified.
+   Pages may toggle .text-justified on [data-class-change] without remounting React.
+   Keep CSS in sync with the TextAlignment rendering parameter / observer. */
+.text-justified .multipromo-header {
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.text-justified .multipromo-header-description {
+  max-width: none;
+  margin-inline: 0;
+}
+
+.text-justified .multipromo-header-underline {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+@media (width >= 64rem) {
+  .text-justified .multipromo-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    column-gap: 3rem;
+    align-items: start;
+  }
+
+  .text-justified .multipromo-header-description {
+    margin-top: 0;
+  }
+}

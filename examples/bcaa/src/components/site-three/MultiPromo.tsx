@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
@@ -10,6 +10,49 @@ import { NoDataFallback } from '@/utils/NoDataFallback';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import { cn } from '@/lib/utils';
 import type { MultiPromoProps, PromoItemProps } from './multi-promo.props';
+
+const TEXT_JUSTIFIED_CLASS = 'text-justified';
+
+const isTextJustifiedFromParams = (params?: { [key: string]: string }): boolean => {
+  const alignment = params?.TextAlignment?.trim();
+  if (alignment === 'Text Justified') {
+    return true;
+  }
+  if (alignment === 'Text Centered') {
+    return false;
+  }
+
+  return Boolean(
+    params?.styles
+      ?.split(/[\s|]+/)
+      .map((token) => token.trim())
+      .includes(TEXT_JUSTIFIED_CLASS)
+  );
+};
+
+const useTextJustified = (params?: { [key: string]: string }) => {
+  const ref = useRef<HTMLElement | null>(null);
+  const fromParams = isTextJustifiedFromParams(params);
+  const [fromDom, setFromDom] = useState(fromParams);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) {
+      setFromDom(fromParams);
+      return;
+    }
+
+    const sync = () =>
+      setFromDom(element.classList.contains(TEXT_JUSTIFIED_CLASS) || fromParams);
+
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(element, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, [fromParams]);
+
+  return { ref, isTextJustified: fromParams || fromDom };
+};
 
 const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
   const { image, heading, description, link } = promo ?? {};
@@ -39,18 +82,42 @@ const parentBasedGridClasses =
 const parentBasedGridItemClasses =
   '[.multipromo-centered_&]:items-center [.bg-gradient_&]:text-white items-start';
 
+const multiPromoHeaderClass = (isTextJustified: boolean) =>
+  cn(
+    'multipromo-header',
+    isTextJustified
+      ? 'max-w-none text-left lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-x-12'
+      : 'mx-auto max-w-3xl text-center'
+  );
+
 export const Default = (props: MultiPromoProps) => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
+  const { ref, isTextJustified } = useTextJustified(props.params);
 
   if (datasource) {
     return (
-      <section className={`relative ${props.params?.styles || ''}`} data-class-change>
+      <section
+        ref={ref}
+        className={cn(
+          'relative',
+          props.params?.styles,
+          isTextJustified && TEXT_JUSTIFIED_CLASS
+        )}
+        data-class-change
+      >
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="mb-6 text-2xl lg:text-5xl uppercase">
-              <ContentSdkText field={getFieldValue(datasource?.title)} />
-            </h2>
-            <p className="text-lg">
+          <div className={multiPromoHeaderClass(isTextJustified)} data-testid="multipromo-header">
+            <div className="multipromo-header-title">
+              <h2 className="mb-6 text-2xl lg:text-5xl uppercase">
+                <ContentSdkText field={getFieldValue(datasource?.title)} />
+              </h2>
+            </div>
+            <p
+              className={cn(
+                'multipromo-header-description text-lg',
+                isTextJustified && 'lg:mt-0'
+              )}
+            >
               <ContentSdkText field={getFieldValue(datasource?.description)} />
             </p>
           </div>
@@ -177,6 +244,7 @@ const FlexColumnCard = (promo: PromoItemProps) => {
 
 export const FlexColumn = (props: MultiPromoProps) => {
   const datasource = useMemo(() => getDatasource(props.fields), [props.fields]);
+  const { ref, isTextJustified } = useTextJustified(props.params);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const items = datasource?.children?.results?.filter(Boolean) ?? [];
 
@@ -203,21 +271,36 @@ export const FlexColumn = (props: MultiPromoProps) => {
   if (datasource) {
     return (
       <section
-        className={`relative bg-background ${props.params?.styles || ''}`}
+        ref={ref}
+        className={cn(
+          'relative bg-background',
+          props.params?.styles,
+          isTextJustified && TEXT_JUSTIFIED_CLASS
+        )}
         data-class-change
         data-testid="multipromo-flexcolumn"
       >
         <div className="container mx-auto px-4 py-16">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-dark md:text-5xl">
-              <ContentSdkText field={getFieldValue(datasource?.title)} />
-            </h2>
-            <div
-              aria-hidden="true"
-              className="mx-auto mt-5 h-1 w-12 bg-brand-red"
-              data-testid="multipromo-flexcolumn-underline"
-            />
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-foreground md:text-lg">
+          <div className={multiPromoHeaderClass(isTextJustified)} data-testid="multipromo-header">
+            <div className="multipromo-header-title">
+              <h2 className="text-3xl font-bold tracking-tight text-dark md:text-5xl">
+                <ContentSdkText field={getFieldValue(datasource?.title)} />
+              </h2>
+              <div
+                aria-hidden="true"
+                className={cn(
+                  'multipromo-header-underline mt-5 h-1 w-12 bg-brand-red',
+                  isTextJustified ? 'ml-0 mr-auto' : 'mx-auto'
+                )}
+                data-testid="multipromo-flexcolumn-underline"
+              />
+            </div>
+            <p
+              className={cn(
+                'multipromo-header-description text-base leading-relaxed text-foreground md:text-lg',
+                isTextJustified ? 'mt-6 max-w-none lg:mt-0' : 'mx-auto mt-6 max-w-2xl'
+              )}
+            >
               <ContentSdkText field={getFieldValue(datasource?.description)} />
             </p>
           </div>
