@@ -148,14 +148,8 @@ describe('TestimonialCarousel MediaCarousel', () => {
   });
 
   it('sends video-played with the video that started', () => {
-    const previousNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
-    try {
-      render(<MediaCarousel {...mediaProps} />);
-      fireEvent.click(screen.getByRole('button', { name: 'Play video, 1:15' }));
-    } finally {
-      process.env.NODE_ENV = previousNodeEnv;
-    }
+    render(<MediaCarousel {...mediaProps} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Play video, 1:15' }));
 
     expect(mockEvent).toHaveBeenCalledWith({
       type: 'video-played',

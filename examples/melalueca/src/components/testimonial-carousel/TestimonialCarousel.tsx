@@ -202,24 +202,25 @@ const posterFromImage = (image: TestimonialCarouselItemProps['image']) => {
 };
 
 const reportVideoPlayed = (
-  page: {
-    mode?: { isEditing?: boolean; isPreview?: boolean };
-    layout?: { sitecore?: { route?: { name?: string; itemLanguage?: string } } };
+  context: {
+    isEditing: boolean;
+    isPreview: boolean;
+    language?: string;
+    pageName?: string;
   },
   video: { href: string; name: string; duration: string }
 ) => {
-  if (process.env.NODE_ENV === 'development' || page.mode?.isEditing || page.mode?.isPreview) {
+  if (process.env.NODE_ENV === 'development' || context.isEditing || context.isPreview) {
     return;
   }
 
-  const route = page.layout?.sitecore?.route;
   try {
     void Promise.resolve(
       event({
         type: 'video-played',
         channel: 'WEB',
-        ...(route?.itemLanguage ? { language: route.itemLanguage.toUpperCase() } : {}),
-        ...(route?.name ? { page: route.name } : {}),
+        ...(context.language ? { language: context.language.toUpperCase() } : {}),
+        ...(context.pageName ? { page: context.pageName } : {}),
         extensionData: {
           videoUrl: video.href,
           videoTitle: video.name || video.href,
@@ -342,7 +343,15 @@ export const MediaCarousel: React.FC<TestimonialCarouselProps> = (props) => {
                   onClick={() => {
                     if (!active?.href) return;
                     setIsVideoOpen(true);
-                    reportVideoPlayed(page, active);
+                    reportVideoPlayed(
+                      {
+                        isEditing: Boolean(page?.mode?.isEditing),
+                        isPreview: Boolean(page?.mode?.isPreview),
+                        language: page?.layout?.sitecore?.route?.itemLanguage,
+                        pageName: page?.layout?.sitecore?.route?.name,
+                      },
+                      active
+                    );
                   }}
                 >
                   {active?.src ? (
