@@ -13,6 +13,7 @@ import {
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import type { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { event } from '@sitecore-content-sdk/events';
 import { cn } from '@/lib/utils';
 import { getFieldValue } from '@/lib/component-props';
 import {
@@ -200,6 +201,37 @@ const posterFromImage = (image: TestimonialCarouselItemProps['image']) => {
   return { src, alt };
 };
 
+const reportVideoPlayed = (
+  page: {
+    mode?: { isEditing?: boolean; isPreview?: boolean };
+    layout?: { sitecore?: { route?: { name?: string; itemLanguage?: string } } };
+  },
+  video: { href: string; name: string; duration: string }
+) => {
+  if (process.env.NODE_ENV === 'development' || page.mode?.isEditing || page.mode?.isPreview) {
+    return;
+  }
+
+  const route = page.layout?.sitecore?.route;
+  try {
+    void Promise.resolve(
+      event({
+        type: 'video-played',
+        channel: 'WEB',
+        ...(route?.itemLanguage ? { language: route.itemLanguage.toUpperCase() } : {}),
+        ...(route?.name ? { page: route.name } : {}),
+        extensionData: {
+          videoUrl: video.href,
+          videoTitle: video.name || video.href,
+          ...(video.duration ? { duration: video.duration } : {}),
+        },
+      })
+    ).catch(() => undefined);
+  } catch {
+    // Events are not initialized in development, editing, or preview.
+  }
+};
+
 const mediaFromItem = (item: TestimonialCarouselItemProps) => {
   const attribution = getFieldValue(item.testimonialAttribution)?.value || '';
   const quote = getFieldValue(item.testimonialQuote)?.value || '';
@@ -307,7 +339,11 @@ export const MediaCarousel: React.FC<TestimonialCarouselProps> = (props) => {
                   type="button"
                   className="relative block w-full"
                   aria-label={active?.duration ? `Play video, ${active.duration}` : 'Play video'}
-                  onClick={() => active?.href && setIsVideoOpen(true)}
+                  onClick={() => {
+                    if (!active?.href) return;
+                    setIsVideoOpen(true);
+                    reportVideoPlayed(page, active);
+                  }}
                 >
                   {active?.src ? (
                     <img

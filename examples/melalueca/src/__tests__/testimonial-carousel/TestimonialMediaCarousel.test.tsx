@@ -4,8 +4,18 @@ import { MediaCarousel } from '../../components/testimonial-carousel/Testimonial
 import type { TestimonialCarouselProps } from '../../components/testimonial-carousel/testimonial-carousel.props';
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  useSitecore: () => ({ page: { mode: { isEditing: false } } }),
+  useSitecore: () => ({
+    page: {
+      mode: { isEditing: false, isPreview: false },
+      layout: { sitecore: { route: { name: 'Home', itemLanguage: 'en' } } },
+    },
+  }),
   Text: ({ field }: { field?: { value?: string } }) => <span>{field?.value}</span>,
+}));
+
+const mockEvent = jest.fn().mockReturnValue(Promise.resolve());
+jest.mock('@sitecore-content-sdk/events', () => ({
+  event: (payload: unknown) => mockEvent(payload),
 }));
 
 const mediaProps = {
@@ -63,6 +73,10 @@ const mediaProps = {
 } as unknown as TestimonialCarouselProps;
 
 describe('TestimonialCarousel MediaCarousel', () => {
+  beforeEach(() => {
+    mockEvent.mockClear();
+  });
+
   beforeAll(() => {
     window.matchMedia = jest.fn().mockImplementation(() => ({
       matches: true,
@@ -131,5 +145,28 @@ describe('TestimonialCarousel MediaCarousel', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Stop automatic slide show' }));
     expect(screen.getByRole('button', { name: 'Start automatic slide show' })).toBeInTheDocument();
+  });
+
+  it('sends video-played with the video that started', () => {
+    const previousNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    try {
+      render(<MediaCarousel {...mediaProps} />);
+      fireEvent.click(screen.getByRole('button', { name: 'Play video, 1:15' }));
+    } finally {
+      process.env.NODE_ENV = previousNodeEnv;
+    }
+
+    expect(mockEvent).toHaveBeenCalledWith({
+      type: 'video-played',
+      channel: 'WEB',
+      language: 'EN',
+      page: 'Home',
+      extensionData: {
+        videoUrl: 'https://video-us.melaleuca.com/shelby.mp4',
+        videoTitle: 'Shelby Ford',
+        duration: '1:15',
+      },
+    });
   });
 });
