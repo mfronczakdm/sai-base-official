@@ -38,6 +38,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'mrfbasech2.sitecoresandbox.cloud',
+        port: '',
+      },
+      {
+        protocol: 'https',
         hostname: '*.sitecorecontenthub.cloud',
         port: '',
       },
