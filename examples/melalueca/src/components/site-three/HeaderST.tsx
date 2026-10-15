@@ -432,7 +432,10 @@ const HeaderSTVersion5View = (props: HeaderSTProps) => {
       <div className="bg-dark">
         <div className="mx-auto flex max-w-[90rem] items-center pr-2">
           <nav aria-label="Primary" className={version5CategoryClass}>
-            <ul ref={categoryRowRef} className="flex min-w-0 flex-1 items-center overflow-x-auto">
+            <ul
+              ref={categoryRowRef}
+              className="flex min-w-0 flex-1 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
               <AppPlaceholder
                 name={placeholderName}
                 rendering={props.rendering}

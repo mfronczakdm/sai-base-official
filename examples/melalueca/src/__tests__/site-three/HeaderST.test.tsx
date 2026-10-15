@@ -635,6 +635,11 @@ describe('HeaderST Component', () => {
         '/become-a-member'
       );
       expect(screen.getByRole('button', { name: 'Menu' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'More categories' })).toBeInTheDocument();
+      expect(screen.getByRole('navigation', { name: 'Primary' }).querySelector('ul')).toHaveClass(
+        'overflow-x-auto',
+        '[scrollbar-width:none]'
+      );
       expect(screen.getAllByTestId('app-placeholder').length).toBeGreaterThan(0);
       expect(screen.queryByTestId('fontawesome-icon')).not.toBeInTheDocument();
       expect(document.head.innerHTML + document.body.innerHTML).toContain('padding-top: 8.75rem');

@@ -310,6 +310,25 @@ describe('Carousel Version2', () => {
     expect(screen.getByLabelText('Pause carousel')).toBeInTheDocument();
     expect(screen.getAllByTestId('carousel-dot-indicator')).toHaveLength(3);
     expect(screen.getByTestId('carousel-link')).toHaveClass('uppercase');
+    expect(screen.getByTestId('carousel-link')).toHaveClass('text-primary');
+    expect(carousel).toHaveAttribute('data-image-tone', 'dark');
+  });
+
+  it('uses dark text and a dark button when the image tone is light', () => {
+    render(
+      <Version2
+        {...defaultCarouselProps}
+        params={{ ...defaultCarouselProps.params, ImageTone: 'Light' }}
+      />
+    );
+
+    const carousel = screen.getByRole('group').closest('[aria-roledescription="carousel"]');
+    expect(carousel).toHaveAttribute('data-image-tone', 'light');
+    expect(screen.getByText('Sustainable Energy').closest('h2')).toHaveClass('text-foreground');
+    expect(screen.getByText('Committed to renewable energy sources').closest('p')).toHaveClass(
+      'text-foreground'
+    );
+    expect(screen.getByTestId('carousel-link')).toHaveClass('text-white');
   });
 
   it('moves to the selected dot', async () => {
