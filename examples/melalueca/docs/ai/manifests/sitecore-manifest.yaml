@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-15T12:30:00Z"
+lastUpdatedAt: "2026-10-15T14:40:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -7909,7 +7909,7 @@ ia:
       - "2026-08-19: Created dfs Data/Feature Banners folder + Portal Features parent + 7 FeatureItem children (foodservice copy; Image left empty for public URLs)."
       - "2026-10-06: Populated bcaa Data/Feature Banners/Main Home with 8 FeatureItem children matching the homepage I would like to bar. Title set to I would like to:. Links point at existing IA pages. Shared SV icon reused. Sort order matches screenshot."
       - "2026-10-06: Added Presentation/Styles/FeatureBanner/Dark Theme (Value=dark-theme, Allowed Renderings=FeatureBanner). Default/Vertical apply bg-primary, primary-foreground text, compact bar, inverted icons when params.styles includes dark-theme. Select Dark Theme in Pages Styling — MCP cannot set instance Styles."
-      - "2026-10-06: Pages canvas only toggles the dark-theme class on [data-class-change] and does not remount React with updated params.styles. Added CSS for .dark-theme plus a MutationObserver so the editor canvas matches preview."
+      - "2026-10-15: Vertical variant matches the Melaleuca category band: bold title case heading, subTitle underneath, circular images. ComponentQuery now selects subTitle. Product Categories subTitle set to Explore Our Product Categories."
       - "2026-10-06: Large-viewport Default/Accent packed the item group to the right (justify-between + shrink-wrapped nowrap). Items row is now flex-1 justify-evenly; each FeatureItem is flex-1 basis-0 so links share remaining width evenly and wrap on smaller viewports."
     react:
       filePath: "src/components/site-three/FeatureBanner.tsx"
@@ -13432,13 +13432,17 @@ externalImageOptimizerAudit:
     category: "Page Content"
     status: "complete"
     createdAt: "2026-10-07T17:40:00Z"
-    updatedAt: "2026-10-07T17:50:00Z"
+    updatedAt: "2026-10-15T14:40:00Z"
     siteName: "bcaa"
     siteCollection: "bcaa"
     notes: >
       Context-only component that renders Article Page route fields (pageShortTitle,
       pageHeaderTitle with pageTitle fallback, pageSubtitle, pageDisplayDate,
-      pageReadTime, pageSummary, Content). No datasource and no ComponentQuery.
+      pageReadTime, pageSummary, Content). Landing Page body is the lowercase content
+      field and appears when Show content is checked. The date/read-time bullet renders
+      only when both values exist. No datasource and no ComponentQuery.
+      2026-10-15: ShowContent checkbox {BFF0F3AE-9254-4CCA-90E3-2629D254C6B9} on Advanced styling
+      section {5EC12CC0-98B5-4597-85D6-789BD5C942E5}.
       Placed on Beat the heat summer checklist {C3528652-4FE4-480A-A860-5BF899B716DF}
       in /headless-main/container-seventy-4 after the empty Rich Text. Default variant
       FieldNames is {2F6EE827-E1D1-4463-90A8-20A61FE089C7}.
@@ -13765,6 +13769,10 @@ ia:
     - "Items are in Draft. Content read-back confirmed on Supplements, Awards, Our Brands, and Frank L VanderSloot."
     - "Our Brands live page did not yield article paragraphs; Content is the page headline plus the source link."
     - "2026-10-15: Landing Page R3 Challenge {1797B8B3-425E-465E-B182-9C915813FCFB} filled from https://www.melaleuca.com/productstore/r3challenge. content, page*, metadata*, and og* echoed. No og image. A Main Content Loading region never hydrated."
+    - "2026-10-15: TestimonialCarousel MediaCarousel variant {D87F29D7-774B-4DD9-A9D5-BCA8D2ACA4C1}. Default datasource {1DFBE198-ACBD-40BB-B54D-8AD99EDCDF8B} filled with the seven homepage customer videos. Attribution stores name | Customer Since year. Items are Draft."
+    - "2026-10-15: HeroST folder {A9C2A7C2-F53D-413D-937F-C2C347C76ABF} and 12 audience heroes. Ampersand is not allowed in item names, so Nutrition and Supplements and Beauty and Personal Care use and. Images left empty. Items are Draft."
+    - "2026-10-15: HeroST Advanced styling HeroHeight droplist {11AA2551-6697-41AF-8EB2-22B2FDA2F6CD} and BlurOverlay droplist {7D39CB16-53E4-400C-8FE3-A9F10E9A14DD}. Options live under Presentation/Enumerations/HeroST. Blank Hero height keeps the current size. Blank Blur overlay keeps the frost; Off removes it."
+    - "2026-10-15: HeroST ImageCount droplist {E674A726-14F9-46E5-B393-0B989CA67705}. Options 1 and 2 under Presentation/Enumerations/HeroST/ImageCount. 1 uses Image1 as the full background on every variant. Blank or 2 keeps the existing layouts."
   pages:
     - { name: "Supplements", itemId: "6e60d1f2-4b3f-459c-a745-db5c092c09c5", path: "/sitecore/content/melaleuca/melaleuca/Home/Supplements" }
     - { name: "Cleaning and Laundry", itemId: "3f34acf4-177e-4c43-9119-f8d1a1ab3c8b", path: "/sitecore/content/melaleuca/melaleuca/Home/Cleaning and Laundry" }

@@ -637,6 +637,12 @@ describe('HeaderST Component', () => {
       expect(screen.getByRole('button', { name: 'Menu' })).toBeInTheDocument();
       expect(screen.getAllByTestId('app-placeholder').length).toBeGreaterThan(0);
       expect(screen.queryByTestId('fontawesome-icon')).not.toBeInTheDocument();
+      expect(document.head.innerHTML + document.body.innerHTML).toContain('padding-top: 8.75rem');
+    });
+
+    it('does not offset the page while editing', () => {
+      render(<HeaderSTVersion5 {...headerSTPropsBasic} page={mockPageEditing} />);
+      expect(document.head.innerHTML + document.body.innerHTML).not.toContain('padding-top: 8.75rem');
     });
   });
 

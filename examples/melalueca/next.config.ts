@@ -66,6 +66,16 @@ const nextConfig: NextConfig = {
         hostname: 'edge-platform.sitecorecloud.io',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdnsc1.melaleuca.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'video-us.melaleuca.com',
+        port: '',
+      },
     ],
     // Optimize image sizes for responsive loading
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

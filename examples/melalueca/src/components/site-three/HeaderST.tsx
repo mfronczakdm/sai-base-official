@@ -300,6 +300,8 @@ export const Version4 = (props: HeaderSTProps) => (
   </HeaderSTScrollFrame>
 );
 
+const version5HeaderHeight = '8.75rem';
+
 const version5UtilityLinks = [
   { label: 'Product Store', path: '' },
   { label: 'Our Story', path: 'Our Story' },
@@ -331,12 +333,17 @@ const HeaderSTVersion5View = (props: HeaderSTProps) => {
   const contentHref = (path: string) =>
     path ? `/${site}/${locale}/${encodeURI(path)}` : `/${site}/${locale}`;
 
+  const isEditing = Boolean(props.page?.mode?.isEditing);
+
   return (
     <header
       className={cn(props.params?.styles, 'w-full text-primary-foreground')}
       data-class-change
       data-testid="header-st-version5"
     >
+      {!isEditing && (
+        <style>{`@media (min-width: 64rem) { header[class~="lg:fixed"] + main { padding-top: ${version5HeaderHeight}; } }`}</style>
+      )}
       <div className="bg-dark">
         <div className="mx-auto flex h-9 max-w-[90rem] items-center px-4 lg:px-6">
           <nav aria-label="Sections" className="flex items-center gap-5">
