@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-15T11:55:00Z"
+lastUpdatedAt: "2026-10-15T12:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -11603,6 +11603,7 @@ ia:
         - "Version1"
         - "Version2"
         - "FlexColumn"
+        - "Carousel"
       note: "Version1 named export implemented 2026-08-25. Teal/white split, three-up overlapping cards, optional portrait with concave white mask, carousel when more than 3 children. LCMC Headless Variants synced 2026-09-10 including tab variants and Version2. 2026-10-07: FlexColumn added for bcaa (centered title + brand-red underline + horizontal overflow cards). Existing Default/Stacked/SingleColumn unchanged. 2026-10-08: TextAlignment Droplist on MultiPromo Parameters Styling (Pages Advanced styling, same pattern as Number of Columns). Default + FlexColumn swap header classes from params.TextAlignment; MutationObserver + CSS cover Pages class toggles without a full refresh."
 
     sitecoreEnvironment:
@@ -13763,6 +13764,7 @@ ia:
     - "Starter Data, Speakers, and Video were left in place."
     - "Items are in Draft. Content read-back confirmed on Supplements, Awards, Our Brands, and Frank L VanderSloot."
     - "Our Brands live page did not yield article paragraphs; Content is the page headline plus the source link."
+    - "2026-10-15: Landing Page R3 Challenge {1797B8B3-425E-465E-B182-9C915813FCFB} filled from https://www.melaleuca.com/productstore/r3challenge. content, page*, metadata*, and og* echoed. No og image. A Main Content Loading region never hydrated."
   pages:
     - { name: "Supplements", itemId: "6e60d1f2-4b3f-459c-a745-db5c092c09c5", path: "/sitecore/content/melaleuca/melaleuca/Home/Supplements" }
     - { name: "Cleaning and Laundry", itemId: "3f34acf4-177e-4c43-9119-f8d1a1ab3c8b", path: "/sitecore/content/melaleuca/melaleuca/Home/Cleaning and Laundry" }
