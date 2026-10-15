@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-14T13:00:00Z"
+lastUpdatedAt: "2026-10-15T11:55:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -13069,7 +13069,7 @@ externalImageOptimizerAudit:
     category: "Carousel"
     status: "complete"
     createdAt: "2026-10-06T08:50:00Z"
-    updatedAt: "2026-10-14T01:00:00Z"
+    updatedAt: "2026-10-15T11:10:00Z"
     notes:
       - "2026-10-06: Created click-click-launch Carousel templates to match Image Carousel / Image Carousel Item / Image Carousels Folder."
       - "2026-10-06: Created JSON Rendering, Rendering Parameters (Image Carousel four bases), Data/Carousels folder, example parent + two slides, Headless Variants Default, and appended to Available Renderings/click-click-launch next to ImageCarousel."
@@ -13080,6 +13080,8 @@ externalImageOptimizerAudit:
       - "2026-10-11: Replaced Carousel_upcoming Renewal DAM homepage images with media library Cars on road {E16E4730}, electric car {8BDD11E3}, and person {5EDE601F}."
       - "2026-10-11: Rewrote Carousel_Renewal_past {D83C9E4A} for a lapsed renewal — caring win-back copy, new images, links to Car / ICBC / Book an Appointment."
       - "2026-10-14: Added Carousel_Prospect {F8F14F74} for guests who are not members (membership_status=false). Three slides: Join Roadside, Ways to Save, Compare Plans."
+      - "2026-10-15: Added Version2 variant. Sitecore item {FD382F38-4DA9-437B-A9EE-5008E0FF2F52} at /sitecore/content/melaleuca/melaleuca/Presentation/Headless Variants/Carousel/Version2. Full-bleed image, green wash, centered copy, circular side arrows, pause-and-dots pill. Select Version2 in Pages; Default and CTALeft are unchanged."
+      - "2026-10-15: Created 3 Melaleuca carousels under /sitecore/content/melaleuca/melaleuca/Data/Carousels. Explore Wellness Solutions {FC432C9C}, A Healthier Home Starts Here {E8253BA9}, Complete Your Wellness Routine {B2BD58AC}. Four slides each with title, body, and internal links. Slide images left empty."
 
     react:
       filePath: "src/components/carousel/Carousel.tsx"
@@ -13087,6 +13089,7 @@ externalImageOptimizerAudit:
       variants:
         - "Default"
         - "CTALeft"
+        - "Version2"
 
     templates:
       datasource:
@@ -13706,3 +13709,113 @@ externalImageOptimizerAudit:
         - "Restart localhost:3000 so /api/blog-listing and the client fetch are live in Pages"
         - "Optional leftover local DS /sitecore/content/bcaa/bcaa/Home/BCAA Blog/Data/BCAA_Blog_Listing {6565F732} is unused after rebind"
         - "Switch FieldNames from Cards to Default in Pages if a row layout is preferred"
+
+  - name: "melaleuca-homepage-multipromo"
+    kind: "content-create"
+    category: "Promos"
+    status: "complete"
+    createdAt: "2026-10-15T11:55:00Z"
+    updatedAt: "2026-10-15T11:55:00Z"
+    siteCollection: "melaleuca"
+    siteName: "melaleuca"
+    componentName: "MultiPromo"
+    datasourceTemplateId: "{775D6354-CF01-4F34-9713-D34645079C88}"
+    childTemplateId: "{F94C8C17-70E8-4D8B-9D35-D0465C0E0945}"
+    notes:
+      - "Homepage Promos for the default home page. Three SimplePromo cards match the Melaleuca leaf tiles. Images left empty after standard values applied the Default Website cover. Leaf photos still need authoring."
+    folder:
+      name: "MultiPromos"
+      itemId: "{BB02BA83-EA37-4F5A-9B61-7740CA547D97}"
+      path: "/sitecore/content/melaleuca/melaleuca/Data/MultiPromos"
+      preexisting: true
+    items:
+      - name: "Homepage Promos"
+        itemId: "{D8AA33E6-8057-4AC6-8403-6A24754ECE85}"
+        path: "/sitecore/content/melaleuca/melaleuca/Data/MultiPromos/Homepage Promos"
+        children:
+          - { name: "Where Passion Meets Purpose", itemId: "{2E978F47-F8EE-4D73-BD64-680990DF90AA}", linkTarget: "Our Story" }
+          - { name: "Made with Meaning", itemId: "{1704FE83-5344-48FE-97EA-A888C8B8BC15}", linkTarget: "Ingredients Philosophy" }
+          - { name: "Our Ground Rule for Greatness", itemId: "{39335422-0815-47C8-AD4B-743564859012}", linkTarget: "Extra Savings" }
+    verification:
+      checkedAt: "2026-10-15T11:55:00Z"
+      passed:
+        - "Parent and three SimplePromo children created under Data/MultiPromos"
+        - "Headings and link text match the homepage tiles on read-back"
+      failed: []
+      pendingManual:
+        - "Assign Homepage Promos to the home page MultiPromo and publish for Edge"
+        - "Set a leaf photo on each card image field"
+
+ia:
+  name: "melaleuca"
+  status: "complete"
+  createdAt: "2026-10-14T22:15:00Z"
+  siteName: "melaleuca"
+  contentRoot: "/sitecore/content/melaleuca/melaleuca/Home"
+  contentRootId: "6dac14d1-bf6d-4389-a69c-36230a004c6e"
+  pageTemplateId: "{DB74BE6B-BDBB-4940-AA29-7D8E83B3F786}"
+  sourceUrl: "https://www.melaleuca.com/"
+  iaFile: "docs/ai/ia/melaleuca-ia.md"
+  createdCount: 55
+  skippedCount: 0
+  notes:
+    - "Page template was not in Home insert options; create_content_item still succeeded."
+    - "Starter Data, Speakers, and Video were left in place."
+    - "Items are in Draft. Content read-back confirmed on Supplements, Awards, Our Brands, and Frank L VanderSloot."
+    - "Our Brands live page did not yield article paragraphs; Content is the page headline plus the source link."
+  pages:
+    - { name: "Supplements", itemId: "6e60d1f2-4b3f-459c-a745-db5c092c09c5", path: "/sitecore/content/melaleuca/melaleuca/Home/Supplements" }
+    - { name: "Cleaning and Laundry", itemId: "3f34acf4-177e-4c43-9119-f8d1a1ab3c8b", path: "/sitecore/content/melaleuca/melaleuca/Home/Cleaning and Laundry" }
+    - { name: "Cleaning", itemId: "bfbd71d3-9270-4d32-99cb-7e732059bb7f", path: "/sitecore/content/melaleuca/melaleuca/Home/Cleaning and Laundry/Cleaning" }
+    - { name: "Laundry", itemId: "f80200f6-9b20-45c4-9efa-66f41bdbf50d", path: "/sitecore/content/melaleuca/melaleuca/Home/Cleaning and Laundry/Laundry" }
+    - { name: "Personal Care", itemId: "bc87abc2-327a-4f1f-b1e5-3ac3d7d03078", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care" }
+    - { name: "Bath and Body", itemId: "1f0c7555-7570-4302-8f03-88bddec44929", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Bath and Body" }
+    - { name: "Dental", itemId: "2b82c498-57f3-4172-9fde-eaa88cf46e99", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Dental" }
+    - { name: "Hair Care", itemId: "e5863382-8cb5-4872-93ce-88b068979d7c", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Hair Care" }
+    - { name: "Hand Soap and Sanitizer", itemId: "5567d46b-e07d-4b6e-842e-50028729e8ca", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Hand Soap and Sanitizer" }
+    - { name: "Outdoor", itemId: "4a748c26-8c7f-46a3-8915-9e29a29427e5", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Outdoor" }
+    - { name: "Baby Care", itemId: "4923b645-c07d-4007-8582-15f683bf7cdd", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Baby Care" }
+    - { name: "Acne Prevention", itemId: "2771723e-3512-4b79-b328-29ac546c4528", path: "/sitecore/content/melaleuca/melaleuca/Home/Personal Care/Acne Prevention" }
+    - { name: "Beauty", itemId: "add70fac-6a79-459d-836e-a4b8169f5b68", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty" }
+    - { name: "Premium Skin Care", itemId: "bb62e3ac-a7d4-4f0a-a01f-1faca8f21333", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Premium Skin Care" }
+    - { name: "Color Cosmetics", itemId: "657f635b-2a4b-49bd-9ae7-e8d72a4bb631", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Color Cosmetics" }
+    - { name: "Beauty Specials", itemId: "c04cfcf2-ee3d-4a59-ba03-f554590a49fb", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Beauty Specials" }
+    - { name: "Hair Care", itemId: "3f46927c-7126-4024-aa00-578f344dc0a6", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Hair Care" }
+    - { name: "Fragrance Perfume", itemId: "c581841d-8a39-42e0-ac4f-5ad5d8ea24ce", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Fragrance Perfume" }
+    - { name: "Now Trending Seasonal Colors", itemId: "aadcab1f-3100-4ef6-88ea-47113e6c2129", path: "/sitecore/content/melaleuca/melaleuca/Home/Beauty/Now Trending Seasonal Colors" }
+    - { name: "Healthy Foods and Drinks", itemId: "75830e23-fff2-4d6e-bf42-64a3e3aa9680", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks" }
+    - { name: "Healthy Weight and Protein", itemId: "9dd2454e-7b4b-4966-a8d9-edae9dbdf968", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Healthy Weight and Protein" }
+    - { name: "Healthy Snacks", itemId: "759f24e1-74f5-4fa7-9935-94e98644c9f9", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Healthy Snacks" }
+    - { name: "Beverages", itemId: "5ab508c3-cca9-434d-9268-bbc1b3118841", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Beverages" }
+    - { name: "Cooking Essentials", itemId: "91ffe6a3-1021-4fc6-9617-10ce9c336358", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Cooking Essentials" }
+    - { name: "Fiber Drink", itemId: "07f9def4-48c9-4958-9297-0924ddc63981", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Fiber Drink" }
+    - { name: "Mints", itemId: "32f47b2e-e762-4da8-a75a-563bf7824b5c", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Mints" }
+    - { name: "Baking Mixes", itemId: "edc8b4b4-4b4c-43de-a53b-1f151ebb072f", path: "/sitecore/content/melaleuca/melaleuca/Home/Healthy Foods and Drinks/Baking Mixes" }
+    - { name: "Medicines and Treatments", itemId: "7e700be7-6044-4b23-8e36-a54cafdc1e64", path: "/sitecore/content/melaleuca/melaleuca/Home/Medicines and Treatments" }
+    - { name: "Home Fragrance", itemId: "ace85e14-e6d8-4b3a-beb6-84c4655231c7", path: "/sitecore/content/melaleuca/melaleuca/Home/Home Fragrance" }
+    - { name: "Essential Oils", itemId: "f2461cea-7f2e-4fae-88af-ae1c4db2fbf3", path: "/sitecore/content/melaleuca/melaleuca/Home/Essential Oils" }
+    - { name: "New Products", itemId: "2bfa945e-b307-40ff-ba7d-d7da84be650c", path: "/sitecore/content/melaleuca/melaleuca/Home/New Products" }
+    - { name: "Extra Savings", itemId: "ab390047-4e84-47c9-b74f-dbbd87dfb006", path: "/sitecore/content/melaleuca/melaleuca/Home/Extra Savings" }
+    - { name: "Outlet Store", itemId: "7db936d4-52ad-431f-9cfc-9e2c311b18ee", path: "/sitecore/content/melaleuca/melaleuca/Home/Extra Savings/Outlet Store" }
+    - { name: "Monthly Specials", itemId: "2deb13d6-a10c-410c-af38-8688d251e280", path: "/sitecore/content/melaleuca/melaleuca/Home/Extra Savings/Monthly Specials" }
+    - { name: "Featured This Month", itemId: "9060d43a-0fbe-4073-9d7c-4ad77babf508", path: "/sitecore/content/melaleuca/melaleuca/Home/Featured This Month" }
+    - { name: "Curated Collections", itemId: "1fba8133-0729-4d1d-a91d-ba387d0ce7fa", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections" }
+    - { name: "Family Favorites", itemId: "bfb1f9f0-cdb0-4b42-8775-8efd52835cb4", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/Family Favorites" }
+    - { name: "Busy Moms", itemId: "79703522-f653-4c11-9787-6c462becd667", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/Busy Moms" }
+    - { name: "Beauty Essentials", itemId: "75ac1a17-33e7-4e3d-bfd2-5360d62c16a8", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/Beauty Essentials" }
+    - { name: "For Him", itemId: "210c441f-1ff5-4403-8765-cbab70b4d498", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/For Him" }
+    - { name: "Fitness Focus", itemId: "5c0f7a3d-fc41-4319-bd7d-f7f83fd015b5", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/Fitness Focus" }
+    - { name: "Healthy Weight Essentials", itemId: "2cb8804a-7e05-463a-a8f5-ce2c8070a1ba", path: "/sitecore/content/melaleuca/melaleuca/Home/Curated Collections/Healthy Weight Essentials" }
+    - { name: "New Member Savings Packs", itemId: "036e27f3-48f9-4a26-b8e7-8da61a8abfa9", path: "/sitecore/content/melaleuca/melaleuca/Home/New Member Savings Packs" }
+    - { name: "Logo Gear", itemId: "c31395c7-08d3-48e3-a6e4-14c7bb52c31b", path: "/sitecore/content/melaleuca/melaleuca/Home/Logo Gear" }
+    - { name: "Sales Aids and Materials", itemId: "50f089c2-4c7d-4410-957d-e9116152d1fa", path: "/sitecore/content/melaleuca/melaleuca/Home/Sales Aids and Materials" }
+    - { name: "Our Story", itemId: "826651aa-92b4-411c-83e7-e78942d5aac1", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story" }
+    - { name: "Total Wellness", itemId: "d6909aa8-6e54-4220-b818-b5729d60b55b", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Total Wellness" }
+    - { name: "Our Brands", itemId: "8486dae1-b968-4552-865f-cf460c434398", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Our Brands" }
+    - { name: "Ingredients Philosophy", itemId: "0c484678-caa0-42a3-a4dc-cebc91b0ea99", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Ingredients Philosophy" }
+    - { name: "Awards", itemId: "7179e1d5-d82d-4009-9d6c-6d03045e9754", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Awards" }
+    - { name: "Made in America", itemId: "e6c7ff1e-f3ec-425a-910c-a1c24968272c", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Made in America" }
+    - { name: "Become a Member", itemId: "a72aea72-84bc-4e3c-b7c8-27295a9d8afd", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Become a Member" }
+    - { name: "Frank L VanderSloot", itemId: "47368dd5-c98e-4d14-b8fb-def46b0671fa", path: "/sitecore/content/melaleuca/melaleuca/Home/Our Story/Frank L VanderSloot" }
+    - { name: "R3", itemId: "ddfb77d6-e5f6-4b11-b552-14b4fb7747f1", path: "/sitecore/content/melaleuca/melaleuca/Home/R3" }
+    - { name: "Riverbend Ranch", itemId: "3acc40c8-3989-4c03-b243-6d20bf339d6e", path: "/sitecore/content/melaleuca/melaleuca/Home/Riverbend Ranch" }
