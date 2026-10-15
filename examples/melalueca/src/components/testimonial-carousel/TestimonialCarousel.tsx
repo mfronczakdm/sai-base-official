@@ -191,10 +191,12 @@ const attributeFromXml = (xml: string, name: string) => {
   return match?.[1] || '';
 };
 
+const textValue = (value: unknown) => (typeof value === 'string' ? value : '');
+
 const posterFromImage = (image: TestimonialCarouselItemProps['image']) => {
   const parsed = getFieldValue(image) as ImageField | undefined;
-  const src = parsed?.value?.src || attributeFromXml(image?.value || '', 'src');
-  const alt = parsed?.value?.alt || attributeFromXml(image?.value || '', 'alt');
+  const src = textValue(parsed?.value?.src) || attributeFromXml(image?.value || '', 'src');
+  const alt = textValue(parsed?.value?.alt) || attributeFromXml(image?.value || '', 'alt');
   return { src, alt };
 };
 
