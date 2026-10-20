@@ -10,6 +10,7 @@ import * as ZipcodeModaldev from 'src/components/zipcode-modal/zipcode-modal.dev
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
 import * as PracticePortalComponent from 'src/components/uiim/practice-portal/PracticePortalComponent';
 import * as NewsListing from 'src/components/uiim/news/NewsListing';
+import * as EventListing from 'src/components/uiim/events/EventListing';
 import * as CareerListing from 'src/components/uiim/careers/CareerListing';
 import * as CareerComponent from 'src/components/uiim/careers/CareerComponent';
 import * as BlogListing from 'src/components/uiim/article/BlogListing';
@@ -226,6 +227,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['VerticalImageAccordion', { ...VerticalImageAccordion, componentType: 'client' }],
   ['PracticePortalComponent', { ...PracticePortalComponent, componentType: 'client' }],
   ['NewsListing', { ...NewsListing, componentType: 'client' }],
+  ['EventListing', { ...EventListing, componentType: 'client' }],
   ['CareerListing', { ...CareerListing, componentType: 'client' }],
   ['CareerComponent', { ...CareerComponent }],
   ['BlogListing', { ...BlogListing, componentType: 'client' }],
