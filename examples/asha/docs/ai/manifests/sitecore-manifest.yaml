@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-19T21:00:00Z"
+lastUpdatedAt: "2026-10-20T13:10:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -113,6 +113,58 @@ components:
         - "__Standard values link (silent-write)"
         - "__Masters on parent SV, folder SV, and Feature Banner folder (silent-write)"
         - "Publish Feature Banner folder before Edge delivery"
+  - name: "AshaEventListing"
+    kind: "list"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-20T13:00:00Z"
+    updatedAt: "2026-10-20T13:10:00Z"
+    siteName: "asha"
+    siteCollection: "asha"
+    notes:
+      - "2026-10-20: ASHA event cards matching NewsListing. Authors select Event List or Calendar Event items under Data/Events. An Event List card uses its Calendar Event child for place, start, and end. Does not replace the andmore EventListing rendering."
+    react:
+      filePath: "src/components/uiim/events/EventListing.tsx"
+      componentName: "EventListing"
+      variants: ["Default"]
+    templates:
+      parent:
+        name: "EventListing"
+        path: "/sitecore/templates/Project/asha/EventListing"
+        itemId: "{E1D41BD5-BBEC-456E-9E0D-03DDCF636E82}"
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{81727325-3121-45C3-B0FC-9845D9009388}" }
+          - { name: "Events", type: "Treelist", itemId: "{C26CF52F-D644-469E-A28F-9A5505C4A1A8}", source: "/sitecore/content/asha/asha/Data/Events" }
+      folder:
+        name: "EventListing Folder"
+        path: "/sitecore/templates/Project/asha/EventListing Folder"
+        itemId: "{E08D3E58-F170-450E-BCA2-A6F00B41423A}"
+    rendering:
+      name: "EventListing"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/EventListing"
+      itemId: "{14DFF86D-3BEE-4195-82DA-9018ADB0AF88}"
+      componentName: "EventListing"
+      parametersTemplateId: "{26C8350E-9D67-4A63-A012-DB9043BFED35}"
+      datasourceTemplatePath: "/sitecore/templates/Project/asha/EventListing"
+    datasource:
+      path: "/sitecore/content/asha/asha/Data/Event Listings/Upcoming Events"
+      itemId: "{52AB8F6B-F712-4F6A-BF5B-FC69C3D1B0E6}"
+      title: "EVENTS"
+    variants:
+      containerPath: "/sitecore/content/asha/asha/Presentation/Headless Variants/EventListing"
+      containerItemId: "{9011D2C5-2CAE-42E2-A1E0-47B51BAD50FD}"
+      definitions:
+        - { name: "Default", itemId: "{BD1FDD94-93AD-4923-A24E-F9728184769B}" }
+    verification:
+      checkedAt: "2026-10-20T13:10:00Z"
+      passed:
+        - "Events treelist includes Event List and Calendar Event"
+        - "Upcoming Events selects six Event Lists"
+        - "Rendering registered on Page Content Available Renderings"
+      failed: []
+      pendingManual:
+        - "Publish Upcoming Events, the selected events, and the EventListing rendering for Edge"
+        - "Folder __Masters was a silent write"
   - name: "NewsListing"
     kind: "list"
     category: "Page Content"
