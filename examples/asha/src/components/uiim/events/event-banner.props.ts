@@ -1,5 +1,5 @@
 import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
-import type { ComponentProps, GraphQLField } from '@/lib/component-props';
+import type { CompatibleField, ComponentProps, GraphQLField } from '@/lib/component-props';
 import type { EventDateField } from './event-listing.props';
 
 export type EventBannerImage = GraphQLField<ImageField> | { value?: string | ImageField['value'] };
@@ -7,12 +7,12 @@ export type EventBannerImage = GraphQLField<ImageField> | { value?: string | Ima
 export type EventBannerEvent = {
   id?: string;
   name?: string;
-  eventName?: GraphQLField<Field<string>>;
-  eventPlace?: GraphQLField<Field<string>>;
-  eventDescription?: GraphQLField<Field<string>>;
+  eventName?: CompatibleField<Field<string>>;
+  eventPlace?: CompatibleField<Field<string>>;
+  eventDescription?: CompatibleField<Field<string>>;
   eventStart?: EventDateField;
   eventEnd?: EventDateField;
-  eventLink?: GraphQLField<LinkField>;
+  eventLink?: CompatibleField<LinkField>;
   eventImage?: EventBannerImage;
 };
 
@@ -20,12 +20,12 @@ export type EventBannerFields = {
   data?: {
     datasource?: EventBannerEvent;
   };
-  EventName?: GraphQLField<Field<string>> | Field<string>;
-  EventPlace?: GraphQLField<Field<string>> | Field<string>;
-  EventDescription?: GraphQLField<Field<string>> | Field<string>;
+  EventName?: CompatibleField<Field<string>>;
+  EventPlace?: CompatibleField<Field<string>>;
+  EventDescription?: CompatibleField<Field<string>>;
   EventStart?: EventDateField;
   EventEnd?: EventDateField;
-  EventLink?: GraphQLField<LinkField> | LinkField;
+  EventLink?: CompatibleField<LinkField>;
   eventImage?: EventBannerImage;
 };
 
