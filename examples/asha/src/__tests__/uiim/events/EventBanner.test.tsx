@@ -44,8 +44,7 @@ describe('EventBanner', () => {
     expect(banner.querySelector('[data-image-side="left"]')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Career fair' })).toHaveAttribute('src', '/-/media/career-fair.webp');
     expect(screen.getByRole('heading', { name: 'ASHA Fall Virtual Career Fair' })).toHaveStyle({ color: '#00778B' });
-    expect(screen.getByText('Virtual')).toBeInTheDocument();
-    expect(screen.getByText('October 7, 2026 · 6–8:30 p.m.')).toBeInTheDocument();
+    expect(screen.getByText('Virtual · October 7, 2026 · 6–8:30 p.m.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Learn more' })).toHaveAttribute('href', 'https://www.asha.org/events/career-fair/');
   });
 
@@ -53,11 +52,34 @@ describe('EventBanner', () => {
     render(<ImageRight {...props} />);
 
     const layout = screen.getByTestId('event-banner').querySelector('[data-image-side="right"]');
-    expect(layout?.firstElementChild).toHaveClass('@lg:order-2');
+    expect(layout?.firstElementChild).toHaveClass('order-2');
   });
 
   it('keeps ImageLeft on the left', () => {
     render(<ImageLeft {...props} />);
-    expect(screen.getByTestId('event-banner').querySelector('[data-image-side="left"]')?.firstElementChild).not.toHaveClass('@lg:order-2');
+    expect(screen.getByTestId('event-banner').querySelector('[data-image-side="left"]')?.firstElementChild).not.toHaveClass('order-2');
+  });
+
+  it('reads the standard Calendar Event fields when the layout has no query result', () => {
+    render(
+      <Default
+        rendering={{ componentName: 'EventBanner' }}
+        page={mockPage}
+        params={{}}
+        fields={{
+          EventName: { value: 'New CPT Code Workshop for Speech-Language Pathologists' },
+          EventPlace: { value: 'Indianapolis, IN' },
+          EventDescription: { value: 'November 18, 2026 from 5:30–7:30 p.m. ET. Not available for ASHA CEUs.' },
+          EventStart: { value: '20261118T173000Z' },
+          EventEnd: { value: '20261118T193000Z' },
+          eventImage: { value: { src: '/-/media/workshop.webp', alt: 'Workshop' } },
+        }}
+      />,
+    );
+
+    expect(screen.queryByText(/requires a datasource/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'New CPT Code Workshop for Speech-Language Pathologists' })).toBeInTheDocument();
+    expect(screen.getByText('Indianapolis, IN · November 18, 2026 · 5:30–7:30 p.m.')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Workshop' })).toHaveAttribute('src', '/-/media/workshop.webp');
   });
 });

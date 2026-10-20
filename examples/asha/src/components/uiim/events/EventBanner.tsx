@@ -52,29 +52,32 @@ const EventBannerLayout = ({ event, imageSide }: { event: EventBannerEvent; imag
   const schedule = formatSchedule(dateValue(event.eventStart), dateValue(event.eventEnd));
   const href = typeof linkField?.value?.href === 'string' ? linkField.value.href : '';
 
+  const details = [place, schedule].filter(Boolean).join(' · ');
+
   return (
-    <div className="grid min-h-[28rem] grid-cols-1 @lg:grid-cols-2" data-image-side={imageSide}>
-      <div className={cn('relative min-h-72 bg-[#e7e2d8]', imageSide === 'right' && '@lg:order-2')}>
+    <div className="grid h-[9.24rem] grid-cols-[7.5rem_1fr] @md:grid-cols-[11.5rem_1fr]" data-image-side={imageSide}>
+      <div className={cn('relative h-full min-w-0 overflow-hidden bg-[#e7e2d8]', imageSide === 'right' && 'order-2')}>
         {imageField ? (
           <Image field={imageField} className="absolute inset-0 h-full w-full object-cover" />
         ) : null}
       </div>
-      <div className="flex flex-col justify-center bg-white px-8 py-12 sm:px-14 lg:px-16">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#991E66]">Event</p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl" style={{ color: TITLE_COLOR }}>
-          {nameField?.value ? <Text field={nameField} /> : event.name}
-        </h2>
-        {place ? <p className="mt-4 text-lg text-[#5c564e]">{place}</p> : null}
-        {schedule ? <p className="mt-1 text-lg text-[#5c564e]">{schedule}</p> : null}
-        {descriptionField?.value ? (
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-[#5c564e]">
-            <Text field={descriptionField} />
-          </p>
-        ) : null}
+      <div className="flex min-w-0 items-center gap-4 bg-white px-4 @md:px-6">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.16em] text-[#991E66]">Event</p>
+          <h2 className="mt-1 truncate text-base font-semibold leading-tight @md:text-lg" style={{ color: TITLE_COLOR }}>
+            {nameField?.value ? <Text field={nameField} /> : event.name}
+          </h2>
+          {details ? <p className="mt-0.5 truncate text-xs text-[#5c564e] @md:text-sm">{details}</p> : null}
+          {descriptionField?.value ? (
+            <p className="mt-0.5 hidden truncate text-xs text-[#5c564e] @md:block">
+              <Text field={descriptionField} />
+            </p>
+          ) : null}
+        </div>
         {linkField && href ? (
           <Link
             field={linkField}
-            className="mt-8 inline-flex w-fit bg-[#0E7C86] px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white no-underline"
+            className="inline-flex shrink-0 bg-[#0E7C86] px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-white no-underline"
           >
             {linkField.value?.text || 'Learn more'}
           </Link>
@@ -84,8 +87,23 @@ const EventBannerLayout = ({ event, imageSide }: { event: EventBannerEvent; imag
   );
 };
 
+const eventFromFields = (fields?: EventBannerProps['fields']): EventBannerEvent | undefined => {
+  if (fields?.data?.datasource) return fields.data.datasource;
+  if (!fields?.EventName && !fields?.EventPlace && !fields?.EventDescription && !fields?.eventImage) return undefined;
+
+  return {
+    eventName: fields.EventName,
+    eventPlace: fields.EventPlace,
+    eventDescription: fields.EventDescription,
+    eventStart: fields.EventStart,
+    eventEnd: fields.EventEnd,
+    eventLink: fields.EventLink,
+    eventImage: fields.eventImage,
+  };
+};
+
 const EventBannerView = (props: EventBannerProps): JSX.Element => {
-  const event = props.fields?.data?.datasource;
+  const event = eventFromFields(props.fields);
   if (!event) return <NoDataFallback componentName="EventBanner" />;
 
   return (
@@ -94,7 +112,9 @@ const EventBannerView = (props: EventBannerProps): JSX.Element => {
       id={props.params?.RenderingIdentifier}
       data-testid="event-banner"
     >
-      <EventBannerLayout event={event} imageSide={props.imageSide ?? 'left'} />
+    <div className="mx-auto w-[70%] overflow-hidden">
+        <EventBannerLayout event={event} imageSide={props.imageSide ?? 'left'} />
+      </div>
     </section>
   );
 };

@@ -20,6 +20,13 @@ export type EventBannerFields = {
   data?: {
     datasource?: EventBannerEvent;
   };
+  EventName?: GraphQLField<Field<string>> | Field<string>;
+  EventPlace?: GraphQLField<Field<string>> | Field<string>;
+  EventDescription?: GraphQLField<Field<string>> | Field<string>;
+  EventStart?: EventDateField;
+  EventEnd?: EventDateField;
+  EventLink?: GraphQLField<LinkField> | LinkField;
+  eventImage?: EventBannerImage;
 };
 
 export type EventBannerProps = ComponentProps & {

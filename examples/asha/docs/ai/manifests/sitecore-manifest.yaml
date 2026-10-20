@@ -122,7 +122,7 @@ components:
     siteName: "asha"
     siteCollection: "asha"
     notes:
-      - "2026-10-20: Full-width Calendar Event banner. Datasource is the existing Calendar Event, including eventImage. ImageLeft and ImageRight swap the photo side. Default matches ImageLeft. Example image is on Data/Events/ASHA Fall Virtual Career Fair/ASHA Fall Virtual Career Fair."
+      - "2026-10-20: Full-width Calendar Event banner. Datasource is the existing Calendar Event, including eventImage. ImageLeft and ImageRight swap the photo side. Default matches ImageLeft. The layout service did not attach the integrated GraphQL result, so the component reads the Calendar Event fields directly."
     react:
       filePath: "src/components/uiim/events/EventBanner.tsx"
       componentName: "EventBanner"
@@ -145,12 +145,12 @@ components:
       checkedAt: "2026-10-20T18:15:00Z"
       passed:
         - "Datasource template is the existing Calendar Event"
-        - "ComponentQuery reads eventImage jsonValue and value"
+        - "Component reads Calendar Event fields directly, including eventImage"
         - "ImageLeft and ImageRight variant names match the React exports"
         - "Rendering registered on Page Content Available Renderings"
       failed: []
       pendingManual:
-        - "Publish the Calendar Event, eventImage media, and EventBanner rendering for Edge"
+        - "Publish Home so the public page includes the EventBanner instance"
   - name: "AshaEventListing"
     kind: "list"
     category: "Page Content"
