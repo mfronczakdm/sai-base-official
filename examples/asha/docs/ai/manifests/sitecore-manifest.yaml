@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-20T13:10:00Z"
+lastUpdatedAt: "2026-10-20T18:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -113,6 +113,44 @@ components:
         - "__Standard values link (silent-write)"
         - "__Masters on parent SV, folder SV, and Feature Banner folder (silent-write)"
         - "Publish Feature Banner folder before Edge delivery"
+  - name: "EventBanner"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-20T18:10:00Z"
+    updatedAt: "2026-10-20T18:15:00Z"
+    siteName: "asha"
+    siteCollection: "asha"
+    notes:
+      - "2026-10-20: Full-width Calendar Event banner. Datasource is the existing Calendar Event, including eventImage. ImageLeft and ImageRight swap the photo side. Default matches ImageLeft. Example image is on Data/Events/ASHA Fall Virtual Career Fair/ASHA Fall Virtual Career Fair."
+    react:
+      filePath: "src/components/uiim/events/EventBanner.tsx"
+      componentName: "EventBanner"
+      variants: ["Default", "ImageLeft", "ImageRight"]
+    rendering:
+      name: "EventBanner"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/EventBanner"
+      itemId: "{72384C57-BF81-4CD0-A47E-196069D32782}"
+      componentName: "EventBanner"
+      parametersTemplateId: "{D405F234-B971-436C-A124-B3BF1982B2E5}"
+      datasourceTemplatePath: "/sitecore/templates/Feature/Experience Accelerator/Events/Datasource/Calendar Event"
+    variants:
+      containerPath: "/sitecore/content/asha/asha/Presentation/Headless Variants/EventBanner"
+      containerItemId: "{C0B4534A-7D3D-4B11-B343-35C452681CCF}"
+      definitions:
+        - { name: "Default", itemId: "{9274A733-B78D-4D41-B227-A8BE61608ADB}" }
+        - { name: "ImageLeft", itemId: "{2643899F-AC02-4AA7-A2C3-DD64EC8252EB}" }
+        - { name: "ImageRight", itemId: "{D34980F5-F4C1-4CB5-9751-7D2F4B60EF5B}" }
+    verification:
+      checkedAt: "2026-10-20T18:15:00Z"
+      passed:
+        - "Datasource template is the existing Calendar Event"
+        - "ComponentQuery reads eventImage jsonValue and value"
+        - "ImageLeft and ImageRight variant names match the React exports"
+        - "Rendering registered on Page Content Available Renderings"
+      failed: []
+      pendingManual:
+        - "Publish the Calendar Event, eventImage media, and EventBanner rendering for Edge"
   - name: "AshaEventListing"
     kind: "list"
     category: "Page Content"

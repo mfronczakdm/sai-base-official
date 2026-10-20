@@ -11,6 +11,7 @@ import * as VerticalImageAccordion from 'src/components/vertical-image-accordion
 import * as PracticePortalComponent from 'src/components/uiim/practice-portal/PracticePortalComponent';
 import * as NewsListing from 'src/components/uiim/news/NewsListing';
 import * as EventListing from 'src/components/uiim/events/EventListing';
+import * as EventBanner from 'src/components/uiim/events/EventBanner';
 import * as CareerListing from 'src/components/uiim/careers/CareerListing';
 import * as BlogListing from 'src/components/uiim/article/BlogListing';
 import * as ThemeProviderdev from 'src/components/theme-provider/theme-provider.dev';
@@ -138,6 +139,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['PracticePortalComponent', { ...PracticePortalComponent }],
   ['NewsListing', { ...NewsListing }],
   ['EventListing', { ...EventListing }],
+  ['EventBanner', { ...EventBanner }],
   ['CareerListing', { ...CareerListing }],
   ['BlogListing', { ...BlogListing }],
   ['theme-provider', { ...ThemeProviderdev }],
