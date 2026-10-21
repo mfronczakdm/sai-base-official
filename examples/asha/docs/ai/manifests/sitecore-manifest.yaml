@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-21T14:35:00Z"
+lastUpdatedAt: "2026-10-21T16:05:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -21,6 +21,53 @@ availableRenderings:
   warning: "MCP cannot read this field — value may be stale if modified outside this session. Also: MCP write returned empty updatedFields — silent-write. Verify in Content Editor."
 
 components:
+  - name: "SearchResults"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-21T16:05:00Z"
+    updatedAt: "2026-10-21T16:05:00Z"
+    siteName: "asha"
+    siteCollection: "asha"
+    notes:
+      - "2026-10-21: Search page chrome matching the ASHA website search layout. Results are published pages from Edge. Topics, content type, publication year, author, and profession chips are simulated in the component."
+    react:
+      filePath: "src/components/uiim/search/SearchResults.tsx"
+      componentName: "SearchResults"
+      variants: ["Default"]
+    templates:
+      parent:
+        name: "SearchResults"
+        path: "/sitecore/templates/Project/asha/SearchResults"
+        itemId: "{8F48EFF3-2812-4A1B-8CC9-AB992EDF9B24}"
+      folder:
+        name: "SearchResults Folder"
+        path: "/sitecore/templates/Project/asha/SearchResults Folder"
+        itemId: "{EB31B405-63CE-419D-B02B-54621F96DD16}"
+    rendering:
+      name: "SearchResults"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/SearchResults"
+      itemId: "{52E7077F-A25C-4CF7-A317-57266E5BFA38}"
+      componentName: "SearchResults"
+      parametersTemplateId: "{DEDFC252-340A-47D5-8199-213736BF00EF}"
+      datasourceTemplatePath: "/sitecore/templates/Project/asha/SearchResults"
+    datasource:
+      path: "/sitecore/content/asha/asha/Data/Search Results/ASHA Website Search"
+      itemId: "{75F43E09-525B-46D0-B146-117636C73368}"
+      pagePath: "/sitecore/content/asha/asha/Home/Search"
+      pageId: "{B769E5DA-9C3F-4759-9029-BE2DB22C9FBF}"
+      placeholder: "headless-main"
+    verification:
+      checkedAt: "2026-10-21T16:05:00Z"
+      passed:
+        - "Rendering componentName is SearchResults"
+        - "ComponentQuery is empty"
+        - "Rendering appended to Page Content Available Renderings"
+        - "Instance placed on Home/Search headless-main"
+      failed: []
+      pendingManual:
+        - "Publish the Search page, SearchResults rendering, and datasource for the public site"
+        - "Standard values and folder __Masters were silent writes"
   - name: "AshaFeatureBanner"
     kind: "list"
     category: "Page Content"

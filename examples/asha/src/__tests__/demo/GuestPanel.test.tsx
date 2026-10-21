@@ -50,6 +50,7 @@ describe('GuestPanel', () => {
 
     await user.click(await screen.findByTestId('demo-guest-tab'));
 
+    expect(screen.getByRole('heading', { name: 'Tealium Data Shared with Sitecore' })).toBeInTheDocument();
     expect(screen.getByTestId('demo-guest-learning')).toHaveTextContent('convention interest');
 
     await user.click(screen.getByRole('button', { name: /Marcus Hale/ }));
@@ -75,5 +76,24 @@ describe('GuestPanel', () => {
     expect(banner).toHaveTextContent('Hearing Aids & Cochlear Implants');
     expect(banner).toHaveTextContent('convention interest');
     expect(screen.getByTestId('demo-guest-tab')).toHaveTextContent('Omar');
+  });
+
+  it('logs out of the current guest and returns the browser to anonymous', async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem('asha-demo-guest-email', 'omar.haddad.26@example.com');
+    window.sessionStorage.setItem('asha-demo-visit-trail', JSON.stringify(['/Events']));
+    document.cookie = 'sc_cid=known-browser';
+
+    render(<GuestPanel />);
+
+    await user.click(await screen.findByTestId('demo-guest-logout'));
+
+    await waitFor(() => {
+      expect(reloadPage).toHaveBeenCalled();
+    });
+    expect(identifyDemoGuest).not.toHaveBeenCalled();
+    expect(window.localStorage.getItem('asha-demo-guest-email')).toBeNull();
+    expect(window.sessionStorage.getItem('asha-demo-visit-trail')).toBeNull();
+    expect(document.cookie).not.toContain('sc_cid=known-browser');
   });
 });

@@ -1,10 +1,13 @@
 import { DEMO_GUESTS, pinnedDemoGuests } from '@/demo/demo-guests';
 import {
   appendVisitPath,
+  clearStoredTrail,
   describeVisitLearning,
+  forgetSitecoreBrowser,
   isDemoGuestPanelEnabled,
   pageLabel,
   triggeredAffinities,
+  writeStoredTrail,
 } from '@/demo/guest-session';
 
 describe('guest session', () => {
@@ -41,5 +44,16 @@ describe('guest session', () => {
       'convention interest',
     ]);
     expect(affinities[1].source).toBe('visit');
+  });
+
+  it('clears the stored visit and the Sitecore browser cookie', () => {
+    writeStoredTrail(['/Events']);
+    document.cookie = 'sc_cid=known-browser';
+
+    clearStoredTrail();
+    forgetSitecoreBrowser();
+
+    expect(window.sessionStorage.getItem('asha-demo-visit-trail')).toBeNull();
+    expect(document.cookie).not.toContain('sc_cid=known-browser');
   });
 });

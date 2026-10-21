@@ -16,7 +16,9 @@ import {
   DEMO_GUEST_STORAGE_KEY,
   DEMO_PANEL_STORAGE_KEY,
   appendVisitPath,
+  clearStoredTrail,
   describeVisitLearning,
+  forgetSitecoreBrowser,
   isDemoGuestPanelEnabled,
   pageLabel,
   readStoredTrail,
@@ -151,6 +153,8 @@ const GuestPanel = (): JSX.Element | null => {
       }
     } else {
       window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
+      clearStoredTrail();
+      forgetSitecoreBrowser();
     }
 
     reloadPage();
@@ -165,6 +169,15 @@ const GuestPanel = (): JSX.Element | null => {
         >
           <p className="mb-2 text-sm font-semibold">{guestDisplayName(guest)}</p>
           <CurrentProfile guest={guest} affinities={affinities} />
+          <button
+            type="button"
+            className="mt-3 text-sm font-semibold text-[#00778B] underline"
+            data-testid="demo-guest-logout"
+            disabled={pending}
+            onClick={() => selectGuest(null)}
+          >
+            Log out to anonymous
+          </button>
         </div>
       ) : null}
 
@@ -193,7 +206,7 @@ const GuestPanel = (): JSX.Element | null => {
               <p className="text-xs font-semibold tracking-wide text-[#00778B] uppercase">
                 Demo guest
               </p>
-              <h2 className="mt-1 text-xl font-semibold">What Sitecore knows</h2>
+              <h2 className="mt-1 text-xl font-semibold">Tealium Data Shared with Sitecore</h2>
             </div>
             <button type="button" className="text-sm text-[#00778B]" onClick={() => setOpen(false)}>
               Close
@@ -219,6 +232,17 @@ const GuestPanel = (): JSX.Element | null => {
                 Anonymous. Sitecore has this browser, and it does not yet have a known guest.
               </p>
             )}
+            {guest ? (
+              <button
+                type="button"
+                className="mt-3 text-sm font-semibold text-[#00778B] underline"
+                data-testid="demo-guest-logout"
+                disabled={pending}
+                onClick={() => selectGuest(null)}
+              >
+                Log out to anonymous
+              </button>
+            ) : null}
           </section>
 
           <section className="mt-6">
@@ -286,24 +310,18 @@ const GuestPanel = (): JSX.Element | null => {
                 ))}
               </div>
             ) : null}
-            <button
-              type="button"
-              className="mt-4 text-sm text-[#5c6b70] underline"
-              disabled={pending}
-              onClick={() => selectGuest(null)}
-            >
-              Browse as anonymous
-            </button>
           </section>
 
           {process.env.NODE_ENV === 'development' ? (
             <p className="mt-6 text-xs text-[#5c6b70]">
               On localhost the Cloud SDK stays off, so this browser remembers the guest locally. On
-              the deployed site the same click sends an identity event for that email, then reloads.
+              the deployed site, choosing a guest sends an identity event for that email. Log out
+              clears that browser and reloads as anonymous.
             </p>
           ) : (
             <p className="mt-6 text-xs text-[#5c6b70]">
-              Choosing a guest sends an identity event for that email and reloads this page.
+              Choosing a guest sends an identity event for that email. Log out clears that browser
+              and reloads as anonymous.
             </p>
           )}
         </aside>

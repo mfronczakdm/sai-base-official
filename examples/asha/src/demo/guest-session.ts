@@ -105,3 +105,28 @@ export const readStoredTrail = (): string[] => {
 export const writeStoredTrail = (paths: string[]): void => {
   window.sessionStorage.setItem(DEMO_TRAIL_STORAGE_KEY, JSON.stringify(paths));
 };
+
+export const clearStoredTrail = (): void => {
+  window.sessionStorage.removeItem(DEMO_TRAIL_STORAGE_KEY);
+};
+
+const SITECORE_CLIENT_COOKIE = 'sc_cid';
+
+/** Drops the Cloud SDK browser id so the next page view is a new anonymous visitor. */
+export const forgetSitecoreBrowser = (): void => {
+  if (typeof document === 'undefined') return;
+
+  const host = window.location.hostname.replace(/^www\./, '');
+  const expired = 'Thu, 01 Jan 1970 00:00:00 GMT';
+  const base = `${SITECORE_CLIENT_COOKIE}=; Path=/; Expires=${expired}; Max-Age=0`;
+  const cookies = [
+    base,
+    `${base}; Domain=${host}`,
+    `${base}; Secure; SameSite=None`,
+    `${base}; Domain=${host}; Secure; SameSite=None`,
+  ];
+
+  cookies.forEach((cookie) => {
+    document.cookie = cookie;
+  });
+};
