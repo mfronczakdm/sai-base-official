@@ -11,6 +11,7 @@ import { DesignLibraryApp } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
 import { generateOrganizationSchema, generateWebSiteSchema } from 'src/lib/structured-data/schema';
 import { StructuredData } from 'src/components/structured-data/StructuredData';
+import GuestPanel from '@/demo/GuestPanel';
 
 const heading = Outfit({
   weight: ['400', '500', '600', '700'],
@@ -132,6 +133,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
       <StructuredData id="website-schema" data={websiteSchema} />
       <SitecoreStyles layoutData={layout} />
       <Providers page={page}>
+        <GuestPanel />
         {/* root placeholder for the app, which we add components to using route data */}
         <div className={`min-h-screen flex flex-col ${classNamesMain}`}>
           {page.mode.isDesignLibrary ? (
