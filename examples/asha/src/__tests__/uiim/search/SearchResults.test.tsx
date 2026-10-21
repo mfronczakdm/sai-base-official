@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Default as SearchResults } from '@/components/uiim/search/SearchResults';
+import { mockPage } from '../../test-utils/mockPage';
 
 const payload = {
   data: {
@@ -46,7 +47,14 @@ describe('SearchResults', () => {
 
   it('lists published pages and filters them by the search box', async () => {
     const user = userEvent.setup();
-    render(<SearchResults fields={{ Title: { value: 'ASHA Website Search' } }} />);
+    render(
+      <SearchResults
+        rendering={{ componentName: 'SearchResults' }}
+        params={{ RenderingIdentifier: 'asha-search' }}
+        page={mockPage}
+        fields={{ Title: { value: 'ASHA Website Search' } }}
+      />
+    );
 
     expect(await screen.findByRole('link', { name: 'Hearing Aids' })).toBeInTheDocument();
     expect(
