@@ -17,17 +17,49 @@ import {
   DEMO_PANEL_STORAGE_KEY,
   appendVisitPath,
   describeVisitLearning,
-  guestPageLine,
   isDemoGuestPanelEnabled,
   pageLabel,
   readStoredTrail,
+  triggeredAffinities,
   writeStoredTrail,
+  type TriggeredAffinity,
 } from '@/demo/guest-session';
 
 const Fact = ({ label, value }: { label: string; value?: string }) => (
   <div className="grid grid-cols-[8.5rem_1fr] gap-2 border-b border-[#e7e2d8] py-2 text-sm">
     <dt className="text-[#5c6b70]">{label}</dt>
     <dd className="min-w-0 text-[#16323a]">{value || 'Not stored'}</dd>
+  </div>
+);
+
+const affinityLabel = (affinity: TriggeredAffinity): string =>
+  affinity.source === 'visit' ? 'triggered this visit' : 'on the profile';
+
+const CurrentProfile = ({
+  guest,
+  affinities,
+}: {
+  guest?: DemoGuest;
+  affinities: TriggeredAffinity[];
+}) => (
+  <div data-testid="demo-guest-profile">
+    <dl>
+      <Fact label="Profession" value={guest?.profession || 'Not identified'} />
+      <Fact label="Certification" value={guest?.certificationStatus || 'Not identified'} />
+    </dl>
+    <p className="mt-3 text-sm font-semibold">Affinities triggered</p>
+    {affinities.length ? (
+      <ul className="mt-1 space-y-1">
+        {affinities.map((affinity) => (
+          <li key={affinity.value} className="text-sm text-[#16323a]">
+            {affinity.value}
+            <span className="ml-2 text-xs text-[#5c6b70]">{affinityLabel(affinity)}</span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className="mt-1 text-sm text-[#5c6b70]">None triggered yet.</p>
+    )}
   </div>
 );
 
@@ -104,6 +136,7 @@ const GuestPanel = (): JSX.Element | null => {
   if (!visible) return null;
 
   const guest = findDemoGuest(guestEmail);
+  const affinities = triggeredAffinities(guest, trail);
   const pending = pendingEmail !== null;
 
   const selectGuest = async (nextGuest: DemoGuest | null) => {
@@ -130,7 +163,8 @@ const GuestPanel = (): JSX.Element | null => {
           className="fixed right-4 bottom-20 z-[60] w-[20rem] max-w-[calc(100vw-2rem)] rounded-md border border-[#00778B] bg-white px-4 py-3 text-sm text-[#16323a] shadow-lg"
           data-testid="demo-guest-banner"
         >
-          {guestPageLine(guest)}
+          <p className="mb-2 text-sm font-semibold">{guestDisplayName(guest)}</p>
+          <CurrentProfile guest={guest} affinities={affinities} />
         </div>
       ) : null}
 
@@ -167,6 +201,13 @@ const GuestPanel = (): JSX.Element | null => {
           </div>
 
           <section className="mt-6">
+            <h3 className="text-sm font-semibold">Current profile</h3>
+            <div className="mt-2">
+              <CurrentProfile guest={guest} affinities={affinities} />
+            </div>
+          </section>
+
+          <section className="mt-6">
             <h3 className="text-sm font-semibold">Who this browser is</h3>
             {guest ? (
               <p className="mt-2 text-sm">
@@ -190,7 +231,6 @@ const GuestPanel = (): JSX.Element | null => {
                 <Fact label="Primary interest" value={guest.primaryInterest} />
                 <Fact label="Campaign" value={guest.seasonalCampaign} />
                 <Fact label="Engagement" value={guest.engagementLevel} />
-                <Fact label="Affinity" value={guest.contentAffinity} />
                 <Fact label="Next action" value={guest.nextBestAction} />
               </dl>
             ) : (

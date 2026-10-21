@@ -2,9 +2,9 @@ import { DEMO_GUESTS, pinnedDemoGuests } from '@/demo/demo-guests';
 import {
   appendVisitPath,
   describeVisitLearning,
-  guestPageLine,
   isDemoGuestPanelEnabled,
   pageLabel,
+  triggeredAffinities,
 } from '@/demo/guest-session';
 
 describe('guest session', () => {
@@ -34,6 +34,12 @@ describe('guest session', () => {
       'Speech-Language Pathologist',
     ]);
     expect(new Set(pinned.map((guest) => guest.seasonalCampaign)).size).toBe(3);
-    expect(guestPageLine(pinned[1])).toContain('Hearing Aids & Cochlear Implants');
+
+    const affinities = triggeredAffinities(pinned[1], ['/Events/The-ASHA-Convention']);
+    expect(affinities.map((affinity) => affinity.value)).toEqual([
+      'Hearing Aids & Cochlear Implants',
+      'convention interest',
+    ]);
+    expect(affinities[1].source).toBe('visit');
   });
 });

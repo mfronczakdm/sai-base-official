@@ -1,5 +1,4 @@
 import type { DemoGuest } from '@/demo/demo-guests';
-import { guestDisplayName } from '@/demo/demo-guests';
 
 export const DEMO_GUEST_STORAGE_KEY = 'asha-demo-guest-email';
 export const DEMO_PANEL_STORAGE_KEY = 'asha-demo-guest-panel';
@@ -32,6 +31,37 @@ export const learningTopic = (path: string): string | null => {
   return null;
 };
 
+export type TriggeredAffinity = {
+  value: string;
+  source: 'profile' | 'visit';
+};
+
+export const triggeredAffinities = (
+  guest: DemoGuest | undefined,
+  paths: string[]
+): TriggeredAffinity[] => {
+  const seen = new Set<string>();
+  const affinities: TriggeredAffinity[] = [];
+
+  const add = (value: string | undefined, source: TriggeredAffinity['source']) => {
+    const trimmed = value?.trim();
+    if (!trimmed) return;
+    const key = trimmed.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    affinities.push({ value: trimmed, source });
+  };
+
+  if (guest) {
+    add(guest.contentAffinity, 'profile');
+    add(guest.primaryInterest, 'profile');
+  }
+
+  paths.forEach((path) => add(learningTopic(path) ?? undefined, 'visit'));
+
+  return affinities;
+};
+
 export const describeVisitLearning = (paths: string[]): string => {
   const latest = [...paths].reverse().find((path) => learningTopic(path));
 
@@ -59,9 +89,6 @@ export const appendVisitPath = (paths: string[], path: string): string[] => {
   if (!path || paths[paths.length - 1] === path) return paths;
   return [...paths, path].slice(-MAX_TRAIL);
 };
-
-export const guestPageLine = (guest: DemoGuest): string =>
-  `${guestDisplayName(guest)} · ${guest.profession}. Sitecore would lead with ${guest.primaryInterest} and ${guest.seasonalCampaign}.`;
 
 export const readStoredTrail = (): string[] => {
   if (typeof window === 'undefined') return [];
