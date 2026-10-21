@@ -61,27 +61,29 @@ const EventBannerLayout = ({ event, imageSide }: { event: EventBannerEvent; imag
           <Image field={imageField} className="absolute inset-0 h-full w-full object-cover" />
         ) : null}
       </div>
-      <div className="flex min-w-0 items-center gap-4 bg-white px-4 @md:px-6">
-        <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.16em] text-[#991E66]">Event</p>
-          <h2 className="mt-1 truncate text-base font-semibold leading-tight @md:text-lg" style={{ color: TITLE_COLOR }}>
-            {nameField?.value ? <Text field={nameField} /> : event.name}
-          </h2>
-          {details ? <p className="mt-0.5 truncate text-xs text-[#5c564e] @md:text-sm">{details}</p> : null}
-          {descriptionField?.value ? (
-            <p className="mt-0.5 hidden truncate text-xs text-[#5c564e] @md:block">
-              <Text field={descriptionField} />
-            </p>
+      <div className="flex min-w-0 items-center bg-white px-4 @md:px-6">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2">
+          <div className="min-w-0 max-w-xl">
+            <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.16em] text-[#991E66]">Event</p>
+            <h2 className="mt-1 truncate text-base font-semibold leading-tight @md:text-lg" style={{ color: TITLE_COLOR }}>
+              {nameField?.value ? <Text field={nameField} /> : event.name}
+            </h2>
+            {details ? <p className="mt-0.5 truncate text-xs text-[#5c564e] @md:text-sm">{details}</p> : null}
+            {descriptionField?.value ? (
+              <p className="mt-0.5 hidden truncate text-xs text-[#5c564e] @md:block">
+                <Text field={descriptionField} />
+              </p>
+            ) : null}
+          </div>
+          {linkField && href ? (
+            <Link
+              field={linkField}
+              className="inline-flex shrink-0 bg-[#0E7C86] px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-white no-underline"
+            >
+              {linkField.value?.text || 'Learn more'}
+            </Link>
           ) : null}
         </div>
-        {linkField && href ? (
-          <Link
-            field={linkField}
-            className="inline-flex shrink-0 bg-[#0E7C86] px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-white no-underline"
-          >
-            {linkField.value?.text || 'Learn more'}
-          </Link>
-        ) : null}
       </div>
     </div>
   );
@@ -108,7 +110,7 @@ const EventBannerView = (props: EventBannerProps): JSX.Element => {
 
   return (
     <section
-      className={cn('@container w-full', props.params?.styles)}
+      className={cn('@container w-full pt-8', props.params?.styles)}
       id={props.params?.RenderingIdentifier}
       data-testid="event-banner"
     >
