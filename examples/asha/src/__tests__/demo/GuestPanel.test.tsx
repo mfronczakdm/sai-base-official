@@ -14,6 +14,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('@/demo/identify-demo-guest', () => ({
+  GUEST_IDENTITY_WAIT_MS: 0,
   identifyDemoGuest: jest.fn().mockResolvedValue(undefined),
   hardReloadPage: jest.fn(),
 }));
@@ -23,6 +24,7 @@ describe('GuestPanel', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.mocked(identifyDemoGuest).mockResolvedValue(undefined);
     window.localStorage.clear();
     window.sessionStorage.clear();
     process.env.NEXT_PUBLIC_DEMO_GUEST_PANEL = 'true';
@@ -83,6 +85,21 @@ describe('GuestPanel', () => {
     expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('julian.rossi.39@example.com');
     expect(window.sessionStorage.getItem('asha-demo-guest-bound')).toBe('1');
     expect(hardReloadPage).toHaveBeenCalled();
+  });
+
+  it('reloads even when the identity event never finishes', async () => {
+    const user = userEvent.setup();
+    jest.mocked(identifyDemoGuest).mockImplementation(() => new Promise(() => undefined));
+
+    render(<GuestPanel />);
+
+    await user.click(await screen.findByTestId('demo-guest-tab'));
+    await user.click(screen.getByRole('button', { name: /Nora Kim/ }));
+
+    await waitFor(() => {
+      expect(hardReloadPage).toHaveBeenCalled();
+    });
+    expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('nora.kim.09@example.com');
   });
 
   it('shows the selected guest on the page after the hard refresh', async () => {

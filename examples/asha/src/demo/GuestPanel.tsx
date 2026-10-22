@@ -10,7 +10,11 @@ import {
   pinnedDemoGuests,
   type DemoGuest,
 } from '@/demo/demo-guests';
-import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
+import {
+  GUEST_IDENTITY_WAIT_MS,
+  hardReloadPage,
+  identifyDemoGuest,
+} from '@/demo/identify-demo-guest';
 import {
   DEMO_GUEST_BOUND_KEY,
   DEMO_GUEST_STORAGE_KEY,
@@ -103,6 +107,21 @@ const GuestPanel = (): JSX.Element | null => {
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
   useEffect(() => {
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) {
+        window.sessionStorage.removeItem('asha-demo-bfcache-bust');
+        return;
+      }
+      if (window.sessionStorage.getItem('asha-demo-bfcache-bust') === '1') return;
+      window.sessionStorage.setItem('asha-demo-bfcache-bust', '1');
+      hardReloadPage();
+    };
+
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, []);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const query = params.get('guestPanel');
     if (query === '1' || query === '0') {
@@ -152,22 +171,25 @@ const GuestPanel = (): JSX.Element | null => {
   const selectGuest = async (nextGuest: DemoGuest | null) => {
     setPendingEmail(nextGuest?.email ?? 'anonymous');
 
-    if (nextGuest) {
-      markGuestBound();
-      window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
-      try {
-        await identifyDemoGuest(nextGuest);
-      } catch {
-        // The Events SDK is not initialized in development or in Pages.
+    try {
+      if (nextGuest) {
+        markGuestBound();
+        window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
+        await Promise.race([
+          identifyDemoGuest(nextGuest).catch(() => undefined),
+          new Promise<void>((resolve) => {
+            window.setTimeout(resolve, GUEST_IDENTITY_WAIT_MS);
+          }),
+        ]);
+      } else {
+        clearGuestBound();
+        window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
+        clearStoredTrail();
+        forgetSitecoreBrowser();
       }
-    } else {
-      clearGuestBound();
-      window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
-      clearStoredTrail();
-      forgetSitecoreBrowser();
+    } finally {
+      hardReloadPage();
     }
-
-    hardReloadPage();
   };
 
   return (
