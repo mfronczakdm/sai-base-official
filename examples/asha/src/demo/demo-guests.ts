@@ -18,10 +18,10 @@ export interface DemoGuest {
 }
 
 export const PINNED_DEMO_GUEST_EMAILS = [
-  'marcus.hale@example.com',
-  'omar.haddad.26@example.com',
   'julian.rossi.39@example.com',
-  'ivy.sullivan.17@example.com',
+  'lila.moreau.50@example.com',
+  'nora.kim.09@example.com',
+  'omar.haddad.26@example.com',
 ] as const;
 
 export const DEMO_GUESTS: DemoGuest[] = [
@@ -55,7 +55,7 @@ export const DEMO_GUESTS: DemoGuest[] = [
     firstName: 'Julian',
     lastName: 'Rossi',
     profession: 'Student',
-    certificationStatus: 'Subscriber',
+    certificationStatus: 'Public',
     caseloadSize: '80+',
     primaryInterest: 'Literacy',
     seasonalCampaign: 'Fall CE Bundle',

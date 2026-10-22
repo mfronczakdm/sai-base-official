@@ -7,21 +7,25 @@ import { cn } from '@/lib/utils';
 import {
   findDemoGuest,
   guestDisplayName,
-  moreDemoGuests,
   pinnedDemoGuests,
   type DemoGuest,
 } from '@/demo/demo-guests';
-import { identifyDemoGuest, reloadPage } from '@/demo/identify-demo-guest';
+import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
 import {
+  DEMO_GUEST_BOUND_KEY,
   DEMO_GUEST_STORAGE_KEY,
   DEMO_PANEL_STORAGE_KEY,
   appendVisitPath,
+  clearGuestBound,
   clearStoredTrail,
   describeVisitLearning,
+  ensureAnonymousFirstLoad,
   forgetSitecoreBrowser,
   isDemoGuestPanelEnabled,
+  markGuestBound,
   pageLabel,
   readStoredTrail,
+  stripGuestReloadParam,
   triggeredAffinities,
   writeStoredTrail,
   type TriggeredAffinity,
@@ -89,11 +93,11 @@ const GuestChoice = ({
 );
 
 const GuestPanel = (): JSX.Element | null => {
+  ensureAnonymousFirstLoad();
   const pathname = usePathname();
   const { page } = useSitecore();
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [showMore, setShowMore] = useState(false);
   const [guestEmail, setGuestEmail] = useState<string | null>(null);
   const [trail, setTrail] = useState<string[]>([]);
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
@@ -116,9 +120,13 @@ const GuestPanel = (): JSX.Element | null => {
       return;
     }
 
-    const email = window.localStorage.getItem(DEMO_GUEST_STORAGE_KEY);
+    const email =
+      window.sessionStorage.getItem(DEMO_GUEST_BOUND_KEY) === '1'
+        ? window.localStorage.getItem(DEMO_GUEST_STORAGE_KEY)
+        : null;
     const nextTrail = appendVisitPath(readStoredTrail(), pathname || '/');
     writeStoredTrail(nextTrail);
+    stripGuestReloadParam();
     setGuestEmail(email);
     setTrail(nextTrail);
     setVisible(true);
@@ -145,6 +153,7 @@ const GuestPanel = (): JSX.Element | null => {
     setPendingEmail(nextGuest?.email ?? 'anonymous');
 
     if (nextGuest) {
+      markGuestBound();
       window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
       try {
         await identifyDemoGuest(nextGuest);
@@ -152,12 +161,13 @@ const GuestPanel = (): JSX.Element | null => {
         // The Events SDK is not initialized in development or in Pages.
       }
     } else {
+      clearGuestBound();
       window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
       clearStoredTrail();
       forgetSitecoreBrowser();
     }
 
-    reloadPage();
+    hardReloadPage();
   };
 
   return (
@@ -291,37 +301,20 @@ const GuestPanel = (): JSX.Element | null => {
                 />
               ))}
             </div>
-            <button
-              type="button"
-              className="mt-3 text-sm font-semibold text-[#00778B]"
-              onClick={() => setShowMore((current) => !current)}
-            >
-              {showMore ? 'Hide guests' : `More guests (${moreDemoGuests().length})`}
-            </button>
-            {showMore ? (
-              <div className="mt-3 max-h-64 space-y-2 overflow-y-auto">
-                {moreDemoGuests().map((choice) => (
-                  <GuestChoice
-                    key={choice.email}
-                    guest={choice}
-                    pending={pending}
-                    onSelect={selectGuest}
-                  />
-                ))}
-              </div>
-            ) : null}
           </section>
 
           {process.env.NODE_ENV === 'development' ? (
             <p className="mt-6 text-xs text-[#5c6b70]">
-              On localhost the Cloud SDK stays off, so this browser remembers the guest locally. On
-              the deployed site, choosing a guest sends an identity event for that email. Log out
-              clears that browser and reloads as anonymous.
+              On localhost the Cloud SDK stays off, so this browser remembers the guest locally and
+              reloads the full page after a choice. The first visit stays anonymous. On the deployed
+              site, choosing a guest sends an identity event for that email and reloads so
+              personalization uses that profile.
             </p>
           ) : (
             <p className="mt-6 text-xs text-[#5c6b70]">
-              Choosing a guest sends an identity event for that email. Log out clears that browser
-              and reloads as anonymous.
+              Choosing a guest sends an identity event for that email, then loads the page again so
+              personalization uses that profile. The first visit stays anonymous. Log out clears
+              that browser and loads the anonymous page.
             </p>
           )}
         </aside>

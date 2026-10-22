@@ -11,6 +11,7 @@ import sites from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 import client from './lib/sitecore-client';
+import { DEMO_GUEST_BOUND_COOKIE, shouldPersonalizeAsAnonymous } from './demo/guest-session';
 
 const preview = new PreviewProxy({
     client,
@@ -75,8 +76,25 @@ const personalize = new PersonalizeProxy({
   skip: () => false,
 });
 
+const requestForPersonalization = (req: NextRequest): NextRequest => {
+  const demoPanelEnabled =
+    process.env.NEXT_PUBLIC_DEMO_GUEST_PANEL === 'true' ||
+    process.env.NODE_ENV === 'development' ||
+    req.nextUrl.searchParams.get('guestPanel') === '1';
+
+  if (
+    shouldPersonalizeAsAnonymous(demoPanelEnabled, req.cookies.get(DEMO_GUEST_BOUND_COOKIE)?.value)
+  ) {
+    req.cookies.delete('sc_cid');
+  }
+
+  return req;
+};
+
 export default function proxy(req: NextRequest) {
-  return defineProxy(preview, locale, multisite, redirects, personalize).exec(req);
+  return defineProxy(preview, locale, multisite, redirects, personalize).exec(
+    requestForPersonalization(req)
+  );
 }
 
 export const config = {

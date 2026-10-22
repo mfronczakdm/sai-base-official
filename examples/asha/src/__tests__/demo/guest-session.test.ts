@@ -1,11 +1,16 @@
 import { DEMO_GUESTS, pinnedDemoGuests } from '@/demo/demo-guests';
 import {
   appendVisitPath,
+  clearGuestBound,
   clearStoredTrail,
+  cookieHeaderWithoutBrowserId,
   describeVisitLearning,
+  ensureAnonymousFirstLoad,
   forgetSitecoreBrowser,
   isDemoGuestPanelEnabled,
+  markGuestBound,
   pageLabel,
+  shouldPersonalizeAsAnonymous,
   triggeredAffinities,
   writeStoredTrail,
 } from '@/demo/guest-session';
@@ -26,19 +31,24 @@ describe('guest session', () => {
     expect(pageLabel('/Events/The-ASHA-Convention')).toBe('The ASHA Convention');
   });
 
-  it('pins four guests with different professions and campaigns', () => {
+  it('pins the four selectable guest profiles', () => {
     const pinned = pinnedDemoGuests();
 
     expect(DEMO_GUESTS).toHaveLength(51);
-    expect(pinned.map((guest) => guest.profession)).toEqual([
-      'Speech-Language Pathologist',
-      'Audiologist',
-      'Student',
-      'Speech-Language Pathologist',
+    expect(pinned.map((guest) => `${guest.profession}|${guest.certificationStatus}`)).toEqual([
+      'Student|Public',
+      'Audiologist|Member-only',
+      'Speech-Language Pathologist|Certificate holder',
+      'Audiologist|Subscriber',
     ]);
-    expect(new Set(pinned.map((guest) => guest.seasonalCampaign)).size).toBe(3);
+    expect(pinned.map((guest) => guest.email)).toEqual([
+      'julian.rossi.39@example.com',
+      'lila.moreau.50@example.com',
+      'nora.kim.09@example.com',
+      'omar.haddad.26@example.com',
+    ]);
 
-    const affinities = triggeredAffinities(pinned[1], ['/Events/The-ASHA-Convention']);
+    const affinities = triggeredAffinities(pinned[3], ['/Events/The-ASHA-Convention']);
     expect(affinities.map((affinity) => affinity.value)).toEqual([
       'Hearing Aids & Cochlear Implants',
       'convention interest',
@@ -55,5 +65,30 @@ describe('guest session', () => {
 
     expect(window.sessionStorage.getItem('asha-demo-visit-trail')).toBeNull();
     expect(document.cookie).not.toContain('sc_cid=known-browser');
+  });
+
+  it('starts a new session anonymous and keeps a guest only after one is chosen', () => {
+    window.localStorage.setItem('asha-demo-guest-email', 'omar.haddad.26@example.com');
+
+    ensureAnonymousFirstLoad();
+
+    expect(window.localStorage.getItem('asha-demo-guest-email')).toBeNull();
+
+    markGuestBound();
+    window.localStorage.setItem('asha-demo-guest-email', 'julian.rossi.39@example.com');
+    ensureAnonymousFirstLoad();
+
+    expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('julian.rossi.39@example.com');
+    expect(document.cookie).toContain('asha-demo-guest-bound=1');
+
+    clearGuestBound();
+    expect(window.sessionStorage.getItem('asha-demo-guest-bound')).toBeNull();
+  });
+
+  it('drops the browser id until a demo guest is bound', () => {
+    expect(shouldPersonalizeAsAnonymous(true, undefined)).toBe(true);
+    expect(shouldPersonalizeAsAnonymous(true, '1')).toBe(false);
+    expect(shouldPersonalizeAsAnonymous(false, undefined)).toBe(false);
+    expect(cookieHeaderWithoutBrowserId('sc_cid=abc; other=1')).toBe('other=1');
   });
 });

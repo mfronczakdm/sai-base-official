@@ -3,6 +3,8 @@ import type { DemoGuest } from '@/demo/demo-guests';
 export const DEMO_GUEST_STORAGE_KEY = 'asha-demo-guest-email';
 export const DEMO_PANEL_STORAGE_KEY = 'asha-demo-guest-panel';
 export const DEMO_TRAIL_STORAGE_KEY = 'asha-demo-visit-trail';
+export const DEMO_GUEST_BOUND_KEY = 'asha-demo-guest-bound';
+export const DEMO_GUEST_BOUND_COOKIE = 'asha-demo-guest-bound';
 
 const MAX_TRAIL = 6;
 
@@ -111,6 +113,43 @@ export const clearStoredTrail = (): void => {
 };
 
 const SITECORE_CLIENT_COOKIE = 'sc_cid';
+
+/** A new browser session starts anonymous until a known guest is chosen. */
+export const ensureAnonymousFirstLoad = (): void => {
+  if (typeof window === 'undefined') return;
+  if (window.sessionStorage.getItem(DEMO_GUEST_BOUND_KEY) === '1') return;
+  window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
+};
+
+export const markGuestBound = (): void => {
+  window.sessionStorage.setItem(DEMO_GUEST_BOUND_KEY, '1');
+  document.cookie = `${DEMO_GUEST_BOUND_COOKIE}=1; Path=/; SameSite=Lax; Max-Age=86400`;
+};
+
+export const clearGuestBound = (): void => {
+  window.sessionStorage.removeItem(DEMO_GUEST_BOUND_KEY);
+  const expired = 'Thu, 01 Jan 1970 00:00:00 GMT';
+  document.cookie = `${DEMO_GUEST_BOUND_COOKIE}=; Path=/; Expires=${expired}; Max-Age=0`;
+};
+
+export const stripGuestReloadParam = (): void => {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has('guestReload')) return;
+  url.searchParams.delete('guestReload');
+  window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+};
+
+export const cookieHeaderWithoutBrowserId = (cookieHeader: string | null): string =>
+  (cookieHeader ?? '')
+    .split(';')
+    .map((part) => part.trim())
+    .filter((part) => part && !part.toLowerCase().startsWith(`${SITECORE_CLIENT_COOKIE}=`))
+    .join('; ');
+
+export const shouldPersonalizeAsAnonymous = (
+  demoPanelEnabled: boolean,
+  boundCookie: string | undefined
+): boolean => demoPanelEnabled && boundCookie !== '1';
 
 /** Drops the Cloud SDK browser id so the next page view is a new anonymous visitor. */
 export const forgetSitecoreBrowser = (): void => {

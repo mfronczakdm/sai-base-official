@@ -16,6 +16,9 @@ export const identifyDemoGuest = async (guest: DemoGuest): Promise<void> => {
   });
 };
 
-export const reloadPage = (): void => {
-  window.location.reload();
+/** Full document load with a unique URL so personalization cannot reuse the anonymous page. */
+export const hardReloadPage = (): void => {
+  const url = new URL(window.location.href);
+  url.searchParams.set('guestReload', Date.now().toString());
+  window.location.replace(url.toString());
 };
