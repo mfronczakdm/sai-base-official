@@ -72,7 +72,7 @@ describe('GuestPanel', () => {
     const banner = await screen.findByTestId('demo-guest-banner');
 
     expect(banner).toHaveTextContent('Audiologist');
-    expect(banner).toHaveTextContent('Clinical Fellow');
+    expect(banner).toHaveTextContent('Subscriber');
     expect(banner).toHaveTextContent('Hearing Aids & Cochlear Implants');
     expect(banner).toHaveTextContent('convention interest');
     expect(screen.getByTestId('demo-guest-tab')).toHaveTextContent('Omar');

@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-21T16:05:00Z"
+lastUpdatedAt: "2026-10-21T21:40:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -68,6 +68,76 @@ components:
       pendingManual:
         - "Publish the Search page, SearchResults rendering, and datasource for the public site"
         - "Standard values and folder __Masters were silent writes"
+  - name: "PracticeListing"
+    kind: "simple"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-21T21:40:00Z"
+    updatedAt: "2026-10-21T21:40:00Z"
+    siteName: "asha"
+    siteCollection: "asha"
+    notes:
+      - "2026-10-21: Lists PracticePortal pages under Practice Management. Public Access is visible to every profile. Other pages show when the demo guest certificationStatus matches one or more Access values: Certificate holder, Member-only, or Subscriber. Default is a link list. Cards is the card variant. ComponentQuery is empty. Pages are loaded from Edge through /api/practice-listing."
+    react:
+      filePath: "src/components/uiim/practice-listing/PracticeListing.tsx"
+      componentName: "PracticeListing"
+      variants: ["Default", "Cards"]
+    templates:
+      parent:
+        name: "PracticeListing"
+        path: "/sitecore/templates/Project/asha/PracticeListing"
+        itemId: "{B4F33F82-BF6F-46A0-A0BF-D8F686D8F11F}"
+        baseTemplatesSet: true
+        standardValues:
+          itemId: "{F0701616-4FF8-4111-B785-3C87DDF9BE6A}"
+          linked: false
+        fields:
+          - { name: "Title", type: "Single-Line Text", itemId: "{1D879450-2ADF-485E-8B56-8D62DD056F51}" }
+          - { name: "Intro", type: "Multi-Line Text", itemId: "{F71F5EBC-03D9-4E89-9CCE-75C166BE57C9}" }
+      folder:
+        name: "PracticeListing Folder"
+        path: "/sitecore/templates/Project/asha/PracticeListing Folder"
+        itemId: "{C9DF8704-1554-47B7-9F4C-FB2BEFF752C7}"
+        standardValues:
+          itemId: "{C43954B9-7FB1-4071-A63F-41F0FEA2EAD7}"
+          linked: false
+          masters: ["PracticeListing"]
+    rendering:
+      name: "PracticeListing"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/PracticeListing"
+      itemId: "{75864471-203F-439D-B97A-F8AC068D375F}"
+      componentName: "PracticeListing"
+      parametersTemplateId: "{73BA2B7F-6C31-4599-B965-36164F9CF48F}"
+      datasourceTemplatePath: "/sitecore/templates/Project/asha/PracticeListing"
+    variants:
+      containerPath: "/sitecore/content/asha/asha/Presentation/Headless Variants/PracticeListing"
+      containerItemId: "{B74B99E2-44A7-45D8-A6CB-4A65BA89BE68}"
+      definitions:
+        - { name: "Default", itemId: "{3B94E03B-9D49-49EF-99DF-EC68D36DB3C1}" }
+        - { name: "Cards", itemId: "{9FC34A7E-A221-440F-A145-CCAE986B3C68}" }
+    datasource:
+      path: "/sitecore/content/asha/asha/Data/Practice Listings/Practice topics"
+      itemId: "{E3FFBF1B-DB94-4BF0-A7BA-3329D6AEDE1B}"
+      folderId: "{B138CBAD-AE59-4C1C-B648-29515AF048FB}"
+      pagePath: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal"
+      pageId: "{14AADE4E-7326-4E14-9541-8DD5D47A1CF2}"
+      pageDatasourceId: "{1CFB3EAB-BF53-4322-AFE8-311F592D1B2E}"
+      placeholder: "headless-main"
+    verification:
+      checkedAt: "2026-10-21T21:40:00Z"
+      passed:
+        - "Rendering componentName is PracticeListing and ComponentQuery is empty"
+        - "Parameters Template is the PracticeListing rendering parameters item id"
+        - "Title is Single-Line Text and Intro is Multi-Line Text"
+        - "Default and Cards variant definitions exist"
+        - "Rendering appended to Page Content Available Renderings"
+        - "Instance placed on Practice Portal headless-main"
+        - "Access checklist saved on the ten Professional Issues pages"
+      failed: []
+      pendingManual:
+        - "Publish Practice Portal, the Professional Issues pages, and PracticeListing so Edge returns the Access values"
+        - "Template standard values link and folder __Masters were silent writes"
+        - "Anonymous visitors and profiles whose certificationStatus is not one of the three Access values only see Public topics. Marcus Hale is still Certified."
   - name: "AshaFeatureBanner"
     kind: "list"
     category: "Page Content"
@@ -4386,6 +4456,45 @@ demoContent:
 
 # Information architecture / page creation batches
 ia:
+  - name: "professional-issues-topics"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-21T21:10:00Z"
+    updatedAt: "2026-10-21T21:10:00Z"
+    siteName: "asha"
+    contentRootPath: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues"
+    contentRootItemId: "{672C4ABD-9C48-4A6C-8EFA-1EF14652E264}"
+    pageTemplateId: "{A51E9057-A334-41A3-A4F4-049C3A218788}"
+    pageTemplateName: "PracticePortal"
+    sourceSite: "https://www.asha.org/practice-portal/professional-issues/"
+    createdCount: 5
+    skippedCount: 0
+    failedCount: 0
+    notes: >
+      Five PracticePortal pages sampled from the ASHA professional topics list.
+      Existing siblings Accent Modification, Audiology Assistants, Caseload and
+      Workload, Classroom Acoustics, and Clinical Education and Supervision were
+      left in place. Body copy is a summary in Overview, KeyIssues, Resources,
+      References, and AboutThisContent. The Page Content field was left empty,
+      matching those siblings; PracticePortalComponent renders the portal fields.
+      Items are Draft.
+    verification:
+      checkedAt: "2026-10-21T21:10:00Z"
+      passed:
+        - "Cultural Responsiveness read-back: Overview, KeyIssues, Resources, References, AboutThisContent, TopicsLink, pageTitle, pageSummary"
+        - "Counseling in Audiology and Speech-Language Pathology read-back: same portal fields"
+        - "Template PracticePortal {A51E9057-A334-41A3-A4F4-049C3A218788}"
+      failed: []
+      pendingManual:
+        - "Publish the five pages for Edge"
+        - "Taxonomy fields were left blank, matching most existing professional topics"
+    items:
+      - { name: "Cultural Responsiveness", itemId: "{7E6C51B6-EA60-4F8B-88E0-E0DAD3CEB827}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Cultural Responsiveness" }
+      - { name: "Telepractice", itemId: "{6BE280B6-8A85-4FAB-BF23-C3248C58C51F}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Telepractice" }
+      - { name: "Speech-Language Pathology Assistants", itemId: "{D4825812-4E10-44AF-8D54-67475223A568}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Speech-Language Pathology Assistants" }
+      - { name: "Documentation in Schools", itemId: "{B003D7F0-E495-4E7A-846E-D54933239239}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Documentation in Schools" }
+      - { name: "Counseling in Audiology and Speech-Language Pathology", itemId: "{79643AF5-8E63-4C1A-9B95-49CE4D28FB53}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Counseling in Audiology and Speech-Language Pathology" }
   - name: "asha-ia-tree"
     kind: "ia-create"
     category: "IA"
