@@ -10,12 +10,11 @@ describe('hardReloadPage', () => {
     hardReloadPage();
 
     expect(submit).toHaveBeenCalledTimes(2);
-    const first = submit.mock.instances[0] as HTMLFormElement;
-    const second = submit.mock.instances[1] as HTMLFormElement;
-    const firstReload = new FormData(first).get('guestReload');
-    const secondReload = new FormData(second).get('guestReload');
+    const forms = Array.from(document.body.querySelectorAll('form'));
+    const firstReload = new FormData(forms[0]).get('guestReload');
+    const secondReload = new FormData(forms[1]).get('guestReload');
 
-    expect(first.method).toBe('get');
+    expect(forms[0].method).toBe('get');
     expect(firstReload).toEqual(expect.any(String));
     expect(secondReload).toEqual(expect.any(String));
     expect(secondReload).not.toBe(firstReload);
