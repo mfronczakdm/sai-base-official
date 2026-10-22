@@ -14,7 +14,6 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('@/demo/identify-demo-guest', () => ({
-  GUEST_IDENTITY_WAIT_MS: 0,
   identifyDemoGuest: jest.fn().mockResolvedValue(undefined),
   hardReloadPage: jest.fn(),
 }));

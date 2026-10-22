@@ -10,11 +10,7 @@ import {
   pinnedDemoGuests,
   type DemoGuest,
 } from '@/demo/demo-guests';
-import {
-  GUEST_IDENTITY_WAIT_MS,
-  hardReloadPage,
-  identifyDemoGuest,
-} from '@/demo/identify-demo-guest';
+import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
 import {
   DEMO_GUEST_BOUND_KEY,
   DEMO_GUEST_STORAGE_KEY,
@@ -29,7 +25,6 @@ import {
   markGuestBound,
   pageLabel,
   readStoredTrail,
-  stripGuestReloadParam,
   triggeredAffinities,
   writeStoredTrail,
   type TriggeredAffinity,
@@ -75,17 +70,14 @@ const CurrentProfile = ({
 
 const GuestChoice = ({
   guest,
-  pending,
   onSelect,
 }: {
   guest: DemoGuest;
-  pending: boolean;
   onSelect: (guest: DemoGuest) => void;
 }) => (
   <button
     type="button"
-    className="w-full rounded-md border border-[#d7e3e6] px-3 py-2 text-left hover:border-[#00778B] disabled:opacity-60"
-    disabled={pending}
+    className="w-full rounded-md border border-[#d7e3e6] px-3 py-2 text-left hover:border-[#00778B]"
     onClick={() => onSelect(guest)}
   >
     <span className="block text-sm font-semibold text-[#16323a]">{guestDisplayName(guest)}</span>
@@ -104,21 +96,19 @@ const GuestPanel = (): JSX.Element | null => {
   const [open, setOpen] = useState(false);
   const [guestEmail, setGuestEmail] = useState<string | null>(null);
   const [trail, setTrail] = useState<string[]>([]);
-  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const onPageShow = (event: PageTransitionEvent) => {
-      if (!event.persisted) {
-        window.sessionStorage.removeItem('asha-demo-bfcache-bust');
-        return;
-      }
-      if (window.sessionStorage.getItem('asha-demo-bfcache-bust') === '1') return;
-      window.sessionStorage.setItem('asha-demo-bfcache-bust', '1');
-      hardReloadPage();
+      if (event.persisted) window.location.reload();
     };
+    const optOutOfBfcache = () => undefined;
 
     window.addEventListener('pageshow', onPageShow);
-    return () => window.removeEventListener('pageshow', onPageShow);
+    window.addEventListener('unload', optOutOfBfcache);
+    return () => {
+      window.removeEventListener('pageshow', onPageShow);
+      window.removeEventListener('unload', optOutOfBfcache);
+    };
   }, []);
 
   useEffect(() => {
@@ -145,7 +135,6 @@ const GuestPanel = (): JSX.Element | null => {
         : null;
     const nextTrail = appendVisitPath(readStoredTrail(), pathname || '/');
     writeStoredTrail(nextTrail);
-    stripGuestReloadParam();
     setGuestEmail(email);
     setTrail(nextTrail);
     setVisible(true);
@@ -166,30 +155,20 @@ const GuestPanel = (): JSX.Element | null => {
 
   const guest = findDemoGuest(guestEmail);
   const affinities = triggeredAffinities(guest, trail);
-  const pending = pendingEmail !== null;
 
-  const selectGuest = async (nextGuest: DemoGuest | null) => {
-    setPendingEmail(nextGuest?.email ?? 'anonymous');
-
-    try {
-      if (nextGuest) {
-        markGuestBound();
-        window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
-        await Promise.race([
-          identifyDemoGuest(nextGuest).catch(() => undefined),
-          new Promise<void>((resolve) => {
-            window.setTimeout(resolve, GUEST_IDENTITY_WAIT_MS);
-          }),
-        ]);
-      } else {
-        clearGuestBound();
-        window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
-        clearStoredTrail();
-        forgetSitecoreBrowser();
-      }
-    } finally {
-      hardReloadPage();
+  const selectGuest = (nextGuest: DemoGuest | null) => {
+    if (nextGuest) {
+      markGuestBound();
+      window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
+      void identifyDemoGuest(nextGuest).catch(() => undefined);
+    } else {
+      clearGuestBound();
+      window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
+      clearStoredTrail();
+      forgetSitecoreBrowser();
     }
+
+    hardReloadPage();
   };
 
   return (
@@ -205,7 +184,6 @@ const GuestPanel = (): JSX.Element | null => {
             type="button"
             className="mt-3 text-sm font-semibold text-[#00778B] underline"
             data-testid="demo-guest-logout"
-            disabled={pending}
             onClick={() => selectGuest(null)}
           >
             Log out to anonymous
@@ -269,7 +247,6 @@ const GuestPanel = (): JSX.Element | null => {
                 type="button"
                 className="mt-3 text-sm font-semibold text-[#00778B] underline"
                 data-testid="demo-guest-logout"
-                disabled={pending}
                 onClick={() => selectGuest(null)}
               >
                 Log out to anonymous
@@ -318,7 +295,6 @@ const GuestPanel = (): JSX.Element | null => {
                 <GuestChoice
                   key={choice.email}
                   guest={choice}
-                  pending={pending}
                   onSelect={selectGuest}
                 />
               ))}

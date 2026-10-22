@@ -132,13 +132,6 @@ export const clearGuestBound = (): void => {
   document.cookie = `${DEMO_GUEST_BOUND_COOKIE}=; Path=/; Expires=${expired}; Max-Age=0`;
 };
 
-export const stripGuestReloadParam = (): void => {
-  const url = new URL(window.location.href);
-  if (!url.searchParams.has('guestReload')) return;
-  url.searchParams.delete('guestReload');
-  window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
-};
-
 export const cookieHeaderWithoutBrowserId = (cookieHeader: string | null): string =>
   (cookieHeader ?? '')
     .split(';')

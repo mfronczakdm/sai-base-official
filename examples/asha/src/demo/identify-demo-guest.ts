@@ -1,8 +1,5 @@
 import type { DemoGuest } from '@/demo/demo-guests';
 
-/** How long a profile switch waits for the identity event before the page reloads anyway. */
-export const GUEST_IDENTITY_WAIT_MS = process.env.NODE_ENV === 'production' ? 1500 : 0;
-
 /**
  * Binds this browser to an imported guest. The Profile Import API key stays on the server.
  * Cloud SDK events are initialized only on a deployed, non-preview site. In development the
@@ -22,9 +19,24 @@ export const identifyDemoGuest = async (guest: DemoGuest): Promise<void> => {
   });
 };
 
-/** Full document load with a unique URL so personalization cannot reuse the anonymous page. */
+/**
+ * Full document load. A form GET is a real navigation: location.replace is ignored on the
+ * second profile switch after history.replaceState cleans the previous cache-busting URL.
+ */
 export const hardReloadPage = (): void => {
   const url = new URL(window.location.href);
   url.searchParams.set('guestReload', Date.now().toString());
-  window.location.replace(url.toString());
+
+  const form = document.createElement('form');
+  form.method = 'GET';
+  form.action = url.pathname;
+  url.searchParams.forEach((value, key) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+  document.body.appendChild(form);
+  form.submit();
 };
