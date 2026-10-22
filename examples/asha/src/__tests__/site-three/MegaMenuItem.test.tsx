@@ -225,6 +225,28 @@ describe('MegaMenuItem', () => {
       expect(link).toHaveTextContent('View All Products');
     });
 
+    it('links Practice Management directly to the practice portal', () => {
+      const portalProps = {
+        ...mockProps,
+        fields: {
+          ...mockProps.fields,
+          Title: { value: 'Practice Management' },
+          Link: {
+            value: {
+              href: '/practice-management/practice-portal',
+              text: 'Practice Management',
+            },
+          },
+        },
+      };
+
+      render(<MegaMenuItemDefault {...portalProps} />);
+
+      const link = screen.getByRole('link', { name: 'Practice Management' });
+      expect(link).toHaveAttribute('href', '/practice-management/practice-portal');
+      expect(screen.queryByText('Back')).not.toBeInTheDocument();
+    });
+
     it('does not render submenu when in simple link mode', () => {
       const simpleLinkProps = {
         ...mockProps,

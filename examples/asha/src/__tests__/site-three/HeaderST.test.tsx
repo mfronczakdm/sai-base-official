@@ -667,6 +667,8 @@ describe('HeaderST Component', () => {
     it('renders the ASHA header chrome, logo field, and audience placeholder', () => {
       render(<HeaderSTAsha {...headerSTPropsBasic} />);
       expect(screen.getByTestId('header-st-asha')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'ASHA home' })).toHaveAttribute('href', '/');
+      expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/About');
       expect(screen.getByTestId('sitecore-image')).toHaveAttribute('alt', 'SYNC Logo');
       expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();

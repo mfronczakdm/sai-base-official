@@ -522,16 +522,12 @@ const ashaAudienceNavClass = [
 
 const HeaderSTAshaView = (props: HeaderSTProps) => {
   const fields = getDatasource(props.fields);
-  const pageContext = props.page as { siteName?: string; locale?: string } | undefined;
-  const site = pageContext?.siteName || 'asha';
-  const locale = pageContext?.locale || 'en';
   const dynamicId = props.params?.DynamicPlaceholderId;
   const placeholderName = `header-navigation-${dynamicId}`;
   const audiencePlaceholderName = `header-audience-${dynamicId}`;
   const identityPlaceholderName = `header-identity-${dynamicId}`;
   const searchLink = getFieldValue(fields?.SearchLink);
-  const pageHref = (path: string) =>
-    path ? `/${site}/${locale}/${encodeURI(path)}` : `/${site}/${locale}`;
+  const pageHref = (path: string) => (path ? `/${encodeURI(path)}` : '/');
 
   return (
     <header

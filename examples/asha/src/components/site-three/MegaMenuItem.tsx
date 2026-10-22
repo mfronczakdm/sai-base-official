@@ -16,14 +16,25 @@ const DICTIONARY_KEYS = {
   BACK_BUTTON_LABEL: 'Back',
 };
 
+const isPracticePortalHref = (href: string | undefined) => {
+  if (!href) return false;
+  const path = decodeURI(href).toLowerCase();
+  return (
+    path.includes('practice-management/practice-portal') ||
+    path.includes('practice management/practice portal')
+  );
+};
+
 export const Default = (props: MegaMenuItemProps) => {
   const { page } = props;
   const isPageEditing = page?.mode?.isEditing;
   const t = useTranslations();
   const featuredProduct = props.fields?.FeaturedProduct;
   const menuId = `mega-menu-${props.params?.DynamicPlaceholderId || 'default'}`;
+  const isDirectLink =
+    Boolean(props.params?.isSimpleLink) || isPracticePortalHref(props.fields?.Link?.value?.href);
 
-  if (props.params?.isSimpleLink) {
+  if (isDirectLink) {
     return (
       <li
         className={`font-(family-name:--font-accent) font-medium ${props.params?.styles}`}
