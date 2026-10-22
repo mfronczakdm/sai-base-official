@@ -63,6 +63,18 @@ describe('PracticeListing', () => {
     expect(screen.getByTestId('practice-listing-status')).toHaveTextContent('Showing topics for Member-only');
   });
 
+  it('applies a newly chosen profile without a fresh document', async () => {
+    render(<Default {...props} />);
+
+    expect(await screen.findByTestId('practice-listing-status')).toHaveTextContent('Showing public topics');
+
+    window.localStorage.setItem('asha-demo-guest-email', 'amina.farouk.01@example.com');
+    window.dispatchEvent(new Event('asha-demo-guest-changed'));
+
+    expect(await screen.findByRole('link', { name: 'Clinical Education and Supervision' })).toBeInTheDocument();
+    expect(screen.getByTestId('practice-listing-status')).toHaveTextContent('Showing topics for Member-only');
+  });
+
   it('renders the card variant', async () => {
     render(<Cards {...props} />);
 

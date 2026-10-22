@@ -91,10 +91,16 @@ const requestForPersonalization = (req: NextRequest): NextRequest => {
   return req;
 };
 
-export default function proxy(req: NextRequest) {
-  return defineProxy(preview, locale, multisite, redirects, personalize).exec(
+export default async function proxy(req: NextRequest) {
+  const response = await defineProxy(preview, locale, multisite, redirects, personalize).exec(
     requestForPersonalization(req)
   );
+
+  response?.headers.set('Cache-Control', 'private, no-store, max-age=0, must-revalidate');
+  response?.headers.set('CDN-Cache-Control', 'no-store');
+  response?.headers.set('Vercel-CDN-Cache-Control', 'no-store');
+
+  return response;
 }
 
 export const config = {

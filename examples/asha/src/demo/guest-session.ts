@@ -5,6 +5,7 @@ export const DEMO_PANEL_STORAGE_KEY = 'asha-demo-guest-panel';
 export const DEMO_TRAIL_STORAGE_KEY = 'asha-demo-visit-trail';
 export const DEMO_GUEST_BOUND_KEY = 'asha-demo-guest-bound';
 export const DEMO_GUEST_BOUND_COOKIE = 'asha-demo-guest-bound';
+export const DEMO_GUEST_CHANGED_EVENT = 'asha-demo-guest-changed';
 
 const MAX_TRAIL = 6;
 

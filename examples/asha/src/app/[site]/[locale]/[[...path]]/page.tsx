@@ -63,6 +63,10 @@ export default async function Page({ params }: PageProps) {
     </NextIntlClientProvider>
   );
 }
+// Personalized pages must be rendered for the current guest. A cached document is what a
+// normal reload shows until the browser is forced to bypass its cache.
+export const dynamic = 'force-dynamic';
+
 // This function gets called at build and export time to determine
 // pages for SSG ("paths", as tokenized array).
 export const generateStaticParams = async () => {

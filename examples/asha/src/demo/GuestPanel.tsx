@@ -13,6 +13,7 @@ import {
 import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
 import {
   DEMO_GUEST_BOUND_KEY,
+  DEMO_GUEST_CHANGED_EVENT,
   DEMO_GUEST_STORAGE_KEY,
   DEMO_PANEL_STORAGE_KEY,
   appendVisitPath,
@@ -98,15 +99,21 @@ const GuestPanel = (): JSX.Element | null => {
   const [trail, setTrail] = useState<string[]>([]);
 
   useEffect(() => {
-    const onPageShow = (event: PageTransitionEvent) => {
-      if (event.persisted) window.location.reload();
+    const readChosenGuest = () => {
+      const email =
+        window.sessionStorage.getItem(DEMO_GUEST_BOUND_KEY) === '1'
+          ? window.localStorage.getItem(DEMO_GUEST_STORAGE_KEY)
+          : null;
+      setGuestEmail(email);
     };
     const optOutOfBfcache = () => undefined;
 
-    window.addEventListener('pageshow', onPageShow);
+    window.addEventListener('pageshow', readChosenGuest);
+    window.addEventListener(DEMO_GUEST_CHANGED_EVENT, readChosenGuest);
     window.addEventListener('unload', optOutOfBfcache);
     return () => {
-      window.removeEventListener('pageshow', onPageShow);
+      window.removeEventListener('pageshow', readChosenGuest);
+      window.removeEventListener(DEMO_GUEST_CHANGED_EVENT, readChosenGuest);
       window.removeEventListener('unload', optOutOfBfcache);
     };
   }, []);
@@ -168,6 +175,7 @@ const GuestPanel = (): JSX.Element | null => {
       forgetSitecoreBrowser();
     }
 
+    window.dispatchEvent(new Event(DEMO_GUEST_CHANGED_EVENT));
     hardReloadPage();
   };
 

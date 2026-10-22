@@ -3,7 +3,7 @@
 import { useEffect, useState, type JSX } from 'react';
 import { Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import { findDemoGuest } from '@/demo/demo-guests';
-import { DEMO_GUEST_STORAGE_KEY } from '@/demo/guest-session';
+import { DEMO_GUEST_CHANGED_EVENT, DEMO_GUEST_STORAGE_KEY } from '@/demo/guest-session';
 import { cn } from '@/lib/utils';
 import { canViewPracticePage } from './practice-access.util';
 import type { PracticeListingProps, PracticeListingVariant, PracticeTopic } from './practice-listing.props';
@@ -47,10 +47,13 @@ const PracticeListingView = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setStatus(readGuestStatus());
+    const applyGuest = () => setStatus(readGuestStatus());
+    applyGuest();
+    window.addEventListener(DEMO_GUEST_CHANGED_EVENT, applyGuest);
+    window.addEventListener('pageshow', applyGuest);
 
     let ignore = false;
-    fetch('/api/practice-listing')
+    fetch('/api/practice-listing', { cache: 'no-store' })
       .then((response) => (response.ok ? response.json() : { topics: [] }))
       .then((payload: { topics?: PracticeTopic[] }) => {
         if (!ignore) setTopics(payload.topics ?? []);
@@ -64,6 +67,8 @@ const PracticeListingView = ({
 
     return () => {
       ignore = true;
+      window.removeEventListener(DEMO_GUEST_CHANGED_EVENT, applyGuest);
+      window.removeEventListener('pageshow', applyGuest);
     };
   }, []);
 
