@@ -227,19 +227,23 @@ const GuestPanel = (): JSX.Element | null => {
   const guest = findDemoGuest(guestEmail);
 
   const selectGuest = (nextGuest: DemoGuest | null) => {
+    const reloadForPersonalization = () => {
+      window.dispatchEvent(new Event(DEMO_GUEST_CHANGED_EVENT));
+      hardReloadPage();
+    };
+
     if (nextGuest) {
       markGuestBound();
       window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
-      void identifyDemoGuest(nextGuest).catch(() => undefined);
-    } else {
-      clearGuestBound();
-      window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
-      clearStoredTrail();
-      forgetSitecoreBrowser();
+      void identifyDemoGuest(nextGuest).finally(reloadForPersonalization);
+      return;
     }
 
-    window.dispatchEvent(new Event(DEMO_GUEST_CHANGED_EVENT));
-    hardReloadPage();
+    clearGuestBound();
+    window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
+    clearStoredTrail();
+    forgetSitecoreBrowser();
+    reloadForPersonalization();
   };
 
   return (

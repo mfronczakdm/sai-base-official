@@ -90,19 +90,29 @@ describe('GuestPanel', () => {
     expect(hardReloadPage).toHaveBeenCalled();
   });
 
-  it('reloads even when the identity event never finishes', async () => {
+  it('reloads after the identity event settles so personalization sees that guest', async () => {
     const user = userEvent.setup();
-    jest.mocked(identifyDemoGuest).mockImplementation(() => new Promise(() => undefined));
+    let finishIdentity: () => void = () => undefined;
+    jest.mocked(identifyDemoGuest).mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          finishIdentity = resolve;
+        })
+    );
 
     render(<GuestPanel />);
 
     await user.click(await screen.findByTestId('demo-guest-tab'));
     await user.click(screen.getByRole('button', { name: /Nora Kim/ }));
 
+    expect(hardReloadPage).not.toHaveBeenCalled();
+    expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('nora.kim.09@example.com');
+
+    finishIdentity();
+
     await waitFor(() => {
       expect(hardReloadPage).toHaveBeenCalled();
     });
-    expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('nora.kim.09@example.com');
   });
 
   it('shows the selected guest on the page after the hard refresh', async () => {
