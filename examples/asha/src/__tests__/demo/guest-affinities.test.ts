@@ -31,4 +31,27 @@ describe('guest affinities', () => {
   it('ignores a personalize error payload', () => {
     expect(flattenAffinities({ message: 'No experiences found' })).toEqual([]);
   });
+
+  it('reads the anonymous visitor profile JSON', () => {
+    const rows = flattenAffinities({
+      type: 'visitor',
+      traits: {
+        affinities: {
+          clinical_topic: {
+            Audiology: { views: 2, score: 1, lastViewAt: '2026-10-23T13:13:15.354455932Z' },
+          },
+          'speech-development': {
+            'speech milestones': { views: 1, score: 1, lastViewAt: '2026-10-23T13:13:08.09131134Z' },
+          },
+        },
+        profile: {},
+        session: {},
+      },
+    });
+
+    expect(rows).toEqual([
+      { name: 'clinical_topic', value: 'Audiology', views: 2, score: 1 },
+      { name: 'speech-development', value: 'speech milestones', views: 1, score: 1 },
+    ]);
+  });
 });

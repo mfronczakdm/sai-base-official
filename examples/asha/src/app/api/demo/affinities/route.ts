@@ -1,26 +1,29 @@
 import { NextResponse } from 'next/server';
-import { PINNED_DEMO_GUEST_EMAILS } from '@/demo/demo-guests';
 import { flattenAffinities } from '@/demo/guest-affinities';
 
 const EDGE_ORIGIN = 'https://edge-platform.sitecorecloud.io';
 // Live headless personalization. Its API response must return profile.traits.affinities.
 const AFFINITY_FRIENDLY_ID = 'asha_guest_affinities';
+const CLIENT_COOKIE = 'sc_cid';
+const CLIENT_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const isPinnedGuest = (email: string): boolean =>
-  (PINNED_DEMO_GUEST_EMAILS as readonly string[]).includes(email);
+const clientIdFromCookie = (cookieHeader: string | null): string => {
+  const pair = (cookieHeader ?? '')
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.toLowerCase().startsWith(`${CLIENT_COOKIE}=`));
+
+  const value = pair ? decodeURIComponent(pair.slice(CLIENT_COOKIE.length + 1)) : '';
+  return CLIENT_ID.test(value) ? value : '';
+};
 
 export async function GET(request: Request) {
-  const email = new URL(request.url).searchParams.get('email')?.trim().toLowerCase() || '';
-
-  if (!isPinnedGuest(email)) {
-    return NextResponse.json({ affinities: [] }, { status: 400 });
-  }
-
+  const clientId = clientIdFromCookie(request.headers.get('cookie'));
   const contextId =
     process.env.SITECORE_EDGE_CONTEXT_ID || process.env.NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID;
   const siteId = process.env.NEXT_PUBLIC_DEFAULT_SITE_NAME;
 
-  if (!contextId || !siteId) {
+  if (!clientId || !contextId || !siteId) {
     return NextResponse.json({ affinities: [] });
   }
 
@@ -41,7 +44,7 @@ export async function GET(request: Request) {
           clientKey: '',
           channel: 'web',
           pointOfSale: siteId,
-          email,
+          browserId: clientId,
           friendlyId,
         }),
       }

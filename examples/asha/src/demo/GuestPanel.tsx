@@ -177,9 +177,7 @@ const GuestPanel = (): JSX.Element | null => {
   }, [page.mode.isNormal, pathname]);
 
   useEffect(() => {
-    if (!guestEmail) {
-      setScoredAffinities([]);
-      setAffinityStatus('idle');
+    if (!visible) {
       return undefined;
     }
 
@@ -187,8 +185,9 @@ const GuestPanel = (): JSX.Element | null => {
 
     const loadScores = () => {
       setAffinityStatus('loading');
-      fetch(`/api/demo/affinities?email=${encodeURIComponent(guestEmail)}`, {
+      fetch('/api/demo/affinities', {
         cache: 'no-store',
+        credentials: 'same-origin',
         signal: controller.signal,
       })
         .then((response) => (response.ok ? response.json() : { affinities: [] }))
@@ -210,7 +209,7 @@ const GuestPanel = (): JSX.Element | null => {
       controller.abort();
       window.clearTimeout(retry);
     };
-  }, [guestEmail, pathname]);
+  }, [pathname, visible]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -245,25 +244,27 @@ const GuestPanel = (): JSX.Element | null => {
 
   return (
     <>
-      {guest && !open ? (
+      {(guest || scoredAffinities.length > 0) && !open ? (
         <div
           className="fixed right-4 bottom-20 z-[60] w-[20rem] max-w-[calc(100vw-2rem)] rounded-md border border-[#00778B] bg-white px-4 py-3 text-sm text-[#16323a] shadow-lg"
           data-testid="demo-guest-banner"
         >
-          <p className="mb-2 text-sm font-semibold">{guestDisplayName(guest)}</p>
+          <p className="mb-2 text-sm font-semibold">{guest ? guestDisplayName(guest) : 'Visitor'}</p>
           <CurrentProfile
             guest={guest}
             affinities={scoredAffinities}
             affinityStatus={affinityStatus}
           />
-          <button
-            type="button"
-            className="mt-3 text-sm font-semibold text-[#00778B] underline"
-            data-testid="demo-guest-logout"
-            onClick={() => selectGuest(null)}
-          >
-            Log out to anonymous
-          </button>
+          {guest ? (
+            <button
+              type="button"
+              className="mt-3 text-sm font-semibold text-[#00778B] underline"
+              data-testid="demo-guest-logout"
+              onClick={() => selectGuest(null)}
+            >
+              Log out to anonymous
+            </button>
+          ) : null}
         </div>
       ) : null}
 
@@ -303,10 +304,10 @@ const GuestPanel = (): JSX.Element | null => {
             <h3 className="text-sm font-semibold">Current profile</h3>
             <div className="mt-2">
               <CurrentProfile
-            guest={guest}
-            affinities={scoredAffinities}
-            affinityStatus={affinityStatus}
-          />
+              guest={guest}
+              affinities={scoredAffinities}
+              affinityStatus={affinityStatus}
+            />
             </div>
           </section>
 
