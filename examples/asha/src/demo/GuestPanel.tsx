@@ -10,21 +10,29 @@ import {
   pinnedDemoGuests,
   type DemoGuest,
 } from '@/demo/demo-guests';
-import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
+import {
+  confirmPersonalizationReload,
+  hardReloadPage,
+  identifyDemoGuest,
+} from '@/demo/identify-demo-guest';
 import { formatAffinityScore, type ScoredAffinity } from '@/demo/guest-affinities';
 import {
   DEMO_GUEST_BOUND_KEY,
   DEMO_GUEST_CHANGED_EVENT,
   DEMO_GUEST_STORAGE_KEY,
   DEMO_PANEL_STORAGE_KEY,
+  PERSONALIZE_CONFIRM_DELAY_MS,
+  PERSONALIZE_CONFIRM_KEY,
   appendVisitPath,
   clearGuestBound,
+  clearPersonalizeConfirm,
   clearStoredTrail,
   describeVisitLearning,
   ensureAnonymousFirstLoad,
   forgetSitecoreBrowser,
   isDemoGuestPanelEnabled,
   markGuestBound,
+  markPersonalizeConfirm,
   pageLabel,
   readStoredTrail,
   writeStoredTrail,
@@ -136,15 +144,31 @@ const GuestPanel = (): JSX.Element | null => {
       setGuestEmail(email);
     };
     const optOutOfBfcache = () => undefined;
+    const onPageShow = (event: PageTransitionEvent) => {
+      readChosenGuest();
+      if (event.persisted) hardReloadPage();
+    };
 
-    window.addEventListener('pageshow', readChosenGuest);
+    window.addEventListener('pageshow', onPageShow);
     window.addEventListener(DEMO_GUEST_CHANGED_EVENT, readChosenGuest);
     window.addEventListener('unload', optOutOfBfcache);
     return () => {
-      window.removeEventListener('pageshow', readChosenGuest);
+      window.removeEventListener('pageshow', onPageShow);
       window.removeEventListener(DEMO_GUEST_CHANGED_EVENT, readChosenGuest);
       window.removeEventListener('unload', optOutOfBfcache);
     };
+  }, []);
+
+  useEffect(() => {
+    if (window.sessionStorage.getItem(PERSONALIZE_CONFIRM_KEY) !== '1') return undefined;
+
+    const timer = window.setTimeout(() => {
+      if (window.sessionStorage.getItem(PERSONALIZE_CONFIRM_KEY) !== '1') return;
+      clearPersonalizeConfirm();
+      confirmPersonalizationReload();
+    }, PERSONALIZE_CONFIRM_DELAY_MS);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -234,12 +258,14 @@ const GuestPanel = (): JSX.Element | null => {
 
     if (nextGuest) {
       markGuestBound();
+      markPersonalizeConfirm();
       window.localStorage.setItem(DEMO_GUEST_STORAGE_KEY, nextGuest.email);
       void identifyDemoGuest(nextGuest).finally(reloadForPersonalization);
       return;
     }
 
     clearGuestBound();
+    clearPersonalizeConfirm();
     window.localStorage.removeItem(DEMO_GUEST_STORAGE_KEY);
     clearStoredTrail();
     forgetSitecoreBrowser();

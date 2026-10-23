@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GuestPanel from '@/demo/GuestPanel';
-import { identifyDemoGuest, hardReloadPage } from '@/demo/identify-demo-guest';
+import { identifyDemoGuest, hardReloadPage, confirmPersonalizationReload } from '@/demo/identify-demo-guest';
 
 const mockUseSitecore = jest.fn();
 
@@ -16,6 +16,7 @@ jest.mock('next/navigation', () => ({
 jest.mock('@/demo/identify-demo-guest', () => ({
   identifyDemoGuest: jest.fn().mockResolvedValue(undefined),
   hardReloadPage: jest.fn(),
+  confirmPersonalizationReload: jest.fn(),
 }));
 
 describe('GuestPanel', () => {
@@ -87,7 +88,25 @@ describe('GuestPanel', () => {
     });
     expect(window.localStorage.getItem('asha-demo-guest-email')).toBe('julian.rossi.39@example.com');
     expect(window.sessionStorage.getItem('asha-demo-guest-bound')).toBe('1');
+    expect(window.sessionStorage.getItem('asha-demo-personalize-confirm')).toBe('1');
     expect(hardReloadPage).toHaveBeenCalled();
+  });
+
+  it('refreshes once more after a profile change so personalization can catch up', () => {
+    jest.useFakeTimers();
+    window.sessionStorage.setItem('asha-demo-personalize-confirm', '1');
+
+    render(<GuestPanel />);
+
+    expect(confirmPersonalizationReload).not.toHaveBeenCalled();
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+
+    expect(confirmPersonalizationReload).toHaveBeenCalledTimes(1);
+    expect(window.sessionStorage.getItem('asha-demo-personalize-confirm')).toBeNull();
+    jest.useRealTimers();
   });
 
   it('reloads after the identity event settles so personalization sees that guest', async () => {
@@ -159,6 +178,7 @@ describe('GuestPanel', () => {
     window.sessionStorage.setItem('asha-demo-guest-bound', '1');
     window.localStorage.setItem('asha-demo-guest-email', 'omar.haddad.26@example.com');
     window.sessionStorage.setItem('asha-demo-visit-trail', JSON.stringify(['/Events']));
+    window.sessionStorage.setItem('asha-demo-personalize-confirm', '1');
     document.cookie = 'sc_cid=known-browser';
 
     render(<GuestPanel />);
@@ -171,6 +191,7 @@ describe('GuestPanel', () => {
     expect(identifyDemoGuest).not.toHaveBeenCalled();
     expect(window.localStorage.getItem('asha-demo-guest-email')).toBeNull();
     expect(window.sessionStorage.getItem('asha-demo-guest-bound')).toBeNull();
+    expect(window.sessionStorage.getItem('asha-demo-personalize-confirm')).toBeNull();
     expect(window.sessionStorage.getItem('asha-demo-visit-trail')).toBeNull();
     expect(document.cookie).not.toContain('sc_cid=known-browser');
   });

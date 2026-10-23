@@ -114,3 +114,11 @@ export const hardReloadPage = (): void => {
   document.body.appendChild(form);
   form.submit();
 };
+
+/**
+ * Same request a manual refresh sends. The load right after identity still gets the
+ * default variant; this follow-up is the one Sitecore personalizes.
+ */
+export const confirmPersonalizationReload = (): void => {
+  window.location.reload();
+};

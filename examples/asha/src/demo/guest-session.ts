@@ -6,6 +6,10 @@ export const DEMO_TRAIL_STORAGE_KEY = 'asha-demo-visit-trail';
 export const DEMO_GUEST_BOUND_KEY = 'asha-demo-guest-bound';
 export const DEMO_GUEST_BOUND_COOKIE = 'asha-demo-guest-bound';
 export const DEMO_GUEST_CHANGED_EVENT = 'asha-demo-guest-changed';
+/** Set on profile click. The next page refreshes once so Sitecore can apply the guest. */
+export const PERSONALIZE_CONFIRM_KEY = 'asha-demo-personalize-confirm';
+/** Sitecore reads the guest on the request after identity, which is the manual refresh today. */
+export const PERSONALIZE_CONFIRM_DELAY_MS = 2000;
 
 const MAX_TRAIL = 6;
 
@@ -131,6 +135,14 @@ export const clearGuestBound = (): void => {
   window.sessionStorage.removeItem(DEMO_GUEST_BOUND_KEY);
   const expired = 'Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = `${DEMO_GUEST_BOUND_COOKIE}=; Path=/; Expires=${expired}; Max-Age=0`;
+};
+
+export const markPersonalizeConfirm = (): void => {
+  window.sessionStorage.setItem(PERSONALIZE_CONFIRM_KEY, '1');
+};
+
+export const clearPersonalizeConfirm = (): void => {
+  window.sessionStorage.removeItem(PERSONALIZE_CONFIRM_KEY);
 };
 
 export const cookieHeaderWithoutBrowserId = (cookieHeader: string | null): string =>
