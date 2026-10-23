@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-21T21:40:00Z"
+lastUpdatedAt: "2026-10-23T12:45:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -4495,6 +4495,46 @@ ia:
       - { name: "Speech-Language Pathology Assistants", itemId: "{D4825812-4E10-44AF-8D54-67475223A568}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Speech-Language Pathology Assistants" }
       - { name: "Documentation in Schools", itemId: "{B003D7F0-E495-4E7A-846E-D54933239239}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Documentation in Schools" }
       - { name: "Counseling in Audiology and Speech-Language Pathology", itemId: "{79643AF5-8E63-4C1A-9B95-49CE4D28FB53}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Counseling in Audiology and Speech-Language Pathology" }
+  - name: "speech-development-in-children"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-23T12:20:00Z"
+    updatedAt: "2026-10-23T12:30:00Z"
+    siteName: "asha"
+    contentRootPath: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues"
+    contentRootItemId: "{672C4ABD-9C48-4A6C-8EFA-1EF14652E264}"
+    pageTemplateId: "{A51E9057-A334-41A3-A4F4-049C3A218788}"
+    pageTemplateName: "PracticePortal"
+    sourceSite: "https://www.asha.org/public/speech/development/communicationdevelopment/"
+    createdCount: 1
+    skippedCount: 0
+    failedCount: 0
+    notes: >
+      2026-10-23: Rebuilt on the PracticePortal template after the first draft used the Page
+      template. The unused Page item {551D58B4-0284-4190-9A8A-8AF3E042A56A} had no references
+      and was deleted. Body is in Overview, KeyIssues, Resources, References, and
+      AboutThisContent. Access is Public. PracticePortalComponent is on headless-main.
+      Item is Draft.
+    events:
+      - name: "Speech Development for Parents Webinar"
+        itemId: "{D9113431-1964-4152-BA8F-37CDEF830A80}"
+        path: "/sitecore/content/asha/asha/Data/Events/Speech Development for Parents Webinar"
+        calendarEventId: "{B35E5685-BBAE-40AA-8220-B694E2F384DB}"
+        eventType: "Webinar {7710FC16-3293-484E-B57A-952CF591980C}"
+        when: "2026-11-12 7:00-8:15 p.m."
+        place: "Online"
+    verification:
+      checkedAt: "2026-10-23T12:30:00Z"
+      passed:
+        - "Item {80EE2D22-246E-43FE-A84F-532B25027FDD} created on PracticePortal"
+        - "PracticePortalComponent placed on headless-main"
+        - "Unused Page-template draft deleted; no content references"
+      failed: []
+      pendingManual:
+        - "Publish the page before it appears on the public site or in the Practice Listing"
+    items:
+      - { name: "Speech Development in Children", itemId: "{80EE2D22-246E-43FE-A84F-532B25027FDD}", path: "/sitecore/content/asha/asha/Home/Practice Management/Practice Portal/Professional Issues/Speech Development in Children" }
   - name: "asha-ia-tree"
     kind: "ia-create"
     category: "IA"

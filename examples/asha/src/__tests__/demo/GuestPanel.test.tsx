@@ -24,6 +24,10 @@ describe('GuestPanel', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(identifyDemoGuest).mockResolvedValue(undefined);
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ affinities: [] }),
+    });
     window.localStorage.clear();
     window.sessionStorage.clear();
     process.env.NEXT_PUBLIC_DEMO_GUEST_PANEL = 'true';
@@ -111,9 +115,33 @@ describe('GuestPanel', () => {
 
     expect(banner).toHaveTextContent('Audiologist');
     expect(banner).toHaveTextContent('Subscriber');
-    expect(banner).toHaveTextContent('Hearing Aids & Cochlear Implants');
-    expect(banner).toHaveTextContent('convention interest');
+    expect(banner).toHaveTextContent('Top affinities');
+    expect(await screen.findByText(/Sitecore has not returned affinity scores/)).toBeInTheDocument();
     expect(screen.getByTestId('demo-guest-tab')).toHaveTextContent('Omar');
+  });
+
+  it('shows Sitecore affinity views and score for the selected guest', async () => {
+    window.sessionStorage.setItem('asha-demo-guest-bound', '1');
+    window.localStorage.setItem('asha-demo-guest-email', 'nora.kim.09@example.com');
+    jest.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        affinities: [{ name: 'clinical_topic', value: 'Audiology', views: 2, score: 1 }],
+      }),
+    } as Response);
+
+    render(<GuestPanel />);
+
+    expect(await screen.findByText('Audiology')).toBeInTheDocument();
+    const scores = screen.getByTestId('demo-guest-affinities');
+
+    expect(scores).toHaveTextContent('Affinity');
+    expect(scores).toHaveTextContent('Views');
+    expect(scores).toHaveTextContent('Score');
+    expect(scores).toHaveTextContent('clinical_topic');
+    expect(scores).toHaveTextContent('Audiology');
+    expect(scores).toHaveTextContent('2');
+    expect(scores).toHaveTextContent('1.00');
   });
 
   it('logs out of the current guest and returns the browser to anonymous', async () => {

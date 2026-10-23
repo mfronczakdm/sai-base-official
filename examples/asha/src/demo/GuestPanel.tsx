@@ -11,6 +11,7 @@ import {
   type DemoGuest,
 } from '@/demo/demo-guests';
 import { hardReloadPage, identifyDemoGuest } from '@/demo/identify-demo-guest';
+import { formatAffinityScore, type ScoredAffinity } from '@/demo/guest-affinities';
 import {
   DEMO_GUEST_BOUND_KEY,
   DEMO_GUEST_CHANGED_EVENT,
@@ -26,9 +27,7 @@ import {
   markGuestBound,
   pageLabel,
   readStoredTrail,
-  triggeredAffinities,
   writeStoredTrail,
-  type TriggeredAffinity,
 } from '@/demo/guest-session';
 
 const Fact = ({ label, value }: { label: string; value?: string }) => (
@@ -38,34 +37,62 @@ const Fact = ({ label, value }: { label: string; value?: string }) => (
   </div>
 );
 
-const affinityLabel = (affinity: TriggeredAffinity): string =>
-  affinity.source === 'visit' ? 'triggered this visit' : 'on the profile';
+const AffinityScores = ({
+  affinities,
+  status,
+}: {
+  affinities: ScoredAffinity[];
+  status: 'idle' | 'loading' | 'ready';
+}) => (
+  <div className="mt-3" data-testid="demo-guest-affinities">
+    <p className="text-sm font-semibold">Top affinities</p>
+    {affinities.length ? (
+      <table className="mt-2 w-full text-left text-sm">
+        <thead>
+          <tr className="text-xs text-[#5c6b70]">
+            <th className="py-1 font-semibold">Affinity</th>
+            <th className="py-1 font-semibold">Views</th>
+            <th className="py-1 text-right font-semibold">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {affinities.map((affinity) => (
+            <tr key={`${affinity.name}:${affinity.value}`} className="border-t border-[#e7e2d8]">
+              <td className="py-2 pr-2">
+                <div className="text-xs text-[#5c6b70]">{affinity.name}</div>
+                <div className="text-[#16323a]">{affinity.value}</div>
+              </td>
+              <td className="py-2">{affinity.views}</td>
+              <td className="py-2 text-right">{formatAffinityScore(affinity.score)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <p className="mt-1 text-sm text-[#5c6b70]">
+        {status === 'loading'
+          ? 'Reading Sitecore affinity scores…'
+          : 'Sitecore has not returned affinity scores for this profile yet.'}
+      </p>
+    )}
+  </div>
+);
 
 const CurrentProfile = ({
   guest,
   affinities,
+  affinityStatus,
 }: {
   guest?: DemoGuest;
-  affinities: TriggeredAffinity[];
+  affinities: ScoredAffinity[];
+  affinityStatus: 'idle' | 'loading' | 'ready';
 }) => (
   <div data-testid="demo-guest-profile">
     <dl>
       <Fact label="Profession" value={guest?.profession || 'Not identified'} />
       <Fact label="Certification" value={guest?.certificationStatus || 'Not identified'} />
     </dl>
-    <p className="mt-3 text-sm font-semibold">Affinities triggered</p>
-    {affinities.length ? (
-      <ul className="mt-1 space-y-1">
-        {affinities.map((affinity) => (
-          <li key={affinity.value} className="text-sm text-[#16323a]">
-            {affinity.value}
-            <span className="ml-2 text-xs text-[#5c6b70]">{affinityLabel(affinity)}</span>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p className="mt-1 text-sm text-[#5c6b70]">None triggered yet.</p>
-    )}
+    <AffinityScores affinities={affinities} status={affinityStatus} />
   </div>
 );
 
@@ -97,6 +124,8 @@ const GuestPanel = (): JSX.Element | null => {
   const [open, setOpen] = useState(false);
   const [guestEmail, setGuestEmail] = useState<string | null>(null);
   const [trail, setTrail] = useState<string[]>([]);
+  const [scoredAffinities, setScoredAffinities] = useState<ScoredAffinity[]>([]);
+  const [affinityStatus, setAffinityStatus] = useState<'idle' | 'loading' | 'ready'>('idle');
 
   useEffect(() => {
     const readChosenGuest = () => {
@@ -148,6 +177,42 @@ const GuestPanel = (): JSX.Element | null => {
   }, [page.mode.isNormal, pathname]);
 
   useEffect(() => {
+    if (!guestEmail) {
+      setScoredAffinities([]);
+      setAffinityStatus('idle');
+      return undefined;
+    }
+
+    const controller = new AbortController();
+
+    const loadScores = () => {
+      setAffinityStatus('loading');
+      fetch(`/api/demo/affinities?email=${encodeURIComponent(guestEmail)}`, {
+        cache: 'no-store',
+        signal: controller.signal,
+      })
+        .then((response) => (response.ok ? response.json() : { affinities: [] }))
+        .then((payload: { affinities?: ScoredAffinity[] }) => {
+          setScoredAffinities(Array.isArray(payload.affinities) ? payload.affinities : []);
+          setAffinityStatus('ready');
+        })
+        .catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === 'AbortError') return;
+          setScoredAffinities([]);
+          setAffinityStatus('ready');
+        });
+    };
+
+    loadScores();
+    const retry = window.setTimeout(loadScores, 1500);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(retry);
+    };
+  }, [guestEmail, pathname]);
+
+  useEffect(() => {
     if (!open) return undefined;
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -161,7 +226,6 @@ const GuestPanel = (): JSX.Element | null => {
   if (!visible) return null;
 
   const guest = findDemoGuest(guestEmail);
-  const affinities = triggeredAffinities(guest, trail);
 
   const selectGuest = (nextGuest: DemoGuest | null) => {
     if (nextGuest) {
@@ -187,7 +251,11 @@ const GuestPanel = (): JSX.Element | null => {
           data-testid="demo-guest-banner"
         >
           <p className="mb-2 text-sm font-semibold">{guestDisplayName(guest)}</p>
-          <CurrentProfile guest={guest} affinities={affinities} />
+          <CurrentProfile
+            guest={guest}
+            affinities={scoredAffinities}
+            affinityStatus={affinityStatus}
+          />
           <button
             type="button"
             className="mt-3 text-sm font-semibold text-[#00778B] underline"
@@ -234,7 +302,11 @@ const GuestPanel = (): JSX.Element | null => {
           <section className="mt-6">
             <h3 className="text-sm font-semibold">Current profile</h3>
             <div className="mt-2">
-              <CurrentProfile guest={guest} affinities={affinities} />
+              <CurrentProfile
+            guest={guest}
+            affinities={scoredAffinities}
+            affinityStatus={affinityStatus}
+          />
             </div>
           </section>
 
