@@ -1,0 +1,32 @@
+[
+  {
+    "name": "asha",
+    "hostName": "*",
+    "language": "en"
+  },
+  {
+    "name": "asha",
+    "hostName": "*",
+    "language": "en"
+  },
+  {
+    "name": "evo",
+    "hostName": "*",
+    "language": "en"
+  },
+  {
+    "name": "bcaa",
+    "hostName": "https://bcaa-seven.vercel.app/",
+    "language": "en"
+  },
+  {
+    "name": "melaleuca",
+    "hostName": "*",
+    "language": "en"
+  },
+  {
+    "name": "solterra",
+    "hostName": "*",
+    "language": "en"
+  }
+]
