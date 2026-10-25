@@ -49,3 +49,17 @@ packages/
 
 # VS Code settings
 .vscode/
+
+# Local installs and build output for every starter
+node_modules/
+.next/
+.jest-cache/
+coverage/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# Accidental extra copy of a starter
+examples/kit-nextjs-product-listing copy/
