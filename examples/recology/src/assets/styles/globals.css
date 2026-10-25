@@ -293,4 +293,5 @@
   --width-3-5: 0.875rem;
   --width-px: 0.0625rem;
   --radius: var(--border-radius-default, 0.25rem);
+  --radius-default: var(--border-radius-default, 0.25rem);
 }
