@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-11T20:25:00Z"
+lastUpdatedAt: "2026-10-24T23:40:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -4030,8 +4030,352 @@ demoContent:
         - "FieldNames variant must be set in Pages (set_component_datasource variantId is personalization, not Headless Variants)"
         - "Select component variant Version1 � Pages canvas Version 1 is layout version, not the rendering variant"
 
+dataTemplates:
+  - name: "LocationItem"
+    kind: "data-template"
+    status: "complete"
+    createdAt: "2026-10-24T16:00:00Z"
+    updatedAt: "2026-10-24T16:00:00Z"
+    path: "/sitecore/templates/Project/click-click-launch/Site/LocationItem"
+    itemId: "{F38AF42C-AC5C-41AC-9E7A-5BFA2DEF4E66}"
+    parentPath: "/sitecore/templates/Project/click-click-launch/Site"
+    parentItemId: "{BC1512D7-AFB1-44BE-AFD7-60392CE909E7}"
+    baseTemplates: "{1930BBEB-7805-471A-A3BE-4858AC7CF696}|{44A022DB-56D3-419A-B43B-E27E4D8E9C41}"
+    baseTemplatesSet: true
+    standardValues:
+      itemId: "{BEEC3C41-FCBD-49A1-A8F5-4526A2289F48}"
+      linked: true
+      defaults:
+        Name: "$name"
+        IsActive: "1"
+    sections:
+      - name: "Identity"
+        itemId: "{49C23F3B-1421-4336-81AE-3C26E3F7DE26}"
+        fields:
+          - { name: "Name", title: "Name", type: "Single-Line Text", itemId: "{67291036-6CC2-4A0A-9FC7-0FB03B53C630}" }
+          - { name: "LocationType", title: "Location Type", type: "Single-Line Text", itemId: "{32DA8221-2256-4E3F-AAEB-FA00C3C4F96F}" }
+          - { name: "LocationCode", title: "Location Code", type: "Single-Line Text", itemId: "{4814A2EE-0B50-47CD-8E92-2BFC9316FE82}" }
+          - { name: "IsActive", title: "Is Active", type: "Checkbox", itemId: "{C380ED97-AA32-4F4E-9971-40415E5BE020}" }
+          - { name: "OpenToPublic", title: "Open to the Public", type: "Checkbox", itemId: "{77DC1423-852E-4F76-AD5E-BD300E07E7E9}" }
+      - name: "Address"
+        itemId: "{CBA2CB69-79D9-4E9E-8C5A-E0CA7601FA21}"
+        fields:
+          - { name: "Address", title: "Address", type: "Multi-Line Text", itemId: "{26480DF1-7F1C-4980-AC25-FD14ABC90FCB}" }
+          - { name: "City", title: "City", type: "Single-Line Text", itemId: "{51B93D1E-3373-4252-97D8-DEE626BEF3D7}" }
+          - { name: "State", title: "State", type: "Single-Line Text", itemId: "{9EA92D47-2FF6-465B-A022-0DE19D27FD3E}" }
+          - { name: "PostalCode", title: "Postal Code", type: "Single-Line Text", itemId: "{F20DBCA8-AAFB-408E-8D38-3432335B985D}" }
+          - { name: "Country", title: "Country", type: "Single-Line Text", itemId: "{32AE5782-D4FB-43D7-9FFC-FB6B41F2EAD5}" }
+      - name: "Contact"
+        itemId: "{C0E0BC7F-446E-4D1D-A4DF-AEFDC5DF67C3}"
+        fields:
+          - { name: "Phone", title: "Phone", type: "Single-Line Text", itemId: "{02FB6BE7-38EC-4F28-8F60-22076021E701}" }
+          - { name: "AlternatePhone", title: "Alternate Phone", type: "Single-Line Text", itemId: "{15C34C21-6AAF-4086-BCC4-E03BE236D253}" }
+          - { name: "Fax", title: "Fax", type: "Single-Line Text", itemId: "{C8ACA962-1737-4E3F-9FF7-D8107E434BFB}" }
+          - { name: "Email", title: "Email", type: "Single-Line Text", itemId: "{6DC69326-A0DE-4961-9D65-5384EC2F6677}" }
+          - { name: "Website", title: "Website", type: "General Link", itemId: "{076C3E70-84E7-4834-AB76-C8866A7F78C4}" }
+      - name: "Service"
+        itemId: "{645F8B27-50E8-4562-B960-D00180B03F22}"
+        fields:
+          - { name: "Hours", title: "Hours", type: "Multi-Line Text", itemId: "{1073A146-5504-4A8C-945F-3B644797CE24}" }
+          - { name: "HolidayHours", title: "Holiday Hours", type: "Multi-Line Text", itemId: "{5D0010B7-731A-432A-A88F-FBE8C45D9985}" }
+          - { name: "Services", title: "Services", type: "Multi-Line Text", itemId: "{29BAD94A-FA3E-4C1B-BB79-E38AA22631A9}" }
+          - { name: "ServiceArea", title: "Service Area", type: "Multi-Line Text", itemId: "{43EAEFE1-E1A2-4971-BF79-2668CA8F0724}" }
+          - { name: "Directions", title: "Directions", type: "Rich Text", itemId: "{FE3FB3DA-6939-417F-8E2E-E22B8D373546}" }
+          - { name: "CartTypes", title: "Cart Types", type: "Multilist", itemId: "{FDECBC43-764D-4B0F-B106-D02555214058}", source: "/sitecore/content/recology/recology/Data/Cart Types" }
+          - { name: "CartSizes", title: "Cart Sizes", type: "Multilist", itemId: "{4B94F157-527F-4003-85BE-4F1AE7C57687}", source: "/sitecore/content/recology/recology/Data/Cart Sizes" }
+      - name: "Map"
+        itemId: "{7F2E7420-D70D-48BC-8C67-4A44681D374C}"
+        fields:
+          - { name: "Latitude", title: "Latitude", type: "Single-Line Text", itemId: "{5D49C32A-D438-4C81-B14C-86B9AF5C58C6}" }
+          - { name: "Longitude", title: "Longitude", type: "Single-Line Text", itemId: "{459D9440-6004-4071-9937-CC5A7490AAFF}" }
+          - { name: "MapLink", title: "Map Link", type: "General Link", itemId: "{B53A5AF7-1021-42A3-9CFF-C1155EF01FD3}" }
+          - { name: "Image", title: "Image", type: "Image", itemId: "{E6AB533B-C3BC-469A-9D05-A676427C60B3}" }
+    verification:
+      checkedAt: "2026-10-24T16:00:00Z"
+      passed:
+        - "Template exists at the requested path"
+        - "Base templates are Standard template and Grid Parameters"
+        - "Five sections created"
+        - "Field Type verified for Name, Address, Phone, IsActive, Website, Directions, MapLink, and Image"
+        - "Standard Values item is based on LocationItem"
+        - "Standard Values defaults Name=$name and IsActive=1"
+      failed: []
+      pendingManual:
+        - "__Standard values link is a silent-write; confirm in Content Editor that LocationItem standard values points at {BEEC3C41-FCBD-49A1-A8F5-4526A2289F48}"
+        - "Section __Sortorder writes did not read back; confirm section order is Identity, Address, Contact, Service, Map"
+    notes: >
+      Data template. Page inheritance of LocationItem was removed. On 2026-10-24 the
+      Home/Location Page items were deleted and recreated on this template, with
+      contact fields filled from recology.com. New hub item is {6B97CC50-2F83-459A-B06C-D07D5F5D81CE}.
+      2026-10-24: Added Service/CartTypes multilist sourced at /sitecore/content/recology/recology/Data/Cart Types.
+      2026-10-24: Added Service/CartSizes multilist sourced at /sitecore/content/recology/recology/Data/Cart Sizes.
+  - name: "CartType"
+    kind: "data-template"
+    status: "complete"
+    createdAt: "2026-10-24T18:50:00Z"
+    updatedAt: "2026-10-24T21:45:00Z"
+    path: "/sitecore/templates/Project/click-click-launch/Site/CartType"
+    itemId: "{C06CFF53-1404-45E0-8586-316620E0FCD3}"
+    parentPath: "/sitecore/templates/Project/click-click-launch/Site"
+    parentItemId: "{BC1512D7-AFB1-44BE-AFD7-60392CE909E7}"
+    baseTemplates: "{1930BBEB-7805-471A-A3BE-4858AC7CF696}"
+    baseTemplatesSet: true
+    standardValues:
+      itemId: "{3E8605F3-42FA-48B0-B3DF-32A3044203DC}"
+      linked: pendingManual
+      defaults:
+        Name: "$name"
+    dataFolder:
+      name: "Cart Types"
+      itemId: "{EC759EC7-ACF2-4E85-9EEF-4880B7354297}"
+      path: "/sitecore/content/recology/recology/Data/Cart Types"
+      templateId: "{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}"
+    sections:
+      - name: "Details"
+        itemId: "{069042CB-99F7-4E5A-9655-20DAA17172EF}"
+        fields:
+          - { name: "Name", title: "Name", type: "Single-Line Text", itemId: "{23856B36-0827-4154-954F-70DEAAEC76A3}" }
+          - { name: "Code", title: "Code", type: "Single-Line Text", itemId: "{BEA4FD47-CC36-451C-8B29-6E92DA47B2B2}" }
+          - { name: "Capacity", title: "Capacity", type: "Single-Line Text", itemId: "{F7F841C9-CF16-4038-A474-DA947DD442C2}" }
+          - { name: "Unit", title: "Unit", type: "Single-Line Text", itemId: "{E27858E6-E12E-491B-8EB8-0A31751E8977}" }
+          - { name: "ContainerType", title: "Container Type", type: "Single-Line Text", itemId: "{65650113-BA87-485E-9E4D-E393D9DBF756}" }
+          - { name: "Dimensions", title: "Dimensions", type: "Single-Line Text", itemId: "{747BB39C-4BA7-4AA2-A1F8-D05F29580136}" }
+          - { name: "Description", title: "Description", type: "Multi-Line Text", itemId: "{286058B9-C0FA-462E-AD8D-BEC8447E307C}" }
+          - { name: "Color", title: "Color", type: "Single-Line Text", itemId: "{C2C13502-294F-4908-BB82-70E4BEA49A53}" }
+          - { name: "Stream", title: "Stream", type: "Single-Line Text", itemId: "{D45CD3ED-2FFD-4CBB-88AF-C6611A8F0858}" }
+    items:
+      - { name: "Green Cart", itemId: "{D48CBBD8-5B9A-4F98-907C-8CD8CA51C14A}", path: "/sitecore/content/recology/recology/Data/Cart Types/Green Cart" }
+      - { name: "Blue Cart", itemId: "{1FBCE91E-B896-464A-9C6E-FE1B99A4A32E}", path: "/sitecore/content/recology/recology/Data/Cart Types/Blue Cart" }
+      - { name: "Black or Gray Cart", itemId: "{EA840772-E5EA-4FF8-B626-3BD2657CF4EA}", path: "/sitecore/content/recology/recology/Data/Cart Types/Black or Gray Cart" }
+    verification:
+      checkedAt: "2026-10-24T21:45:00Z"
+      passed:
+        - "Green Cart read-back confirmed Color Green and Stream Compost / Organics"
+        - "Cart Types folder now holds the three color classifications"
+      failed: []
+      pendingManual:
+        - "__Standard values link did not read back; confirm in Content Editor that CartType standard values points at {3E8605F3-42FA-48B0-B3DF-32A3044203DC}"
+    notes: >
+      Cart types are the color classification. Green is compost/organics, blue is recycling,
+      and black or gray is landfill/garbage. Accepted materials are in Description.
+      The earlier size-only samples were unused and were removed from this folder.
+      Sizes live on CartSize.
+  - name: "CartSize"
+    kind: "data-template"
+    status: "complete"
+    createdAt: "2026-10-24T21:45:00Z"
+    updatedAt: "2026-10-24T21:45:00Z"
+    path: "/sitecore/templates/Project/click-click-launch/Site/CartSize"
+    itemId: "{CECBFFCE-C0BA-4EBC-879F-172B7B313BE7}"
+    parentPath: "/sitecore/templates/Project/click-click-launch/Site"
+    parentItemId: "{BC1512D7-AFB1-44BE-AFD7-60392CE909E7}"
+    baseTemplates: "{1930BBEB-7805-471A-A3BE-4858AC7CF696}"
+    baseTemplatesSet: true
+    standardValues:
+      itemId: "{6A87EE58-DDF3-4F59-BE70-90AE9A0965A6}"
+      linked: pendingManual
+      defaults:
+        Name: "$name"
+    dataFolder:
+      name: "Cart Sizes"
+      itemId: "{56A50FC7-EE4E-4F21-8760-2E8AC763ABEF}"
+      path: "/sitecore/content/recology/recology/Data/Cart Sizes"
+      templateId: "{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}"
+    sections:
+      - name: "Details"
+        itemId: "{CF90E28A-EF7A-4BB0-A06B-E143AFB4151A}"
+        fields:
+          - { name: "Name", title: "Name", type: "Single-Line Text", itemId: "{746BA160-BED5-46A7-8EA4-75AD5F5D5C38}" }
+          - { name: "Code", title: "Code", type: "Single-Line Text", itemId: "{C43D1C07-A597-497C-9243-5F4153F3D1B9}" }
+          - { name: "Capacity", title: "Capacity", type: "Single-Line Text", itemId: "{9AD15A3E-BCA6-4E90-AB04-FAA6A77325CE}" }
+          - { name: "Unit", title: "Unit", type: "Single-Line Text", itemId: "{304FD046-9672-4B0D-90DD-B645048AC7C0}" }
+          - { name: "Dimensions", title: "Dimensions", type: "Single-Line Text", itemId: "{C77C6662-377A-4E20-A880-26F4FB9658F4}" }
+          - { name: "Description", title: "Description", type: "Multi-Line Text", itemId: "{AA65A557-175C-4D8E-B999-650D1CB223CC}" }
+    items:
+      - { name: "16-Gallon", itemId: "{191CB0B6-46AB-4DCB-A26E-365742F61ECB}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/16-Gallon" }
+      - { name: "20-Gallon", itemId: "{1A87DCA3-5AE9-459F-8210-8429EB810E0C}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/20-Gallon" }
+      - { name: "32-Gallon", itemId: "{2F9ED2B6-1B05-448E-825F-FB4F13E4A1F8}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/32-Gallon" }
+      - { name: "64-Gallon", itemId: "{5BCC8FD9-2CFD-4E7B-9AA4-7C0A2DE572EC}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/64-Gallon" }
+      - { name: "96-Gallon", itemId: "{ECD9A508-7884-4D6B-9070-9B5B24F75DAB}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/96-Gallon" }
+      - { name: "Commercial Bin", itemId: "{53BDAD05-67D7-49A7-B8CA-025EA32B6694}", path: "/sitecore/content/recology/recology/Data/Cart Sizes/Commercial Bin" }
+    verification:
+      checkedAt: "2026-10-24T21:45:00Z"
+      passed:
+        - "CartSize template and Cart Sizes folder created"
+        - "LocationItem CartSizes field is Multilist sourced at the Cart Sizes folder"
+      failed: []
+      pendingManual:
+        - "__Standard values link did not read back; confirm CartSize standard values points at {6A87EE58-DDF3-4F59-BE70-90AE9A0965A6}"
+    notes: >
+      Size catalog separate from cart color. 16- and 20-gallon have no published dimensions
+      in the source notes, so Dimensions is empty. 32, 64, and 96 keep the American Canyon
+      rate-table dimensions. Commercial Bin covers 1.5 to 4 cubic yards or more.
+
 # Information architecture / page creation batches
 ia:
+  - name: "recology-ia-tree"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-24T16:30:00Z"
+    updatedAt: "2026-10-24T16:30:00Z"
+    siteName: "recology"
+    contentRootPath: "/sitecore/content/recology/recology/Home"
+    contentRootItemId: "{B57CBB82-2DF6-4118-BD53-D9C574593848}"
+    pageTemplateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}"
+    pageTemplateName: "Page"
+    contentFieldId: "{6E95A570-A5D7-4F47-A427-DFFF49D3925E}"
+    iaSource: "docs/ai/ia/recology-ia.md"
+    sourceSite: "https://www.recology.com/"
+    createdCount: 35
+    skippedCount: 0
+    failedCount: 0
+    notes: >
+      Created 35 Page items under /sitecore/content/recology/recology/Home from recology-ia.md.
+      Rich text body is in Content, which PageContent renders. Read-back confirmed non-empty
+      Content on Pay My Bill, Careers, Internships, Compost, and Battery Safety. The template
+      also echoes a lowercase content key that stays empty; a write to the name content updates
+      Content because the API matches field names without case. Item names spell & as and
+      (Our Mission and Vision, Education and Outreach, Technology and Innovation). Page was
+      not in Home insert options; create_content_item still succeeded. Starter Data, Speakers,
+      and Video were left untouched. Items are in Draft. Location company pages were not created.
+    verification:
+      checkedAt: "2026-10-24T16:30:00Z"
+      passed:
+        - "list_sites confirmed site recology"
+        - "Home resolved at /sitecore/content/recology/recology/Home"
+        - "Template Page {4CFDBA63-45F6-42E8-8787-29F48573BD58} validated; Content is rich text"
+        - "Content read-back non-empty on Pay My Bill, Careers, Internships, Compost, and Battery Safety"
+        - "Title, pageTitle, pageHeaderTitle, pageShortTitle, and navigationTitle echoed on read-back"
+      failed: []
+      pendingManual:
+        - "Confirm field {6E95A570-A5D7-4F47-A427-DFFF49D3925E} is the Content field that now holds the HTML. The API also returns an empty content key that could not be written separately."
+        - "Add Page to Home insert options so authors can create siblings in Content Editor"
+        - "Publish the new pages for Edge"
+        - "Wire navigation separately; this tree does not place components"
+    items:
+      - { name: "Pay My Bill", itemId: "{F93AE4B7-7943-4A13-99F0-6886A0F4FF03}", path: "/sitecore/content/recology/recology/Home/Pay My Bill" }
+      - { name: "FAQ", itemId: "{35B4A27E-6ACD-4167-9D97-D389DBCD2357}", path: "/sitecore/content/recology/recology/Home/FAQ" }
+      - { name: "Contact Us", itemId: "{EE0C5155-42BA-4665-BB3B-873B158B4368}", path: "/sitecore/content/recology/recology/Home/Contact Us" }
+      - { name: "About Us", itemId: "{D9E7B147-8800-415A-A40E-28F5D790C9F9}", path: "/sitecore/content/recology/recology/Home/About Us" }
+      - { name: "Our Mission and Vision", itemId: "{E8BE6B20-FE7A-464B-9F98-ABE79077E3FA}", path: "/sitecore/content/recology/recology/Home/About Us/Our Mission and Vision" }
+      - { name: "Employee-Owned", itemId: "{9B37CFD5-4427-4073-B463-EF7817850F6F}", path: "/sitecore/content/recology/recology/Home/About Us/Employee-Owned" }
+      - { name: "Where We Serve", itemId: "{F8610176-04DE-451C-90B4-6EC0A2E22D51}", path: "/sitecore/content/recology/recology/Home/About Us/Where We Serve" }
+      - { name: "Our History", itemId: "{8F224D33-66B3-4938-A9E4-0E3128E3E878}", path: "/sitecore/content/recology/recology/Home/About Us/Our History" }
+      - { name: "Our Leadership", itemId: "{F8828C13-1848-4734-9137-1FE728A1E791}", path: "/sitecore/content/recology/recology/Home/About Us/Our Leadership" }
+      - { name: "Community Impact", itemId: "{D226B4E6-4CF0-4185-BF8C-675E20CE8576}", path: "/sitecore/content/recology/recology/Home/Community Impact" }
+      - { name: "Recology in the News", itemId: "{64AE849A-BC07-498B-A868-04ED3EA2297B}", path: "/sitecore/content/recology/recology/Home/Community Impact/Recology in the News" }
+      - { name: "Success Stories", itemId: "{C552E3F6-48E4-48B5-8A58-E57C257AC113}", path: "/sitecore/content/recology/recology/Home/Community Impact/Success Stories" }
+      - { name: "Government Partnership", itemId: "{7BB9ED3D-15E6-49CC-8356-806B140718B0}", path: "/sitecore/content/recology/recology/Home/Community Impact/Government Partnership" }
+      - { name: "The Art of Recology", itemId: "{C1E0D831-39B6-41E1-BBB5-259ACEDAFD80}", path: "/sitecore/content/recology/recology/Home/Community Impact/The Art of Recology" }
+      - { name: "Volunteer Program", itemId: "{6F7EF217-53AA-403D-8096-B4363DC201B3}", path: "/sitecore/content/recology/recology/Home/Community Impact/Volunteer Program" }
+      - { name: "Education and Outreach", itemId: "{B3C58C59-432C-4CD8-B6DD-8381F567B13D}", path: "/sitecore/content/recology/recology/Home/Community Impact/Education and Outreach" }
+      - { name: "Sustainability", itemId: "{BE481733-EFC0-4D60-92D6-CF65057F0164}", path: "/sitecore/content/recology/recology/Home/Sustainability" }
+      - { name: "Sustainability at Recology", itemId: "{A520F320-605F-4B10-8816-D8832DAFCC63}", path: "/sitecore/content/recology/recology/Home/Sustainability/Sustainability at Recology" }
+      - { name: "Sustainable Operations", itemId: "{7C985591-5A6B-4AAA-9F18-07B4F202CB02}", path: "/sitecore/content/recology/recology/Home/Sustainability/Sustainable Operations" }
+      - { name: "Recycling", itemId: "{608CECBF-425C-4E29-B71A-9CA2D34B780C}", path: "/sitecore/content/recology/recology/Home/Sustainability/Recycling" }
+      - { name: "Composting", itemId: "{F6BCC9BD-7AD7-4E70-8B88-B4F229C92F93}", path: "/sitecore/content/recology/recology/Home/Sustainability/Composting" }
+      - { name: "Community Engagement", itemId: "{3B56CF4E-C1EB-41FF-8C5E-3D96212E07B0}", path: "/sitecore/content/recology/recology/Home/Sustainability/Community Engagement" }
+      - { name: "Technology and Innovation", itemId: "{B3E2577C-275B-42D5-82E9-03E9834F8659}", path: "/sitecore/content/recology/recology/Home/Sustainability/Technology and Innovation" }
+      - { name: "Commodities", itemId: "{186883AA-05C0-4F2D-ABB5-5F08F3040E97}", path: "/sitecore/content/recology/recology/Home/Sustainability/Commodities" }
+      - { name: "Battery Safety", itemId: "{7D0D8D3D-E7C2-433E-AE34-61596EC53F51}", path: "/sitecore/content/recology/recology/Home/Sustainability/Battery Safety" }
+      - { name: "Organics", itemId: "{00204A3D-55D3-4795-89C9-9BDB653768F5}", path: "/sitecore/content/recology/recology/Home/Organics" }
+      - { name: "Our Products", itemId: "{C4F8097D-00F8-480F-B895-AE5918824ADD}", path: "/sitecore/content/recology/recology/Home/Organics/Our Products" }
+      - { name: "Compost", itemId: "{C8F6842B-7827-42F4-9434-4E2315F0044A}", path: "/sitecore/content/recology/recology/Home/Organics/Our Products/Compost" }
+      - { name: "Mulch", itemId: "{1A84F5F9-1E47-4654-80E1-D679578330F2}", path: "/sitecore/content/recology/recology/Home/Organics/Our Products/Mulch" }
+      - { name: "Soil Blends", itemId: "{4FF5B5B5-D8E7-4A8C-A992-5522028E37B0}", path: "/sitecore/content/recology/recology/Home/Organics/Our Products/Soil Blends" }
+      - { name: "Specialty Services", itemId: "{2FF8E907-84ED-4F26-9639-638229CC8D4E}", path: "/sitecore/content/recology/recology/Home/Organics/Specialty Services" }
+      - { name: "Testimonials", itemId: "{D6CE1FC4-C767-42A7-9D5C-59179C9DDA10}", path: "/sitecore/content/recology/recology/Home/Organics/Testimonials" }
+      - { name: "Partnerships", itemId: "{56E0D0DB-F88D-442C-8771-B8D738F1729E}", path: "/sitecore/content/recology/recology/Home/Organics/Partnerships" }
+      - { name: "Careers", itemId: "{265E8C96-383B-4886-8AE4-AD313A43CAF3}", path: "/sitecore/content/recology/recology/Home/Careers" }
+      - { name: "Internships", itemId: "{FC403A89-BA9F-412C-9370-DA9B1B5EB5AB}", path: "/sitecore/content/recology/recology/Home/Careers/Internships" }
+  - name: "recology-locations"
+    kind: "ia-create"
+    category: "IA"
+    status: "complete"
+    createdAt: "2026-10-24T16:50:00Z"
+    updatedAt: "2026-10-24T16:45:00Z"
+    siteName: "recology"
+    contentRootPath: "/sitecore/content/recology/recology/Home/Location"
+    contentRootItemId: "{6B97CC50-2F83-459A-B06C-D07D5F5D81CE}"
+    pageTemplateId: "{F38AF42C-AC5C-41AC-9E7A-5BFA2DEF4E66}"
+    pageTemplateName: "LocationItem"
+    createdCount: 56
+    skippedCount: 0
+    failedCount: 0
+    notes: >
+      Created Location plus 28 company pages and 27 city pages from the location
+      picker. State headings were not created. Highlighted parents hold their
+      indented cities. Item names drop commas, periods, and & (Garberville Holmes
+      and Redcrest; Pillar Pt Moss Beach Montara Miramar Princeton El Granada).
+      Titles keep the on-screen labels. Content was not filled.
+      2026-10-24 recreate: the Page items were deleted (no page or component references)
+      and recreated on LocationItem {F38AF42C-AC5C-41AC-9E7A-5BFA2DEF4E66}. Read-back
+      of American Canyon and Carnation confirmed template LocationItem and the contact
+      fields. King County cities without a Recology Store have phone and email only.
+      Parent companies without their own URL have no Website. Image and HolidayHours
+      are empty. New item IDs replace the Page IDs.
+    items:
+      - { name: "Location", itemId: "{6B97CC50-2F83-459A-B06C-D07D5F5D81CE}", path: "/sitecore/content/recology/recology/Home/Location" }
+      - { name: "Recology Butte Colusa Counties", itemId: "{5B9B04CE-4F96-4557-94E8-2E5AED2459AC}", path: "/sitecore/content/recology/recology/Home/Location/Recology Butte Colusa Counties" }
+      - { name: "Recology Humboldt County", itemId: "{16AC093D-CCA9-426F-BDAB-C612BE484D74}", path: "/sitecore/content/recology/recology/Home/Location/Recology Humboldt County" }
+      - { name: "Recology of the Coast", itemId: "{91C9BCA7-08E3-406B-81CC-3CC08FC90251}", path: "/sitecore/content/recology/recology/Home/Location/Recology of the Coast" }
+      - { name: "Recology South Bay", itemId: "{9E08565F-8BCE-4B03-AC6F-94F1E5E8A8F9}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay" }
+      - { name: "Recology King County", itemId: "{98C45E6D-D0BC-42D5-9221-0B36B9D64F85}", path: "/sitecore/content/recology/recology/Home/Location/Recology King County" }
+  - name: "recology-location-subpages"
+    kind: "ia-create"
+    category: "IA"
+    status: "partial"
+    createdAt: "2026-10-24T17:30:00Z"
+    updatedAt: "2026-10-24T18:10:00Z"
+    siteName: "recology"
+    contentRootPath: "/sitecore/content/recology/recology/Home/Location"
+    contentRootItemId: "{6B97CC50-2F83-459A-B06C-D07D5F5D81CE}"
+    pageTemplateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}"
+    pageTemplateName: "Page"
+    sourceSite: "https://www.recology.com/page-sitemap.xml"
+    createdCount: 27
+    skippedCount: 0
+    failedCount: 0
+    plannedCount: 870
+    notes: >
+      Sitemap child pages under existing LocationItem nodes, using the Page template.
+      Location homepages were not recreated. Content is a cleaned HTML fragment from the
+      matching recology.com page. Widget and form pages keep a short note plus a source
+      link. Redirects record the destination and do not copy the target body.
+      Complete so far: Recology American Canyon (13) and City of Santa Clara (14).
+      Remaining sitemap children, including depth-3 and depth-4 pages and the four
+      synthetic parents (clatsop, rohnert-park, artist-in-residence-program,
+      unincorporated-vallejo), are not created yet. Street Sweeping read-back confirmed
+      template Page and a non-empty Content field.
+    items:
+      - { name: "Business Services", itemId: "{E4725B6C-FBC5-494F-AE1D-4ACA6416E1F8}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Business Services" }
+      - { name: "Contact Us", itemId: "{00C886C6-D166-4E07-84A5-993E37FCC1E8}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Contact Us" }
+      - { name: "Sorting Guides and Resources", itemId: "{4D3231C7-43C6-4111-A1D8-B95C370DE55F}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Sorting Guides and Resources" }
+      - { name: "Street Sweeping", itemId: "{A0097A71-C20D-4F1B-809B-97D831C6F3F6}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Street Sweeping" }
+      - { name: "What Bin", itemId: "{C36609B8-E108-4C56-83FA-415113BB2537}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/What Bin" }
+      - { name: "Pay My Bill", itemId: "{82688696-8791-409E-9C6F-0F339AD5ECEA}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Pay My Bill" }
+      - { name: "News and Events", itemId: "{86AF46AE-D41A-458A-BA86-8A177E82D4B7}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/News and Events" }
+      - { name: "Recycling Legislation", itemId: "{415F04C3-C3D9-46C9-BDB1-B9DA1826B701}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Recycling Legislation" }
+      - { name: "Request Debris Box", itemId: "{652E5444-F9C6-4615-9EA2-3E3B2D604674}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Request Debris Box" }
+      - { name: "Commercial and Multi-Family Rates", itemId: "{7427AEC0-1D1D-4A60-A9C2-17662F9344AE}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Commercial and Multi-Family Rates" }
+      - { name: "Residential Rates", itemId: "{BF0CC516-8DB8-4462-B5A9-97F1F34FE3F0}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Residential Rates" }
+      - { name: "Junior Recologist", itemId: "{C0C09FFE-7430-4444-A66E-1B7841352894}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Junior Recologist" }
+      - { name: "Vallejo Materials Recovery Facility", itemId: "{58E01CB4-DBA7-4126-84C5-3BA7F4DDE257}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Vallejo Materials Recovery Facility" }
+      - { name: "Electronic and Universal Waste", itemId: "{D8C0902F-5CA8-4741-B4F8-AC8F0CB6B0EC}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Electronic and Universal Waste" }
+      - { name: "What Bin", itemId: "{E889D4F9-2214-46FE-B564-0AFCDD878C9B}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/What Bin" }
+      - { name: "Collection Calendar", itemId: "{8CC92587-B576-4869-B43A-C84E5A98A55A}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Collection Calendar" }
+      - { name: "Contact Us", itemId: "{647CD5D7-DDE0-4850-BAE2-539AF2BA4B58}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Contact Us" }
+      - { name: "Debris Boxes", itemId: "{8BCEF875-4B7A-4F1E-B100-35B3C4C2A3EE}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Debris Boxes" }
+      - { name: "News and Events", itemId: "{97B855C2-50BD-4E9A-89A8-25D9F6A8A2A8}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/News and Events" }
+      - { name: "Request Debris Box", itemId: "{25647C4C-BBC0-42C2-94DE-B0D792E94D46}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Request Debris Box" }
+      - { name: "Pay My Bill", itemId: "{2A6F6C50-D17E-4EF0-BF86-95E98E0E2FD9}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Pay My Bill" }
+      - { name: "Recology South Bay Office", itemId: "{59F310AC-4ECF-4689-BC7A-33F02FCF616C}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Recology South Bay Office" }
+      - { name: "Legislation", itemId: "{6D9C9B82-DBA0-4C9D-90B2-34DDC795F9BE}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Legislation" }
+      - { name: "Sorting Guides", itemId: "{EEA855EA-7CD0-49CD-85C5-A547DB578ADE}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Sorting Guides" }
+      - { name: "Your Recycling Bin", itemId: "{3761785C-DB08-41E6-8354-2D66B160CCBA}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Your Recycling Bin" }
+      - { name: "Hazardous Waste", itemId: "{94C3A72A-A449-41F6-BEA4-CEA29E7C4E4C}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Hazardous Waste" }
+      - { name: "Specialty Services", itemId: "{186C179E-613F-41CB-93AB-7CDA1A4B3D0B}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Specialty Services" }
   - name: "bcaa-ia-tree"
     kind: "ia-create"
     category: "IA"
@@ -9288,7 +9632,7 @@ ia:
     category: "Global Elements"
     status: "complete"
     createdAt: "2026-08-19T18:30:00Z"
-    updatedAt: "2026-10-06T00:15:00Z"
+    updatedAt: "2026-10-24T23:40:00Z"
 
     react:
       filePath: "src/components/site-three/HeaderST.tsx"
@@ -9300,6 +9644,8 @@ ia:
         - "Version2"
         - "Version3"
         - "Version4"
+        - "Version5"
+        - "Version6"
 
     sitecoreEnvironment:
       siteName: "dfs"
@@ -9400,6 +9746,19 @@ ia:
       variants:
         - { name: "Default", itemId: "{B9FEDA61-BC77-4054-AD6E-FA8C65C9BAFE}" }
         - { name: "Version4", itemId: "{8EFB1919-BAB1-4883-99F7-321AF3D97188}" }
+
+    headlessVariantsRecology:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/HeaderST"
+      containerId: "{A8FB6DF1-7D63-420D-86A9-D2DDCF4A50D8}"
+      variants:
+        - { name: "Version5", itemId: "{84360F32-FD87-48B6-91D1-DAB1063F40CF}" }
+        - { name: "Version6", itemId: "{32188657-4A33-4C8C-B39D-1F26E33C9AF1}" }
+      partialDesigns:
+        globalHeader: "{4B6C5584-D671-4378-9B58-CC67D921854B}"
+        americanCanyonFolder: "{AB42B821-F301-431D-A778-439E2AEAB0FB}"
+        americanCanyonHeader: "{54D1BD5D-4C9B-4AA4-BB4A-64C3071889E4}"
+        americanCanyonFooter: "{52D2917E-F11D-409B-85A8-6F6CEE868028}"
+      notes: "2026-10-24: Location partials are separate items under Presentation/Partial Designs/Locations, folder template Partial Design Folder {FCD9DD5E-FF94-47AB-8387-30D8084EF6BB}. They are not copies of the Global Header item. Version5 is the corporate header layout. Version6 is the location layout on the American Canyon header partial. Global Header FieldNames is still empty and must be set to Version5. American Canyon header FieldNames must be Version6. Check showSearchBox on both. Page designs are not assigned."
 
     datasourceExample:
       name: "Header"

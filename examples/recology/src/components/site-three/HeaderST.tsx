@@ -8,7 +8,7 @@ import {
   NextImage as ContentSdkImage,
   AppPlaceholder,
 } from '@sitecore-content-sdk/nextjs';
-import { Search, User } from 'lucide-react';
+import { Search, Truck, User } from 'lucide-react';
 import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
 import { SearchBox } from './non-sitecore/SearchBox';
@@ -298,4 +298,162 @@ export const Version4 = (props: HeaderSTProps) => (
   >
     <HeaderSTVersion4View {...props} />
   </HeaderSTScrollFrame>
+);
+
+const recologyUtilityLinks = [
+  { href: '/Pay-My-Bill', label: 'Pay My Bill' },
+  { href: '/FAQ', label: 'FAQ' },
+  { href: '/Contact-Us', label: 'Contact Us' },
+  { href: '/Location', label: 'My Recology' },
+];
+
+const recologyMainNavClass = [
+  'hidden min-w-0 flex-1 items-center lg:flex',
+  '[&_ul]:flex [&_ul]:flex-row [&_ul]:items-center',
+  '[&_li]:w-auto [&_li]:basis-auto',
+  '[&_a]:px-2.5 [&_a]:py-2 [&_a]:text-sm [&_a]:font-normal [&_a]:text-foreground',
+  '[&_button]:px-2.5 [&_button]:py-2 [&_button]:text-sm [&_button]:font-normal [&_button]:text-foreground',
+  '[&_span]:text-sm [&_span]:font-normal [&_span]:text-foreground',
+].join(' ');
+
+const recologyLocationNavClass = [
+  'min-w-0 flex-1',
+  '[&_ul]:flex [&_ul]:flex-row [&_ul]:flex-wrap [&_ul]:items-center',
+  '[&_li]:w-auto [&_li]:basis-auto',
+  '[&_a]:px-3 [&_a]:py-2 [&_a]:text-xs [&_a]:font-bold [&_a]:uppercase [&_a]:tracking-wide [&_a]:text-foreground',
+  '[&_button]:px-3 [&_button]:py-2 [&_button]:text-xs [&_button]:font-bold [&_button]:uppercase [&_button]:tracking-wide [&_button]:text-foreground',
+  '[&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-foreground',
+].join(' ');
+
+const HeaderSearchForm = ({
+  searchLink,
+}: {
+  searchLink?: { value?: { href?: string; text?: string } };
+}) => {
+  const action = searchLink?.value?.href || '/';
+  const label = searchLink?.value?.text || 'Search';
+
+  return (
+    <form action={action} method="get" role="search" className="hidden items-stretch lg:flex">
+      <input
+        type="search"
+        name="q"
+        aria-label={label}
+        className="h-10 w-40 border border-r-0 border-input bg-background px-3 text-sm text-foreground xl:w-56"
+      />
+      <button type="submit" className="btn btn-outline h-10 rounded-none">
+        {label}
+      </button>
+    </form>
+  );
+};
+
+const HeaderSTRecologyView = ({
+  showLocationNav = false,
+  ...props
+}: HeaderSTProps & { showLocationNav?: boolean }) => {
+  const fields = getDatasource(props.fields);
+  const showSearchBox = Boolean(props.params?.showSearchBox);
+  const showMiniCart = Boolean(props.params?.showMiniCart) && !isChecked(props.params?.HideCart);
+  const searchLink = getFieldValue(fields?.SearchLink);
+  const supportLink = getFieldValue(fields?.SupportLink);
+  const cartLink = getFieldValue(fields?.CartLink);
+  const placeholderId = props.params?.DynamicPlaceholderId || '1';
+  const mainPlaceholder = `header-navigation-${placeholderId}`;
+  const locationPlaceholder = `header-location-navigation-${placeholderId}`;
+
+  return (
+    <header className={cn(props.params?.styles, 'w-full bg-background text-foreground')} data-class-change data-testid={showLocationNav ? 'header-st-version6' : 'header-st-version5'}>
+      <div className="bg-primary text-primary-foreground">
+        <div className="mx-auto flex max-w-7xl justify-end px-4 lg:px-6">
+          <ul className="flex items-center">
+            {recologyUtilityLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="block px-3 py-2 text-sm text-primary-foreground" prefetch={false}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-b border-border bg-background">
+        <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 lg:px-6">
+          <Link href="/" className="flex h-14 shrink-0 items-center" prefetch={false} aria-label="Recology">
+            <ContentSdkImage field={getFieldValue(fields?.Logo)} className="h-12 w-auto max-w-[9rem] object-contain" />
+          </Link>
+
+          <nav className={recologyMainNavClass} aria-label="Primary">
+            <ul className="flex flex-row items-center">
+              <AppPlaceholder
+                name={mainPlaceholder}
+                rendering={props.rendering}
+                page={props.page}
+                componentMap={getComponentMap()}
+              />
+            </ul>
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2">
+            {showSearchBox && searchLink ? (
+              <HeaderSearchForm searchLink={searchLink} />
+            ) : searchLink ? (
+              <ContentSdkLink field={searchLink} prefetch={false} className="btn btn-outline hidden lg:inline-flex" />
+            ) : null}
+            <MobileMenuWrapper className="p-2 text-foreground">
+              <ul className="flex flex-col bg-background text-foreground">
+                <AppPlaceholder
+                  name={mainPlaceholder}
+                  rendering={props.rendering}
+                  page={props.page}
+                  componentMap={getComponentMap()}
+                />
+                {showLocationNav ? (
+                  <AppPlaceholder
+                    name={locationPlaceholder}
+                    rendering={props.rendering}
+                    page={props.page}
+                    componentMap={getComponentMap()}
+                  />
+                ) : null}
+              </ul>
+            </MobileMenuWrapper>
+            {showMiniCart && cartLink ? <MiniCart cartLink={cartLink} /> : null}
+          </div>
+        </div>
+      </div>
+
+      {showLocationNav ? (
+        <div className="border-b border-border bg-background">
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-6">
+            <Truck className="size-8 shrink-0 text-primary" aria-hidden />
+            {supportLink?.value?.text || supportLink?.value?.href ? (
+              <ContentSdkLink
+                field={supportLink}
+                prefetch={false}
+                className="shrink-0 text-sm font-bold uppercase tracking-wide text-primary"
+              />
+            ) : null}
+            <nav className={recologyLocationNavClass} aria-label="Location">
+              <ul className="flex flex-row flex-wrap items-center">
+                <AppPlaceholder
+                  name={locationPlaceholder}
+                  rendering={props.rendering}
+                  page={props.page}
+                  componentMap={getComponentMap()}
+                />
+              </ul>
+            </nav>
+          </div>
+        </div>
+      ) : null}
+    </header>
+  );
+};
+
+export const Version5 = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} />;
+
+export const Version6 = (props: HeaderSTProps) => (
+  <HeaderSTRecologyView {...props} showLocationNav />
 );

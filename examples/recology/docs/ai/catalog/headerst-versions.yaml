@@ -61,3 +61,13 @@ versions:
     paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
     usedBy: ["bcaa"]
     notes: "Matches the BCAA header chrome. LoginLink and SearchLink render as outline icons. The hamburger stays visible at every breakpoint and opens the existing mobile nav. Cart is omitted unless showMiniCart is on; HideCart still suppresses it. No new datasource fields or rendering params. Default layout is unchanged. Scroll thresholds live in HeaderSTScrollFrame inside HeaderST.tsx (solid after 12px, hide after 180px while scrolling down)."
+  - name: Version5
+    layout: "cyan utility bar right-aligned; white main row with logo left, L1 nav, and an inline search box plus outline Search button"
+    paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
+    usedBy: ["recology"]
+    notes: "Recology corporate header. Utility links Pay My Bill, FAQ, Contact Us, and My Recology are Version5-hardcoded because the shared datasource has one SupportLink. L1 stays in header-navigation. Search is an inline input and outline button when showSearchBox is on. Colors come from theme tokens. Mega-menu flyouts stay with MegaMenuItem. Default and Version4 are unchanged."
+  - name: Version6
+    layout: "Version5 plus a third row: truck icon, SupportLink as the location name, and a location nav placeholder"
+    paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
+    usedBy: ["recology"]
+    notes: "Location header. SupportLink is the location label (American Canyon). Location links live in header-location-navigation. No new datasource fields."

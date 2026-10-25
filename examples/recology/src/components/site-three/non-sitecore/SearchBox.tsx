@@ -104,7 +104,7 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
               <Link
                 href={searchUrl}
                 prefetch={false}
-                className="btn btn-primary btn-sharp"
+                className="btn btn-outline"
                 aria-label={t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || SEARCH_GO_ARIA_LABEL}
               >
                 {t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || t(DICTIONARY_KEYS.SEARCH_GO_LABEL) || SEARCH_GO_ARIA_LABEL}
@@ -112,7 +112,7 @@ export const SearchBox = ({ searchLink }: { searchLink: LinkField }) => {
             ) : (
               <button
                 type="button"
-                className="btn btn-primary btn-sharp"
+                className="btn btn-outline"
                 aria-label={t(DICTIONARY_KEYS.SEARCH_GO_DESCRIPTIVE) || SEARCH_GO_ARIA_LABEL}
                 onClick={() => {
                   if (searchTerm.trim() && searchBaseHref) {

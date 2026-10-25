@@ -15,7 +15,7 @@
 
 @layer base {
   html {
-    font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Lato', ui-sans-serif, system-ui, sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     font-weight: 400;
@@ -79,43 +79,43 @@
 
   /* BUTTONS */
   .btn {
-    font-family: var(--font-accent);
-    @apply inline-block text-sm font-medium transition-colors;
+    font-family: var(--font-body);
+    @apply inline-flex items-center justify-center rounded-default border text-sm font-normal transition-colors;
 
     &.btn-primary {
-      @apply py-3 px-5 rounded-full bg-primary;
+      @apply border-primary bg-primary px-4 py-2 text-primary-foreground;
 
       &:hover {
-        @apply bg-primary-hover;
+        @apply border-primary-hover bg-primary-hover;
       }
     }
 
     &.btn-secondary {
-      @apply py-3 px-5 rounded-full bg-light text-secondary-foreground;
+      @apply border-secondary bg-secondary px-4 py-2 text-secondary-foreground;
 
       &:hover {
-        @apply bg-light-hover;
+        @apply border-secondary-hover bg-secondary-hover;
       }
     }
 
     &.btn-ghost {
-      @apply py-2;
+      @apply border-transparent bg-transparent px-4 py-2 text-foreground;
+
+      &:hover {
+        @apply bg-muted;
+      }
     }
 
     &.btn-sharp {
       @apply rounded-none;
     }
 
-    &.btn-ghost {
-      @apply py-2;
-    }
-
     &.btn-outline {
-      @apply py-3 px-5 rounded-full bg-primary outline;
-    }
+      @apply border-input bg-background px-4 py-2 text-foreground;
 
-    &:hover {
-      @apply bg-primary-hover;
+      &:hover {
+        @apply bg-muted;
+      }
     }
   }
 }
