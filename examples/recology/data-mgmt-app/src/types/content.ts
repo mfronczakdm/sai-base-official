@@ -67,10 +67,38 @@ export type FaqRow = {
   badge: BehaviorBadge;
 };
 
+export type CartType = {
+  id: string;
+  name: string;
+  path: string;
+  displayName: string;
+  code: string;
+  capacity: string;
+  unit: string;
+  containerType: string;
+  dimensions: string;
+  description: string;
+  color: string;
+  stream: string;
+};
+
+export type CartSize = {
+  id: string;
+  name: string;
+  path: string;
+  displayName: string;
+  code: string;
+  capacity: string;
+  unit: string;
+  dimensions: string;
+  description: string;
+};
+
 export type CartRate = {
   id: string;
   name: string;
   path: string;
+  cartSizeId: string;
   monthlyRate: string;
   dimensions: string;
   typicalWeeklyNeeds: string;
@@ -93,6 +121,14 @@ export type RegionRatesSummary = {
   careProgramContent: string;
   cartRates: CartRate[];
   additionalServices: AdditionalService[];
+  /** LocationItem CartTypes multilist — which color streams apply */
+  selectedCartTypeIds: string[];
+  /** LocationItem CartSizes multilist — which sizes apply */
+  selectedCartSizeIds: string[];
+  cartRatesFolderId?: string;
+  cartRatesFolderPath?: string;
+  servicesFolderId?: string;
+  servicesFolderPath?: string;
 };
 
 export type RegionOverviewStats = {

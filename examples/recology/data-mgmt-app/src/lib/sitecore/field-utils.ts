@@ -103,3 +103,16 @@ export function displayAuthor(raw?: string): string {
   const parts = raw.replace(/\\/g, "/").split("/");
   return parts[parts.length - 1] || raw;
 }
+
+/** Format a GUID for Sitecore multilist / droplink field values. */
+export function formatGuidBraced(id: string): string {
+  const hex = id.replace(/[{}-]/g, "").toUpperCase();
+  if (hex.length !== 32) {
+    return `{${id.replace(/[{}]/g, "")}}`;
+  }
+  return `{${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}}`;
+}
+
+export function toMultilistValue(ids: string[]): string {
+  return ids.map(formatGuidBraced).join("|");
+}

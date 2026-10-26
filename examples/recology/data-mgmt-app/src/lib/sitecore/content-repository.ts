@@ -6,6 +6,7 @@ import {
 } from "@/lib/sitecore/authoring-client";
 import {
   fieldValue,
+  formatGuidBraced,
   guidsEqual,
   isChecked,
   nodesToFieldMap,
@@ -13,6 +14,7 @@ import {
   parseIdList,
   parseSitecoreDate,
   parseSortOrder,
+  toMultilistValue,
 } from "@/lib/sitecore/field-utils";
 import {
   DATABASE,
@@ -23,6 +25,8 @@ import {
 import type {
   AdditionalService,
   CartRate,
+  CartSize,
+  CartType,
   FaqRow,
   GlobalFaq,
   RegionOption,
@@ -306,6 +310,8 @@ export class ContentRepository {
     const fields = nodesToFieldMap(location.fields?.nodes);
     const cartRateIds = parseIdList(fieldValue(fields, "CartRates"));
     const serviceIds = parseIdList(fieldValue(fields, "AdditionalServices"));
+    const selectedCartTypeIds = parseIdList(fieldValue(fields, "CartTypes"));
+    const selectedCartSizeIds = parseIdList(fieldValue(fields, "CartSizes"));
 
     const childFolders = location.children?.nodes || [];
     const cartFolder = childFolders.find((c) => c.name === "Cart Rates");
@@ -333,6 +339,7 @@ export class ContentRepository {
       id: item.id,
       name: item.name,
       path: item.path,
+      cartSizeId: parseIdList(fieldValue(item.fields, "CartSize"))[0] || "",
       monthlyRate: fieldValue(item.fields, "MonthlyRate"),
       dimensions: fieldValue(item.fields, "Dimensions"),
       typicalWeeklyNeeds: fieldValue(item.fields, "TypicalWeeklyNeeds"),
@@ -341,22 +348,14 @@ export class ContentRepository {
     const additionalServices: AdditionalService[] = pickOrdered(
       serviceIds,
       servicesFromFolder,
-    ).map((item) => ({
-      id: item.id,
-      name: item.name,
-      path: item.path,
-      serviceName: fieldValue(item.fields, "ServiceName") || item.name,
-      cost: fieldValue(item.fields, "Cost"),
-      isSectionHeader: isChecked(fieldValue(item.fields, "IsSectionHeader")) &&
-        fieldValue(item.fields, "IsSectionHeader") !== "",
-    }));
-
-    // IsSectionHeader: empty should be false for section detection
-    const normalizedServices = additionalServices.map((service) => {
-      const raw = servicesFromFolder.find((s) => s.id === service.id);
-      const flag = raw ? fieldValue(raw.fields, "IsSectionHeader") : "";
+    ).map((item) => {
+      const flag = fieldValue(item.fields, "IsSectionHeader");
       return {
-        ...service,
+        id: item.id,
+        name: item.name,
+        path: item.path,
+        serviceName: fieldValue(item.fields, "ServiceName") || item.name,
+        cost: fieldValue(item.fields, "Cost"),
         isSectionHeader: flag === "1" || flag === "true" || flag === "True",
       };
     });
@@ -368,7 +367,13 @@ export class ContentRepository {
       careProgramHeading: fieldValue(fields, "CareProgramHeading"),
       careProgramContent: fieldValue(fields, "CareProgramContent"),
       cartRates,
-      additionalServices: normalizedServices,
+      additionalServices,
+      selectedCartTypeIds,
+      selectedCartSizeIds,
+      cartRatesFolderId: cartFolder?.itemId,
+      cartRatesFolderPath: cartFolder?.path,
+      servicesFolderId: servicesFolder?.itemId,
+      servicesFolderPath: servicesFolder?.path,
     };
   }
 
@@ -544,6 +549,342 @@ export class ContentRepository {
       throw new Error("Delete failed — check Marketplace authoring permissions");
     }
   }
+
+  async listCartTypes(): Promise<CartType[]> {
+    const items = await this.listChildren(RECOLOGY_PATHS.cartTypes);
+    return items
+      .map(mapCartType)
+      .sort((a, b) => a.displayName.localeCompare(b.displayName));
+  }
+
+  async listCartSizes(): Promise<CartSize[]> {
+    const items = await this.listChildren(RECOLOGY_PATHS.cartSizes);
+    return items
+      .map(mapCartSize)
+      .sort((a, b) => a.displayName.localeCompare(b.displayName));
+  }
+
+  async createCartType(input: CartTypeInput): Promise<CartType> {
+    const folder = await this.requireFolder(
+      RECOLOGY_PATHS.cartTypes,
+      "Cart Types",
+    );
+    const created = await this.createChildItem({
+      parentId: folder.itemId!,
+      templateId: RECOLOGY_TEMPLATES.cartType,
+      name: input.displayName || input.name || "New Cart Type",
+      fields: cartTypeFields(input),
+    });
+    return mapCartType(created);
+  }
+
+  async updateCartType(itemId: string, input: CartTypeInput): Promise<void> {
+    await this.updateItemFields(itemId, cartTypeFields(input));
+  }
+
+  async createCartSize(input: CartSizeInput): Promise<CartSize> {
+    const folder = await this.requireFolder(
+      RECOLOGY_PATHS.cartSizes,
+      "Cart Sizes",
+    );
+    const created = await this.createChildItem({
+      parentId: folder.itemId!,
+      templateId: RECOLOGY_TEMPLATES.cartSize,
+      name: input.displayName || input.name || "New Cart Size",
+      fields: cartSizeFields(input),
+    });
+    return mapCartSize(created);
+  }
+
+  async updateCartSize(itemId: string, input: CartSizeInput): Promise<void> {
+    await this.updateItemFields(itemId, cartSizeFields(input));
+  }
+
+  async setRegionCartTypes(regionId: string, typeIds: string[]): Promise<void> {
+    await this.updateItemFields(regionId, [
+      { name: "CartTypes", value: toMultilistValue(typeIds) },
+    ]);
+  }
+
+  async setRegionCartSizes(regionId: string, sizeIds: string[]): Promise<void> {
+    await this.updateItemFields(regionId, [
+      { name: "CartSizes", value: toMultilistValue(sizeIds) },
+    ]);
+  }
+
+  async createCartRate(
+    region: RegionOption,
+    input: {
+      name: string;
+      cartSizeId?: string;
+      monthlyRate: string;
+      dimensions: string;
+      typicalWeeklyNeeds: string;
+    },
+  ): Promise<CartRate> {
+    const rates = await this.getRegionRates(region);
+    const parentId = rates.cartRatesFolderId;
+    if (!parentId) {
+      throw new Error(
+        `No "Cart Rates" folder under ${region.name}. Create it in Sitecore first.`,
+      );
+    }
+
+    const fields = [
+      { name: "MonthlyRate", value: input.monthlyRate },
+      { name: "Dimensions", value: input.dimensions },
+      { name: "TypicalWeeklyNeeds", value: input.typicalWeeklyNeeds },
+    ];
+    if (input.cartSizeId) {
+      fields.push({ name: "CartSize", value: formatGuidBraced(input.cartSizeId) });
+    }
+
+    const created = await this.createChildItem({
+      parentId,
+      templateId: RECOLOGY_TEMPLATES.locationCartRate,
+      name: input.name,
+      fields,
+    });
+
+    // Keep LocationItem CartRates multilist in sync when present
+    const nextIds = [...rates.cartRates.map((r) => r.id), created.id];
+    await this.updateItemFields(region.id, [
+      { name: "CartRates", value: toMultilistValue(nextIds) },
+    ]);
+
+    return {
+      id: created.id,
+      name: created.name,
+      path: created.path,
+      cartSizeId: input.cartSizeId || "",
+      monthlyRate: fieldValue(created.fields, "MonthlyRate") || input.monthlyRate,
+      dimensions: fieldValue(created.fields, "Dimensions") || input.dimensions,
+      typicalWeeklyNeeds:
+        fieldValue(created.fields, "TypicalWeeklyNeeds") ||
+        input.typicalWeeklyNeeds,
+    };
+  }
+
+  async updateCartRate(
+    itemId: string,
+    input: {
+      monthlyRate: string;
+      dimensions: string;
+      typicalWeeklyNeeds: string;
+      cartSizeId?: string;
+    },
+  ): Promise<void> {
+    const fields = [
+      { name: "MonthlyRate", value: input.monthlyRate },
+      { name: "Dimensions", value: input.dimensions },
+      { name: "TypicalWeeklyNeeds", value: input.typicalWeeklyNeeds },
+    ];
+    if (input.cartSizeId !== undefined) {
+      fields.push({
+        name: "CartSize",
+        value: input.cartSizeId ? formatGuidBraced(input.cartSizeId) : "",
+      });
+    }
+    await this.updateItemFields(itemId, fields);
+  }
+
+  async createAdditionalService(
+    region: RegionOption,
+    input: {
+      name: string;
+      serviceName: string;
+      cost: string;
+      isSectionHeader: boolean;
+    },
+  ): Promise<AdditionalService> {
+    const rates = await this.getRegionRates(region);
+    const parentId = rates.servicesFolderId;
+    if (!parentId) {
+      throw new Error(
+        `No "Additional Services" folder under ${region.name}. Create it in Sitecore first.`,
+      );
+    }
+
+    const created = await this.createChildItem({
+      parentId,
+      templateId: RECOLOGY_TEMPLATES.locationAdditionalService,
+      name: input.name || input.serviceName,
+      fields: [
+        { name: "ServiceName", value: input.serviceName },
+        { name: "Cost", value: input.cost },
+        { name: "IsSectionHeader", value: input.isSectionHeader ? "1" : "" },
+      ],
+    });
+
+    const nextIds = [...rates.additionalServices.map((s) => s.id), created.id];
+    await this.updateItemFields(region.id, [
+      { name: "AdditionalServices", value: toMultilistValue(nextIds) },
+    ]);
+
+    return {
+      id: created.id,
+      name: created.name,
+      path: created.path,
+      serviceName: fieldValue(created.fields, "ServiceName") || input.serviceName,
+      cost: fieldValue(created.fields, "Cost") || input.cost,
+      isSectionHeader: input.isSectionHeader,
+    };
+  }
+
+  async updateAdditionalService(
+    itemId: string,
+    input: {
+      serviceName: string;
+      cost: string;
+      isSectionHeader: boolean;
+    },
+  ): Promise<void> {
+    await this.updateItemFields(itemId, [
+      { name: "ServiceName", value: input.serviceName },
+      { name: "Cost", value: input.cost },
+      { name: "IsSectionHeader", value: input.isSectionHeader ? "1" : "" },
+    ]);
+  }
+
+  private async listChildren(path: string): Promise<SitecoreItemSummary[]> {
+    const contextId = this.requireContextId();
+    const folder = await getItemByPath(this.client, contextId, path, true);
+    return (folder?.children?.nodes || [])
+      .map(mapItem)
+      .filter((item): item is SitecoreItemSummary => Boolean(item));
+  }
+
+  private async requireFolder(path: string, label: string): Promise<AuthoringItemNode> {
+    const contextId = this.requireContextId();
+    const folder = await getItemByPath(this.client, contextId, path, false);
+    if (!folder?.itemId) {
+      throw new Error(`${label} folder not found at ${path}`);
+    }
+    return folder;
+  }
+
+  private async createChildItem(input: {
+    parentId: string;
+    templateId: string;
+    name: string;
+    fields: Array<{ name: string; value: string }>;
+  }): Promise<SitecoreItemSummary> {
+    const contextId = this.requireContextId();
+    const itemName = toSitecoreItemName(input.name);
+    const fieldInputs = input.fields
+      .map(
+        (field) =>
+          `{ name: "${field.name}", value: ${JSON.stringify(field.value)} }`,
+      )
+      .join(", ");
+
+    const result = await authoringGraphql<{
+      createItem?: { item?: AuthoringItemNode };
+    }>(
+      this.client,
+      contextId,
+      `
+      mutation {
+        createItem(
+          input: {
+            name: ${JSON.stringify(itemName)}
+            templateId: "${input.templateId}"
+            parent: "${input.parentId}"
+            language: "${LANGUAGE}"
+            fields: [${fieldInputs}]
+          }
+        ) {
+          item { ${ITEM_FIELDS} }
+        }
+      }
+      `,
+    );
+
+    const created = mapItem(result.data?.createItem?.item);
+    if (!created) {
+      throw new Error("createItem did not return an item");
+    }
+    return created;
+  }
+}
+
+export type CartTypeInput = {
+  name?: string;
+  displayName: string;
+  code: string;
+  capacity: string;
+  unit: string;
+  containerType: string;
+  dimensions: string;
+  description: string;
+  color: string;
+  stream: string;
+};
+
+export type CartSizeInput = {
+  name?: string;
+  displayName: string;
+  code: string;
+  capacity: string;
+  unit: string;
+  dimensions: string;
+  description: string;
+};
+
+function cartTypeFields(input: CartTypeInput) {
+  return [
+    { name: "Name", value: input.displayName },
+    { name: "Code", value: input.code },
+    { name: "Capacity", value: input.capacity },
+    { name: "Unit", value: input.unit },
+    { name: "ContainerType", value: input.containerType },
+    { name: "Dimensions", value: input.dimensions },
+    { name: "Description", value: input.description },
+    { name: "Color", value: input.color },
+    { name: "Stream", value: input.stream },
+  ];
+}
+
+function cartSizeFields(input: CartSizeInput) {
+  return [
+    { name: "Name", value: input.displayName },
+    { name: "Code", value: input.code },
+    { name: "Capacity", value: input.capacity },
+    { name: "Unit", value: input.unit },
+    { name: "Dimensions", value: input.dimensions },
+    { name: "Description", value: input.description },
+  ];
+}
+
+function mapCartType(item: SitecoreItemSummary): CartType {
+  return {
+    id: item.id,
+    name: item.name,
+    path: item.path,
+    displayName: fieldValue(item.fields, "Name") || item.name,
+    code: fieldValue(item.fields, "Code"),
+    capacity: fieldValue(item.fields, "Capacity"),
+    unit: fieldValue(item.fields, "Unit"),
+    containerType: fieldValue(item.fields, "ContainerType"),
+    dimensions: fieldValue(item.fields, "Dimensions"),
+    description: fieldValue(item.fields, "Description"),
+    color: fieldValue(item.fields, "Color"),
+    stream: fieldValue(item.fields, "Stream"),
+  };
+}
+
+function mapCartSize(item: SitecoreItemSummary): CartSize {
+  return {
+    id: item.id,
+    name: item.name,
+    path: item.path,
+    displayName: fieldValue(item.fields, "Name") || item.name,
+    code: fieldValue(item.fields, "Code"),
+    capacity: fieldValue(item.fields, "Capacity"),
+    unit: fieldValue(item.fields, "Unit"),
+    dimensions: fieldValue(item.fields, "Dimensions"),
+    description: fieldValue(item.fields, "Description"),
+  };
 }
 
 function toSitecoreItemName(raw: string): string {
@@ -552,7 +893,7 @@ function toSitecoreItemName(raw: string): string {
     .trim()
     .replace(/\s+/g, " ")
     .slice(0, 80);
-  return cleaned || "New Global FAQ";
+  return cleaned || "New Item";
 }
 
 export { getItemById };

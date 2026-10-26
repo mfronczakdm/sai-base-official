@@ -24,7 +24,10 @@ Upgrade Git (≥ 2.25) if you prefer `shadcn@latest` project creation.
 - **Global FAQ** `{C5B47B90-…}` — Question, Answer, Category, SortOrder, Active
 - **Regional FAQ Configuration** `{3560F778-…}` — GlobalFAQ, Behavior (`UseGlobal` \| `AddRegionalInformation` \| `Override` \| `Exclude`), RegionalSupportingInformation, RegionalAnswer, ContactCTA
 - **Regional FAQ Collection** `{DDE2369B-…}` — FAQConfigurations multilist, optional Region → LocationItem
-- **Carts:** LocationItem `CartRates` → `LocationCartRate` (MonthlyRate, Dimensions, TypicalWeeklyNeeds)
+- **Cart Types (global):** `/Data/Cart Types` → `CartType` (Name, Color, Stream, Description, …) — Green / Blue / Black or Gray
+- **Cart Sizes (global):** `/Data/Cart Sizes` → `CartSize` (Name, Capacity, Dimensions, …)
+- **Regional checklist:** LocationItem `CartTypes` + `CartSizes` multilists (which globals apply)
+- **Cart rates:** LocationItem `CartRates` → `LocationCartRate` (CartSize, MonthlyRate, Dimensions, TypicalWeeklyNeeds)
 - **Services:** LocationItem `AdditionalServices` → `LocationAdditionalService` (ServiceName, Cost, IsSectionHeader)
 
 ## Data access
