@@ -6,6 +6,7 @@ import {
   GlobalFaqForm,
   type GlobalFaqFormValues,
 } from "@/features/faqs/global-faq-form";
+import { htmlToPlainText, plainTextToHtml } from "@/lib/html-text";
 import { FAQ_BEHAVIORS } from "@/lib/sitecore/paths";
 import type { FaqRow, RegionalFaqBehavior } from "@/types/content";
 import { Button } from "@/components/ui/button";
@@ -42,10 +43,10 @@ export function FaqEditorCard({
 }: Props) {
   const [behavior, setBehavior] = useState<RegionalFaqBehavior>(row.behavior);
   const [supporting, setSupporting] = useState(
-    row.config?.regionalSupportingInformation || "",
+    htmlToPlainText(row.config?.regionalSupportingInformation || ""),
   );
   const [overrideAnswer, setOverrideAnswer] = useState(
-    row.config?.regionalAnswer || "",
+    htmlToPlainText(row.config?.regionalAnswer || ""),
   );
   const [editingGlobal, setEditingGlobal] = useState(false);
   const [savingRegional, setSavingRegional] = useState(false);
@@ -55,8 +56,8 @@ export function FaqEditorCard({
 
   useEffect(() => {
     setBehavior(row.behavior);
-    setSupporting(row.config?.regionalSupportingInformation || "");
-    setOverrideAnswer(row.config?.regionalAnswer || "");
+    setSupporting(htmlToPlainText(row.config?.regionalSupportingInformation || ""));
+    setOverrideAnswer(htmlToPlainText(row.config?.regionalAnswer || ""));
     setEditingGlobal(false);
     setMessage(null);
     setError(null);
@@ -70,8 +71,8 @@ export function FaqEditorCard({
       await onSaveRegional({
         configId: row.config?.id,
         behavior,
-        regionalSupportingInformation: supporting,
-        regionalAnswer: overrideAnswer,
+        regionalSupportingInformation: plainTextToHtml(supporting),
+        regionalAnswer: plainTextToHtml(overrideAnswer),
       });
       setMessage("Saved regional FAQ configuration.");
     } catch (err) {
@@ -129,17 +130,16 @@ export function FaqEditorCard({
               <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
-                  variant="outline"
                   size="sm"
+                  className="rounded-full text-white"
                   onClick={() => setEditingGlobal(true)}
                 >
                   Edit global
                 </Button>
                 <Button
                   type="button"
-                  variant="outline"
                   size="sm"
-                  colorScheme="neutral"
+                  className="rounded-full text-white"
                   disabled={deleting}
                   onClick={() => void handleDeleteGlobal()}
                 >
@@ -163,12 +163,9 @@ export function FaqEditorCard({
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Global answer
               </p>
-              <div
-                className="prose prose-sm max-w-none text-sm"
-                dangerouslySetInnerHTML={{
-                  __html: row.global.answer || "<em>Empty</em>",
-                }}
-              />
+              <p className="whitespace-pre-wrap text-sm text-foreground">
+                {htmlToPlainText(row.global.answer) || "Empty"}
+              </p>
               <p className="mt-3 text-xs text-muted-foreground">
                 Sort {row.global.sortOrder}
                 {row.global.active ? " · Active" : " · Inactive"}
@@ -263,6 +260,7 @@ export function FaqEditorCard({
 
           <div className="flex flex-wrap items-center gap-3">
             <Button
+              className="rounded-full text-white"
               onClick={() => void handleSaveRegional()}
               disabled={savingRegional || !row.config}
             >

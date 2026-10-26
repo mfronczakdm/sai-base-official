@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { GlobalFaq } from "@/types/content";
+import { htmlToPlainText, plainTextToHtml } from "@/lib/html-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +30,7 @@ export function GlobalFaqForm({
   onCancel,
 }: Props) {
   const [question, setQuestion] = useState(initial?.question || "");
-  const [answer, setAnswer] = useState(initial?.answer || "");
+  const [answer, setAnswer] = useState(htmlToPlainText(initial?.answer || ""));
   const [category, setCategory] = useState(initial?.category || "");
   const [sortOrder, setSortOrder] = useState(String(initial?.sortOrder ?? 100));
   const [active, setActive] = useState(initial?.active ?? true);
@@ -38,7 +39,7 @@ export function GlobalFaqForm({
 
   useEffect(() => {
     setQuestion(initial?.question || "");
-    setAnswer(initial?.answer || "");
+    setAnswer(htmlToPlainText(initial?.answer || ""));
     setCategory(initial?.category || "");
     setSortOrder(String(initial?.sortOrder ?? 100));
     setActive(initial?.active ?? true);
@@ -56,7 +57,7 @@ export function GlobalFaqForm({
     try {
       await onSubmit({
         question: question.trim(),
-        answer,
+        answer: plainTextToHtml(answer),
         category: category.trim(),
         sortOrder: Number.parseInt(sortOrder, 10) || 100,
         active,
@@ -87,7 +88,7 @@ export function GlobalFaqForm({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           rows={6}
-          placeholder="HTML or plain text is accepted"
+          placeholder="Write the answer in plain text. Blank lines create paragraphs."
         />
       </div>
 
@@ -128,14 +129,14 @@ export function GlobalFaqForm({
       )}
 
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={saving}>
+        <Button type="submit" disabled={saving} className="rounded-full text-white">
           {saving ? "Saving..." : submitLabel}
         </Button>
         {onCancel && (
           <Button
             type="button"
-            variant="outline"
             disabled={saving}
+            className="rounded-full text-white"
             onClick={onCancel}
           >
             Cancel

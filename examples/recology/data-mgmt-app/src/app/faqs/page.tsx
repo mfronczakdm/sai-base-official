@@ -110,7 +110,11 @@ export default function FaqsPage() {
           </p>
         </div>
         {!creating && (
-          <Button type="button" onClick={() => setCreating(true)}>
+          <Button
+            type="button"
+            className="rounded-full text-white"
+            onClick={() => setCreating(true)}
+          >
             Add global FAQ
           </Button>
         )}

@@ -34,7 +34,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary-600 active:bg-primary-700",
+          "bg-primary text-white hover:bg-primary-600 active:bg-primary-700",
         outline:
           "border bg-backgrounds hover:bg-neutral-bg hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         ghost: "bg-transparent hover:bg-neutral-bg active:bg-neutral-bg-active",
@@ -64,30 +64,30 @@ const buttonVariants = cva(
         variant: "default",
         colorScheme: "primary",
         class:
-          "bg-primary text-inverse-text hover:bg-primary-hover active:bg-primary-active",
+          "bg-primary text-white hover:bg-primary-hover active:bg-primary-active",
       },
       {
         variant: "default",
         colorScheme: "success",
         class:
-          "bg-success text-inverse-text hover:bg-success-hover active:bg-success-active",
+          "bg-success text-white hover:bg-success-hover active:bg-success-active",
       },
       {
         variant: "default",
         colorScheme: "danger",
         class:
-          "bg-danger text-inverse-text hover:bg-danger-hover active:bg-danger-active",
+          "bg-danger text-white hover:bg-danger-hover active:bg-danger-active",
       },
       {
         variant: "default",
         colorScheme: "neutral",
         class:
-          "bg-neutral text-inverse-text hover:bg-neutral-hover active:bg-neutral-active",
+          "bg-neutral text-white hover:bg-neutral-hover active:bg-neutral-active",
       },
       {
         variant: "default",
         colorScheme: "ai",
-        class: "ai-500 text-inverse-text hover:ai-600 active:ai-700",
+        class: "ai-500 text-white hover:ai-600 active:ai-700",
       },
       {
         variant: "outline",
