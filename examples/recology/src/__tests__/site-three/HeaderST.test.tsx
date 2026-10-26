@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Default as HeaderSTDefault, Version4 as HeaderSTVersion4, Version5 as HeaderSTVersion5, Version6 as HeaderSTVersion6 } from '../../components/site-three/HeaderST';
+import { Default as HeaderSTDefault, Version4 as HeaderSTVersion4, Version5 as HeaderSTVersion5, Regional as HeaderSTRegional, Version6 as HeaderSTVersion6 } from '../../components/site-three/HeaderST';
 import { mockPageEditing } from '../test-utils/mockPage';
 import {
   defaultHeaderSTProps,
@@ -42,6 +42,21 @@ jest.mock('lucide-react', () => ({
   User: (props: any) => <svg data-testid="login-icon" {...props} />,
   Search: (props: any) => <svg data-testid="search-icon" {...props} />,
   Truck: (props: any) => <svg data-testid="truck-icon" {...props} />,
+  ChevronDown: (props: any) => <svg data-testid="chevron-down-icon" {...props} />,
+}));
+
+jest.mock('../../components/site-three/LocationRegionalNav', () => ({
+  LocationRegionalNav: ({ itemId }: { itemId?: string }) =>
+    itemId ? (
+      <ul data-testid="location-regional-nav">
+        <li>
+          <button type="button">All Services</button>
+        </li>
+        <li>
+          <button type="button">Customer Service</button>
+        </li>
+      </ul>
+    ) : null,
 }));
 
 // Mock component-map to avoid circular dependency
@@ -510,7 +525,7 @@ describe('HeaderST Component', () => {
 
   });
 
-  describe('Version5 and Version6', () => {
+  describe('Version5 and Regional', () => {
     it('renders the Recology utility bar and search form without changing Default', () => {
       render(<HeaderSTVersion5 {...headerSTPropsSearchBoxOnly} />);
 
@@ -518,29 +533,44 @@ describe('HeaderST Component', () => {
       expect(screen.getByRole('link', { name: 'Pay My Bill' })).toHaveAttribute('href', '/Pay-My-Bill');
       expect(screen.getByRole('search')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
-      expect(screen.queryByTestId('header-st-version6')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('header-st-regional')).not.toBeInTheDocument();
     });
 
-    it('adds the location row and keeps search and cart params', () => {
+    it('adds the location row with tree-driven nav and keeps search and cart params', () => {
+      const pageWithRoute = {
+        ...headerSTPropsBasic.page,
+        layout: {
+          sitecore: {
+            context: {},
+            route: { itemId: 'f013bb48-b6cd-4824-8cd9-c69eec056724', name: 'Recology American Canyon' },
+          },
+        },
+      };
+
       const { rerender } = render(
-        <HeaderSTVersion6
+        <HeaderSTRegional
           {...headerSTPropsBasic}
+          page={pageWithRoute as any}
           params={{ ...headerSTPropsBasic.params, showSearchBox: '1', showMiniCart: '1' }}
         />
       );
 
-      expect(screen.getByTestId('header-st-version6')).toBeInTheDocument();
+      expect(screen.getByTestId('header-st-regional')).toBeInTheDocument();
       expect(screen.getByTestId('truck-icon')).toBeInTheDocument();
       expect(screen.getByTestId('mini-cart')).toBeInTheDocument();
-      expect(screen.getAllByTestId('app-placeholder').some((node) => node.getAttribute('data-name') === 'header-location-navigation-main-nav')).toBe(true);
+      // Desktop location row + mobile drawer both mount the tree-driven nav
+      expect(screen.getAllByTestId('location-regional-nav').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByRole('button', { name: 'All Services' }).length).toBeGreaterThanOrEqual(1);
 
       rerender(
         <HeaderSTVersion6
           {...headerSTPropsBasic}
+          page={pageWithRoute as any}
           params={{ ...headerSTPropsBasic.params, HideCart: '1', showMiniCart: '1' }}
         />
       );
       expect(screen.queryByTestId('mini-cart')).not.toBeInTheDocument();
+      expect(screen.getByTestId('header-st-regional')).toBeInTheDocument();
     });
   });
 

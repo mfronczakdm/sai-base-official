@@ -66,8 +66,19 @@ versions:
     paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
     usedBy: ["recology"]
     notes: "Recology corporate header. Utility links Pay My Bill, FAQ, Contact Us, and My Recology are Version5-hardcoded because the shared datasource has one SupportLink. L1 stays in header-navigation. Search is an inline input and outline button when showSearchBox is on. Colors come from theme tokens. Mega-menu flyouts stay with MegaMenuItem. Default and Version4 are unchanged."
-  - name: Version6
-    layout: "Version5 plus a third row: truck icon, SupportLink as the location name, and a location nav placeholder"
+  - name: Regional
+    layout: "Version5 plus a third row: truck icon, SupportLink as the location name, tree-driven location dropdowns"
     paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
     usedBy: ["recology"]
-    notes: "Location header. SupportLink is the location label (American Canyon). Location links live in header-location-navigation. No new datasource fields."
+    notes: >
+      Location header (renamed from Version6). SupportLink is the location label
+      (American Canyon). Location nav is fetched from Edge via /api/location-nav:
+      nearest LocationItem ancestor → hasLayout children as L1 dropdowns → their
+      hasLayout children as menu links. Folders (Additional Services, Cart Rates)
+      are excluded because they have no layout. Version6 remains an alias export
+      for pages still selecting Version6. No new datasource fields.
+  - name: Version6
+    layout: "Alias of Regional (backward compatibility)"
+    paramsUsed: ["showSearchBox", "showMiniCart", "HideCart"]
+    usedBy: ["recology"]
+    notes: "Deprecated alias of Regional. Prefer Regional in Pages."

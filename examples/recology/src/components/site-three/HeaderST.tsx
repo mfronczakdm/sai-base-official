@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
 import { SearchBox } from './non-sitecore/SearchBox';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
+import { LocationRegionalNav } from './LocationRegionalNav';
 import type { HeaderSTProps } from './header-st.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import { cn } from '@/lib/utils';
@@ -360,10 +361,16 @@ const HeaderSTRecologyView = ({
   const cartLink = getFieldValue(fields?.CartLink);
   const placeholderId = props.params?.DynamicPlaceholderId || '1';
   const mainPlaceholder = `header-navigation-${placeholderId}`;
-  const locationPlaceholder = `header-location-navigation-${placeholderId}`;
+  const routeItemId = props.page?.layout?.sitecore?.route?.itemId;
+  const language = props.page?.locale || 'en';
+  const isEditing = Boolean(props.page?.mode?.isEditing);
 
   return (
-    <header className={cn(props.params?.styles, 'w-full bg-background text-foreground')} data-class-change data-testid={showLocationNav ? 'header-st-version6' : 'header-st-version5'}>
+    <header
+      className={cn(props.params?.styles, 'w-full bg-background text-foreground')}
+      data-class-change
+      data-testid={showLocationNav ? 'header-st-regional' : 'header-st-version5'}
+    >
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-7xl justify-end px-4 lg:px-6">
           <ul className="flex items-center">
@@ -410,12 +417,9 @@ const HeaderSTRecologyView = ({
                   componentMap={getComponentMap()}
                 />
                 {showLocationNav ? (
-                  <AppPlaceholder
-                    name={locationPlaceholder}
-                    rendering={props.rendering}
-                    page={props.page}
-                    componentMap={getComponentMap()}
-                  />
+                  <li className="border-t border-border pt-2">
+                    <LocationRegionalNav itemId={routeItemId} language={language} className="flex-col items-stretch" />
+                  </li>
                 ) : null}
               </ul>
             </MobileMenuWrapper>
@@ -427,7 +431,7 @@ const HeaderSTRecologyView = ({
       {showLocationNav ? (
         <div className="border-b border-border bg-background">
           <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-6">
-            <Truck className="size-8 shrink-0 text-primary" aria-hidden />
+            <Truck className="size-8 shrink-0 text-primary" aria-hidden data-testid="truck-icon" />
             {supportLink?.value?.text || supportLink?.value?.href ? (
               <ContentSdkLink
                 field={supportLink}
@@ -436,14 +440,12 @@ const HeaderSTRecologyView = ({
               />
             ) : null}
             <nav className={recologyLocationNavClass} aria-label="Location">
-              <ul className="flex flex-row flex-wrap items-center">
-                <AppPlaceholder
-                  name={locationPlaceholder}
-                  rendering={props.rendering}
-                  page={props.page}
-                  componentMap={getComponentMap()}
-                />
-              </ul>
+              <LocationRegionalNav itemId={routeItemId} language={language} />
+              {isEditing && !routeItemId ? (
+                <p className="px-3 py-2 text-xs text-muted-foreground">
+                  Location nav loads from LocationItem children on published location pages.
+                </p>
+              ) : null}
             </nav>
           </div>
         </div>
@@ -454,6 +456,8 @@ const HeaderSTRecologyView = ({
 
 export const Version5 = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} />;
 
-export const Version6 = (props: HeaderSTProps) => (
-  <HeaderSTRecologyView {...props} showLocationNav />
-);
+/** Regional location header: utility + main nav + truck row with tree-driven dropdowns. */
+export const Regional = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} showLocationNav />;
+
+/** @deprecated Prefer Regional — kept so existing Page variants keep rendering. */
+export const Version6 = Regional;

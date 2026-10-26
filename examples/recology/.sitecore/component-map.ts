@@ -57,6 +57,7 @@ import * as MultiPromo from 'src/components/site-three/MultiPromo';
 import * as MobileMenuWrapper from 'src/components/site-three/MobileMenuWrapper';
 import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrapper';
 import * as MegaMenuItem from 'src/components/site-three/MegaMenuItem';
+import * as LocationRegionalNav from 'src/components/site-three/LocationRegionalNav';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as ImageBanner from 'src/components/site-three/ImageBanner';
 import * as HeroST from 'src/components/site-three/HeroST';
@@ -274,6 +275,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MobileMenuWrapper', { ...MobileMenuWrapper, componentType: 'client' }],
   ['MegaMenuItemWrapper', { ...MegaMenuItemWrapper, componentType: 'client' }],
   ['MegaMenuItem', { ...MegaMenuItem }],
+  ['LocationRegionalNav', { ...LocationRegionalNav, componentType: 'client' }],
   ['ImageCarousel', { ...ImageCarousel, componentType: 'client' }],
   ['ImageBanner', { ...ImageBanner }],
   ['HeroST', { ...HeroST, componentType: 'client' }],

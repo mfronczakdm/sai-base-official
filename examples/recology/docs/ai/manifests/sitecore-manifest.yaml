@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-26T18:30:00Z"
+lastUpdatedAt: "2026-10-26T20:00:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -4376,6 +4376,54 @@ ia:
       - { name: "Your Recycling Bin", itemId: "{3761785C-DB08-41E6-8354-2D66B160CCBA}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Your Recycling Bin" }
       - { name: "Hazardous Waste", itemId: "{94C3A72A-A449-41F6-BEA4-CEA29E7C4E4C}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Hazardous Waste" }
       - { name: "Specialty Services", itemId: "{186C179E-613F-41CB-93AB-7CDA1A4B3D0B}", path: "/sitecore/content/recology/recology/Home/Location/Recology South Bay/City of Santa Clara/Specialty Services" }
+  - name: "recology-american-canyon-nav-parents"
+    kind: "ia-create"
+    category: "IA"
+    status: "partial"
+    createdAt: "2026-10-26T19:45:00Z"
+    updatedAt: "2026-10-26T19:45:00Z"
+    siteName: "recology"
+    contentRootPath: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon"
+    contentRootItemId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+    pageTemplateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}"
+    pageTemplateName: "Page"
+    sourceSite: "https://www.recology.com/recology-american-canyon/"
+    notes: >
+      L1 nav bucket pages under Recology American Canyon, mirroring the live
+      location header (Customer Service, All Services, In My Community,
+      Helpful Resources, Nearby Locations). Child page moves pending confirmation;
+      Marketer MCP has no moveItem — moves require Authoring GraphQL or Content Editor.
+      Mapping follows the live American Canyon WordPress menu.
+    items:
+      - { name: "Customer Service", itemId: "{3188CC65-6BBB-4EED-91A8-929142F15BDA}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Customer Service" }
+      - { name: "All Services", itemId: "{7BAF1A27-0E5A-4819-8390-2549E20C8EFB}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/All Services" }
+      - { name: "In My Community", itemId: "{A0EFF99F-F0E4-492C-AB60-3EF33EE7A6AA}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community" }
+      - { name: "Helpful Resources", itemId: "{133E3069-C096-41E5-BB38-45FDAE81FE21}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Helpful Resources" }
+      - { name: "Nearby Locations", itemId: "{320005B8-22CF-4077-A559-EB005C834342}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Nearby Locations" }
+    plannedMoves:
+      Customer Service:
+        - Contact Us
+        - Request Debris Box
+        - FAQ
+        - Pay My Bill
+      All Services:
+        - Residential Rates
+        - Commercial and Multi-Family Rates
+        - Business Services
+        - Street Sweeping
+        - Your Cart
+      In My Community:
+        - Junior Recologist
+        - News and Events
+      Helpful Resources:
+        - Sorting Guides and Resources
+        - What Bin
+        - Recycling Legislation
+      Nearby Locations:
+        - Vallejo Materials Recovery Facility
+    leaveAtLocationRoot:
+      - Additional Services (Folder)
+      - Cart Rates (Folder)
   - name: "bcaa-ia-tree"
     kind: "ia-create"
     category: "IA"
@@ -9646,6 +9694,7 @@ ia:
         - "Version4"
         - "Version5"
         - "Version6"
+        - "Regional"
 
     sitecoreEnvironment:
       siteName: "dfs"
@@ -9753,12 +9802,18 @@ ia:
       variants:
         - { name: "Version5", itemId: "{84360F32-FD87-48B6-91D1-DAB1063F40CF}" }
         - { name: "Version6", itemId: "{32188657-4A33-4C8C-B39D-1F26E33C9AF1}" }
+        - { name: "Regional", itemId: "{D3A5B630-4789-4DCB-A472-F0D8B014DDBE}" }
       partialDesigns:
         globalHeader: "{4B6C5584-D671-4378-9B58-CC67D921854B}"
         americanCanyonFolder: "{AB42B821-F301-431D-A778-439E2AEAB0FB}"
         americanCanyonHeader: "{54D1BD5D-4C9B-4AA4-BB4A-64C3071889E4}"
         americanCanyonFooter: "{52D2917E-F11D-409B-85A8-6F6CEE868028}"
-      notes: "2026-10-24: Location partials are separate items under Presentation/Partial Designs/Locations, folder template Partial Design Folder {FCD9DD5E-FF94-47AB-8387-30D8084EF6BB}. They are not copies of the Global Header item. Version5 is the corporate header layout. Version6 is the location layout on the American Canyon header partial. Global Header FieldNames is still empty and must be set to Version5. American Canyon header FieldNames must be Version6. Check showSearchBox on both. Page designs are not assigned."
+      notes: >
+        2026-10-24: Location partials under Presentation/Partial Designs/Locations.
+        2026-10-26: Regional variant added (tree-driven location dropdowns via
+        /api/location-nav). Version6 export aliases Regional. Prefer FieldNames=Regional
+        on the American Canyon header partial; Version6 still works. Publish location
+        pages so Edge returns children. Version5 remains corporate header.
 
     datasourceExample:
       name: "Header"
