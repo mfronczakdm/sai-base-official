@@ -66,3 +66,40 @@ export function nodesToFieldMap(
   }
   return map;
 }
+
+/** Sitecore standard dates are often `yyyyMMddTHHmmssZ`. */
+export function parseSitecoreDate(raw?: string): string | undefined {
+  if (!raw?.trim()) return undefined;
+  const value = raw.trim();
+  if (/^0001/.test(value)) return undefined;
+
+  const compact = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/.exec(value);
+  if (compact) {
+    const iso = `${compact[1]}-${compact[2]}-${compact[3]}T${compact[4]}:${compact[5]}:${compact[6]}Z`;
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+export function formatDisplayDate(iso?: string): string {
+  if (!iso) return "—";
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(new Date(iso));
+  } catch {
+    return "—";
+  }
+}
+
+export function displayAuthor(raw?: string): string {
+  if (!raw?.trim()) return "—";
+  // Sitecore often stores `sitecore\username`
+  const parts = raw.replace(/\\/g, "/").split("/");
+  return parts[parts.length - 1] || raw;
+}

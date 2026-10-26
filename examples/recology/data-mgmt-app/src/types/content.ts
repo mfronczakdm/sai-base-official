@@ -41,6 +41,10 @@ export type GlobalFaq = {
   category: string;
   sortOrder: number;
   active: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
 };
 
 export type RegionalFaqConfig = {

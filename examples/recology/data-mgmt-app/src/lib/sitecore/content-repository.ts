@@ -11,6 +11,7 @@ import {
   nodesToFieldMap,
   normalizeBehavior,
   parseIdList,
+  parseSitecoreDate,
   parseSortOrder,
 } from "@/lib/sitecore/field-utils";
 import {
@@ -169,25 +170,60 @@ export class ContentRepository {
 
   async listGlobalFaqs(): Promise<GlobalFaq[]> {
     const contextId = this.requireContextId();
-    const folder = await getItemByPath(
+    // Include standard fields so we can surface Created / Updated / Author in the list UI.
+    const result = await authoringGraphql<{ item?: AuthoringItemNode }>(
       this.client,
       contextId,
-      RECOLOGY_PATHS.globalFaqs,
-      true,
+      `
+      query GetGlobalFaqs($path: String!) {
+        item(where: { database: "${DATABASE}", path: $path }) {
+          children {
+            nodes {
+              itemId
+              name
+              path
+              template { name }
+              fields(ownFields: false, excludeStandardFields: false) {
+                nodes { name value }
+              }
+            }
+          }
+        }
+      }
+      `,
+      { path: RECOLOGY_PATHS.globalFaqs },
     );
-    return (folder?.children?.nodes || [])
+
+    return (result.data?.item?.children?.nodes || [])
       .map(mapItem)
       .filter((item): item is SitecoreItemSummary => Boolean(item))
-      .map((item) => ({
-        id: item.id,
-        name: item.name,
-        path: item.path,
-        question: fieldValue(item.fields, "Question") || item.name,
-        answer: fieldValue(item.fields, "Answer"),
-        category: fieldValue(item.fields, "Category"),
-        sortOrder: parseSortOrder(fieldValue(item.fields, "SortOrder")),
-        active: isChecked(fieldValue(item.fields, "Active")),
-      }))
+      .map((item) => {
+        const createdAt = parseSitecoreDate(
+          fieldValue(item.fields, "__Created", "Created"),
+        );
+        const updatedAt =
+          parseSitecoreDate(fieldValue(item.fields, "__Updated", "Updated")) ||
+          createdAt;
+        return {
+          id: item.id,
+          name: item.name,
+          path: item.path,
+          question: fieldValue(item.fields, "Question") || item.name,
+          answer: fieldValue(item.fields, "Answer"),
+          category: fieldValue(item.fields, "Category"),
+          sortOrder: parseSortOrder(fieldValue(item.fields, "SortOrder")),
+          active: isChecked(fieldValue(item.fields, "Active")),
+          createdAt,
+          updatedAt,
+          createdBy: fieldValue(
+            item.fields,
+            "__Created by",
+            "Created by",
+            "__Owner",
+          ),
+          updatedBy: fieldValue(item.fields, "__Updated by", "Updated by"),
+        };
+      })
       .sort((a, b) => a.sortOrder - b.sortOrder || a.question.localeCompare(b.question));
   }
 

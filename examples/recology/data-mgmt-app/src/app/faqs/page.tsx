@@ -1,7 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { FaqEditorCard } from "@/features/faqs/faq-editor-card";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  DEFAULT_FAQ_FILTERS,
+  filterAndSortFaqs,
+  uniqueAuthors,
+  uniqueCategories,
+  type FaqFilterState,
+} from "@/features/faqs/faq-filters";
+import { FaqList } from "@/features/faqs/faq-list";
+import { FaqToolbar } from "@/features/faqs/faq-toolbar";
 import {
   GlobalFaqForm,
   type GlobalFaqFormValues,
@@ -19,6 +27,8 @@ export default function FaqsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [filters, setFilters] = useState<FaqFilterState>(DEFAULT_FAQ_FILTERS);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!repository || !selectedRegion) {
@@ -30,6 +40,9 @@ export default function FaqsPage() {
     try {
       const next = await repository.getFaqRowsForRegion(selectedRegion);
       setRows(next);
+      setExpandedId((current) =>
+        current && next.some((row) => row.global.id === current) ? current : null,
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load FAQs");
       setRows([]);
@@ -41,6 +54,19 @@ export default function FaqsPage() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    setExpandedId(null);
+    setFilters(DEFAULT_FAQ_FILTERS);
+    setCreating(false);
+  }, [selectedRegion?.id]);
+
+  const categories = useMemo(() => uniqueCategories(rows), [rows]);
+  const authors = useMemo(() => uniqueAuthors(rows), [rows]);
+  const visibleRows = useMemo(
+    () => filterAndSortFaqs(rows, filters),
+    [rows, filters],
+  );
 
   const handleSaveRegional = async (input: {
     configId?: string;
@@ -81,7 +107,12 @@ export default function FaqsPage() {
   const handleDeleteGlobal = async (id: string) => {
     if (!repository) throw new Error("Not connected");
     await repository.deleteItem(id, false);
+    setExpandedId(null);
     await load();
+  };
+
+  const handleToggle = (id: string) => {
+    setExpandedId((current) => (current === id ? null : id));
   };
 
   if (!connected) {
@@ -100,20 +131,23 @@ export default function FaqsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
           <p className="text-muted-foreground">
-            Edit global Q&amp;A once, then configure regional behavior for{" "}
-            {selectedRegion.name}.
+            Browse the catalog, then expand a row to edit global content or
+            regional behavior for {selectedRegion.name}.
           </p>
         </div>
         {!creating && (
           <Button
             type="button"
             className="rounded-full text-white"
-            onClick={() => setCreating(true)}
+            onClick={() => {
+              setCreating(true);
+              setExpandedId(null);
+            }}
           >
             Add global FAQ
           </Button>
@@ -123,9 +157,9 @@ export default function FaqsPage() {
       {!selectedRegion.faqCollectionPath && (
         <Alert variant="warning">
           <AlertDescription>
-            No Regional FAQ Collection is linked to this LocationItem yet
-            (Region field / name match). FAQ rows still list global items;
-            regional configs will appear once a collection is associated.
+            No Regional FAQ Collection is linked to this LocationItem yet.
+            Global FAQs still appear; regional behavior saving needs a
+            collection first.
           </AlertDescription>
         </Alert>
       )}
@@ -151,28 +185,33 @@ export default function FaqsPage() {
         </Alert>
       )}
 
+      <FaqToolbar
+        filters={filters}
+        onChange={(next) => {
+          setFilters(next);
+          setExpandedId(null);
+        }}
+        categories={categories}
+        authors={authors}
+        resultCount={visibleRows.length}
+        totalCount={rows.length}
+      />
+
       {loading ? (
-        <div className="space-y-3">
-          <Skeleton className="h-40" />
-          <Skeleton className="h-40" />
+        <div className="space-y-2">
+          <Skeleton className="h-12 rounded-xl" />
+          <Skeleton className="h-12 rounded-xl" />
+          <Skeleton className="h-12 rounded-xl" />
         </div>
       ) : (
-        <div className="space-y-4">
-          {rows.map((row) => (
-            <FaqEditorCard
-              key={row.global.id}
-              row={row}
-              onSaveRegional={handleSaveRegional}
-              onUpdateGlobal={handleUpdateGlobal}
-              onDeleteGlobal={handleDeleteGlobal}
-            />
-          ))}
-          {!rows.length && (
-            <p className="text-sm text-muted-foreground">
-              No Global FAQ items found under Data/Global FAQs.
-            </p>
-          )}
-        </div>
+        <FaqList
+          rows={visibleRows}
+          expandedId={expandedId}
+          onToggle={handleToggle}
+          onSaveRegional={handleSaveRegional}
+          onUpdateGlobal={handleUpdateGlobal}
+          onDeleteGlobal={handleDeleteGlobal}
+        />
       )}
     </div>
   );
