@@ -13,7 +13,12 @@ import {
   parseIdList,
   parseSortOrder,
 } from "@/lib/sitecore/field-utils";
-import { DATABASE, LANGUAGE, RECOLOGY_PATHS } from "@/lib/sitecore/paths";
+import {
+  DATABASE,
+  LANGUAGE,
+  RECOLOGY_PATHS,
+  RECOLOGY_TEMPLATES,
+} from "@/lib/sitecore/paths";
 import type {
   AdditionalService,
   CartRate,
@@ -388,6 +393,130 @@ export class ContentRepository {
       `,
     );
   }
+
+  async createGlobalFaq(input: {
+    question: string;
+    answer: string;
+    category?: string;
+    sortOrder?: number;
+    active?: boolean;
+  }): Promise<GlobalFaq> {
+    const contextId = this.requireContextId();
+    const folder = await getItemByPath(
+      this.client,
+      contextId,
+      RECOLOGY_PATHS.globalFaqs,
+      false,
+    );
+    if (!folder?.itemId) {
+      throw new Error(`Global FAQs folder not found at ${RECOLOGY_PATHS.globalFaqs}`);
+    }
+
+    const itemName = toSitecoreItemName(input.question);
+    const activeValue = input.active === false ? "" : "1";
+    const sortOrder = String(input.sortOrder ?? 100);
+    const category = input.category ?? "";
+
+    const result = await authoringGraphql<{
+      createItem?: { item?: AuthoringItemNode };
+    }>(
+      this.client,
+      contextId,
+      `
+      mutation {
+        createItem(
+          input: {
+            name: ${JSON.stringify(itemName)}
+            templateId: "${RECOLOGY_TEMPLATES.globalFaq}"
+            parent: "${folder.itemId}"
+            language: "${LANGUAGE}"
+            fields: [
+              { name: "Question", value: ${JSON.stringify(input.question)} }
+              { name: "Answer", value: ${JSON.stringify(input.answer)} }
+              { name: "Category", value: ${JSON.stringify(category)} }
+              { name: "SortOrder", value: ${JSON.stringify(sortOrder)} }
+              { name: "Active", value: ${JSON.stringify(activeValue)} }
+            ]
+          }
+        ) {
+          item {
+            ${ITEM_FIELDS}
+          }
+        }
+      }
+      `,
+    );
+
+    const created = mapItem(result.data?.createItem?.item);
+    if (!created) {
+      throw new Error("createItem did not return a Global FAQ item");
+    }
+
+    return {
+      id: created.id,
+      name: created.name,
+      path: created.path,
+      question: fieldValue(created.fields, "Question") || input.question,
+      answer: fieldValue(created.fields, "Answer") || input.answer,
+      category: fieldValue(created.fields, "Category") || category,
+      sortOrder: parseSortOrder(fieldValue(created.fields, "SortOrder") || sortOrder),
+      active: isChecked(fieldValue(created.fields, "Active") || activeValue),
+    };
+  }
+
+  async updateGlobalFaq(
+    itemId: string,
+    input: {
+      question: string;
+      answer: string;
+      category: string;
+      sortOrder: number;
+      active: boolean;
+    },
+  ): Promise<void> {
+    await this.updateItemFields(itemId, [
+      { name: "Question", value: input.question },
+      { name: "Answer", value: input.answer },
+      { name: "Category", value: input.category },
+      { name: "SortOrder", value: String(input.sortOrder) },
+      { name: "Active", value: input.active ? "1" : "" },
+    ]);
+  }
+
+  async deleteItem(itemId: string, permanently = false): Promise<void> {
+    const contextId = this.requireContextId();
+    const result = await authoringGraphql<{
+      deleteItem?: { successful?: boolean };
+    }>(
+      this.client,
+      contextId,
+      `
+      mutation {
+        deleteItem(
+          input: {
+            itemId: "${itemId}"
+            permanently: ${permanently ? "true" : "false"}
+          }
+        ) {
+          successful
+        }
+      }
+      `,
+    );
+
+    if (!result.data?.deleteItem?.successful) {
+      throw new Error("Delete failed — check Marketplace authoring permissions");
+    }
+  }
+}
+
+function toSitecoreItemName(raw: string): string {
+  const cleaned = raw
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .slice(0, 80);
+  return cleaned || "New Global FAQ";
 }
 
 export { getItemById };

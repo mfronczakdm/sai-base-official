@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { BehaviorStatusBadge } from "@/features/faqs/behavior-badge";
+import {
+  GlobalFaqForm,
+  type GlobalFaqFormValues,
+} from "@/features/faqs/global-faq-form";
 import { FAQ_BEHAVIORS } from "@/lib/sitecore/paths";
 import type { FaqRow, RegionalFaqBehavior } from "@/types/content";
 import { Button } from "@/components/ui/button";
@@ -16,18 +20,26 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   row: FaqRow;
-  onSave: (input: {
+  onSaveRegional: (input: {
     configId?: string;
     behavior: RegionalFaqBehavior;
     regionalSupportingInformation: string;
     regionalAnswer: string;
   }) => Promise<void>;
+  onUpdateGlobal: (id: string, values: GlobalFaqFormValues) => Promise<void>;
+  onDeleteGlobal: (id: string) => Promise<void>;
 };
 
-export function FaqEditorCard({ row, onSave }: Props) {
+export function FaqEditorCard({
+  row,
+  onSaveRegional,
+  onUpdateGlobal,
+  onDeleteGlobal,
+}: Props) {
   const [behavior, setBehavior] = useState<RegionalFaqBehavior>(row.behavior);
   const [supporting, setSupporting] = useState(
     row.config?.regionalSupportingInformation || "",
@@ -35,7 +47,9 @@ export function FaqEditorCard({ row, onSave }: Props) {
   const [overrideAnswer, setOverrideAnswer] = useState(
     row.config?.regionalAnswer || "",
   );
-  const [saving, setSaving] = useState(false);
+  const [editingGlobal, setEditingGlobal] = useState(false);
+  const [savingRegional, setSavingRegional] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,16 +57,17 @@ export function FaqEditorCard({ row, onSave }: Props) {
     setBehavior(row.behavior);
     setSupporting(row.config?.regionalSupportingInformation || "");
     setOverrideAnswer(row.config?.regionalAnswer || "");
+    setEditingGlobal(false);
     setMessage(null);
     setError(null);
   }, [row]);
 
-  const handleSave = async () => {
-    setSaving(true);
+  const handleSaveRegional = async () => {
+    setSavingRegional(true);
     setMessage(null);
     setError(null);
     try {
-      await onSave({
+      await onSaveRegional({
         configId: row.config?.id,
         behavior,
         regionalSupportingInformation: supporting,
@@ -62,7 +77,32 @@ export function FaqEditorCard({ row, onSave }: Props) {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
     } finally {
-      setSaving(false);
+      setSavingRegional(false);
+    }
+  };
+
+  const handleUpdateGlobal = async (values: GlobalFaqFormValues) => {
+    setMessage(null);
+    setError(null);
+    await onUpdateGlobal(row.global.id, values);
+    setEditingGlobal(false);
+    setMessage("Updated global FAQ.");
+  };
+
+  const handleDeleteGlobal = async () => {
+    const confirmed = window.confirm(
+      `Delete global FAQ "${row.global.question}"?\n\nThis removes it from all regions. Regional FAQ Configuration items that reference it may need cleanup in Sitecore.`,
+    );
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setMessage(null);
+    setError(null);
+    try {
+      await onDeleteGlobal(row.global.id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+      setDeleting(false);
     }
   };
 
@@ -79,102 +119,159 @@ export function FaqEditorCard({ row, onSave }: Props) {
           </p>
         )}
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="rounded-md border bg-muted/30 p-3">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Global answer
-          </p>
-          <div
-            className="prose prose-sm max-w-none text-sm"
-            dangerouslySetInnerHTML={{ __html: row.global.answer || "<em>Empty</em>" }}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>Regional behavior</Label>
-          <Select
-            value={behavior}
-            onValueChange={(value) => {
-              if (value) setBehavior(value as RegionalFaqBehavior);
-            }}
-            items={FAQ_BEHAVIORS.map((option) => ({
-              value: option.value,
-              label: option.label,
-            }))}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select behavior" />
-            </SelectTrigger>
-            <SelectContent>
-              {FAQ_BEHAVIORS.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {behavior === "UseGlobal" && (
-          <Alert>
-            <AlertDescription>
-              This region inherits the global answer. No regional copy is stored.
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {behavior === "AddRegionalInformation" && (
-          <div className="space-y-2">
-            <Label htmlFor={`support-${row.global.id}`}>
-              Regional supporting information
-            </Label>
-            <Textarea
-              id={`support-${row.global.id}`}
-              value={supporting}
-              onChange={(e) => setSupporting(e.target.value)}
-              rows={5}
-            />
+      <CardContent className="space-y-6">
+        <section className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Global FAQ
+            </h3>
+            {!editingGlobal && (
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditingGlobal(true)}
+                >
+                  Edit global
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  colorScheme="neutral"
+                  disabled={deleting}
+                  onClick={() => void handleDeleteGlobal()}
+                >
+                  {deleting ? "Deleting..." : "Delete global"}
+                </Button>
+              </div>
+            )}
           </div>
-        )}
 
-        {behavior === "Override" && (
+          {editingGlobal ? (
+            <div className="rounded-md border border-border bg-white p-4">
+              <GlobalFaqForm
+                initial={row.global}
+                submitLabel="Update global FAQ"
+                onSubmit={handleUpdateGlobal}
+                onCancel={() => setEditingGlobal(false)}
+              />
+            </div>
+          ) : (
+            <div className="rounded-md border bg-muted/40 p-3">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Global answer
+              </p>
+              <div
+                className="prose prose-sm max-w-none text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: row.global.answer || "<em>Empty</em>",
+                }}
+              />
+              <p className="mt-3 text-xs text-muted-foreground">
+                Sort {row.global.sortOrder}
+                {row.global.active ? " · Active" : " · Inactive"}
+              </p>
+            </div>
+          )}
+        </section>
+
+        <Separator />
+
+        <section className="space-y-4">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Regional behavior
+          </h3>
+
           <div className="space-y-2">
-            <Label htmlFor={`override-${row.global.id}`}>Regional override</Label>
-            <Textarea
-              id={`override-${row.global.id}`}
-              value={overrideAnswer}
-              onChange={(e) => setOverrideAnswer(e.target.value)}
-              rows={5}
-            />
+            <Label>Behavior for this region</Label>
+            <Select
+              value={behavior}
+              onValueChange={(value) => {
+                if (value) setBehavior(value as RegionalFaqBehavior);
+              }}
+              items={FAQ_BEHAVIORS.map((option) => ({
+                value: option.value,
+                label: option.label,
+              }))}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select behavior" />
+              </SelectTrigger>
+              <SelectContent>
+                {FAQ_BEHAVIORS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        )}
 
-        {behavior === "Exclude" && (
-          <Alert variant="warning">
-            <AlertDescription>
-              The FAQ remains globally, but will not render for this region.
-            </AlertDescription>
-          </Alert>
-        )}
+          {behavior === "UseGlobal" && (
+            <Alert>
+              <AlertDescription>
+                This region inherits the global answer. No regional copy is stored.
+              </AlertDescription>
+            </Alert>
+          )}
 
-        {!row.config && (
-          <Alert variant="warning">
-            <AlertDescription>
-              No Regional FAQ Configuration item exists for this Global FAQ in
-              the selected region&apos;s collection yet. Saving updates only
-              works when a configuration item already exists (create in CM /
-              Collections first).
-            </AlertDescription>
-          </Alert>
-        )}
+          {behavior === "AddRegionalInformation" && (
+            <div className="space-y-2">
+              <Label htmlFor={`support-${row.global.id}`}>
+                Regional supporting information
+              </Label>
+              <Textarea
+                id={`support-${row.global.id}`}
+                value={supporting}
+                onChange={(e) => setSupporting(e.target.value)}
+                rows={5}
+              />
+            </div>
+          )}
 
-        <div className="flex items-center gap-3">
-          <Button onClick={() => void handleSave()} disabled={saving || !row.config}>
-            {saving ? "Saving..." : "Save"}
-          </Button>
-          {message && <p className="text-sm text-emerald-700">{message}</p>}
-          {error && <p className="text-sm text-destructive">{error}</p>}
-        </div>
+          {behavior === "Override" && (
+            <div className="space-y-2">
+              <Label htmlFor={`override-${row.global.id}`}>Regional override</Label>
+              <Textarea
+                id={`override-${row.global.id}`}
+                value={overrideAnswer}
+                onChange={(e) => setOverrideAnswer(e.target.value)}
+                rows={5}
+              />
+            </div>
+          )}
+
+          {behavior === "Exclude" && (
+            <Alert variant="warning">
+              <AlertDescription>
+                The FAQ remains globally, but will not render for this region.
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {!row.config && (
+            <Alert variant="warning">
+              <AlertDescription>
+                No Regional FAQ Configuration item exists for this Global FAQ in
+                the selected region&apos;s collection yet. Saving regional updates
+                only works when a configuration item already exists.
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              onClick={() => void handleSaveRegional()}
+              disabled={savingRegional || !row.config}
+            >
+              {savingRegional ? "Saving..." : "Save regional"}
+            </Button>
+            {message && <p className="text-sm text-[#1f8a38]">{message}</p>}
+            {error && <p className="text-sm text-[#444444]" role="alert">{error}</p>}
+          </div>
+        </section>
       </CardContent>
     </Card>
   );

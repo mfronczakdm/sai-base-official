@@ -100,7 +100,7 @@ function ShellInner({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "rounded-md px-3 py-2 text-sm font-medium transition-colors",
                     active
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-white"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
                   )}
                 >
