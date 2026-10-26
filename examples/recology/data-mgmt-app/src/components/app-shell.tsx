@@ -58,16 +58,20 @@ function ShellInner({ children }: { children: React.ReactNode }) {
               <Skeleton className="h-9 w-full" />
             ) : (
               <Select
-                value={selectedRegion?.id || undefined}
+                value={selectedRegion?.id || null}
                 onValueChange={(value) => {
                   if (value) setSelectedRegionId(value);
                 }}
                 disabled={!regions.length}
+                items={regions.map((region) => ({
+                  value: region.id,
+                  label: region.name,
+                }))}
               >
-                <SelectTrigger id="region-select" className="w-full">
+                <SelectTrigger id="region-select" className="w-full max-w-md">
                   <SelectValue placeholder="Select a region" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-72">
                   {regions.map((region) => (
                     <SelectItem key={region.id} value={region.id}>
                       {region.name}

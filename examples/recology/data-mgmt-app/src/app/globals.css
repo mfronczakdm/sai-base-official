@@ -5,6 +5,9 @@
 @tailwind utilities;
 
 @layer base {
+  /* Color tokens must live on :root — Blok puts them under .theme, but
+     --background/--popover resolve to --color-* and break without them. */
+  :root,
   .theme {
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans)

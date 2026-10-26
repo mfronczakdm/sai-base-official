@@ -97,9 +97,13 @@ export function FaqEditorCard({ row, onSave }: Props) {
             onValueChange={(value) => {
               if (value) setBehavior(value as RegionalFaqBehavior);
             }}
+            items={FAQ_BEHAVIORS.map((option) => ({
+              value: option.value,
+              label: option.label,
+            }))}
           >
             <SelectTrigger className="w-full">
-              <SelectValue />
+              <SelectValue placeholder="Select behavior" />
             </SelectTrigger>
             <SelectContent>
               {FAQ_BEHAVIORS.map((option) => (
