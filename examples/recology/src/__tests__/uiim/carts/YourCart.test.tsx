@@ -7,12 +7,13 @@ import { mockPage } from '../../test-utils/mockPage';
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({
     field,
-    tag: Tag = 'span',
+    tag = 'span',
   }: {
     field?: { value?: string };
-    tag?: keyof JSX.IntrinsicElements;
+    tag?: string;
   }) => {
     if (!field?.value) return null;
+    const Tag = tag as 'span';
     return <Tag>{field.value}</Tag>;
   },
   Link: ({ field }: { field?: { value?: { href?: string; text?: string } } }) => {
