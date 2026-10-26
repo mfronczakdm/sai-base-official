@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-25T12:25:00Z"
+lastUpdatedAt: "2026-10-26T18:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -14151,3 +14151,112 @@ externalImageOptimizerAudit:
         - "Confirm __Masters insert options on Global FAQs / Regional FAQ Collections folders"
         - "Publish FAQ templates, content, rendering, variants, and FAQ pages to Edge"
         - "Optional: delete unused local datasources created by add_component under page Data folders"
+
+  - name: "YourCart"
+    kind: "list"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-26T17:00:00Z"
+    updatedAt: "2026-10-26T18:45:00Z"
+    siteName: "recology"
+    siteCollection: "recology"
+    notes: >
+      Datasource is the LocationItem (CartTypes + CartSizes MultilistField targetItems,
+      ModifyServiceLink / NewCustomersLink). Fallback bin images under public/carts/.
+      Your Cart child page under each location; YourCart datasource = parent LocationItem.
+      Demo locations AC/Arcata/Ashland/Carnation have CartTypes/CartSizes + CTA links filled.
+    react:
+      filePath: "src/components/uiim/carts/YourCart.tsx"
+      propsPath: "src/components/uiim/carts/your-cart.props.ts"
+      componentMapKey: "YourCart"
+      variants:
+        - "Default"
+        - "Columns"
+        - "Rows"
+      tests:
+        - "src/__tests__/uiim/carts/YourCart.test.tsx"
+    templates:
+      locationItemCtasSection:
+        path: "/sitecore/templates/Project/recology/LocationItem/CTAs"
+        itemId: "{90D36191-AF2F-4D41-90FC-5517DEBD2F6D}"
+        fields:
+          - { name: "ModifyServiceLink", itemId: "{35833088-F375-41FB-A3FB-A06CB2098589}", type: "General Link", title: "Modify Service Link" }
+          - { name: "NewCustomersLink", itemId: "{9DDE9118-3E83-43C5-98B8-76281D3CB4D9}", type: "General Link", title: "New Customers Link" }
+      cartTypeImageField:
+        path: "/sitecore/templates/Project/click-click-launch/Site/CartType/Image"
+        itemId: "{E42E76C7-99E8-41B7-9691-83AC821A065D}"
+        type: "Image"
+      renderingParams:
+        name: "YourCart"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/Rendering Parameters/YourCart"
+        itemId: "{E3605A5E-AC80-442A-A901-96F1262CE1C6}"
+        standardValuesItemId: "{EF016308-BD9D-4168-8331-0A5548667FF4}"
+        baseTemplatesSet: true
+    rendering:
+      name: "YourCart"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/YourCart"
+      itemId: "{8CEBF6E5-F0F8-42A5-81E0-7FC64C598FCE}"
+      componentName: "YourCart"
+      datasourceTemplatePath: "/sitecore/templates/Project/recology/LocationItem"
+      datasourceLocationQuery: "/sitecore/content/recology/recology/Home/Location"
+      parametersTemplateId: "{E3605A5E-AC80-442A-A901-96F1262CE1C6}"
+      addFieldEditorButton: "1"
+      useComponentQuery: true
+      registeredInAvailableRenderings: true
+      availableRenderingsGroup: "Page Content"
+      availableRenderingsItemId: "{EAFD8A27-6723-4972-AF51-3E0632B679A1}"
+      lastKnownPageContentRenderings: "{C5F905F8-FD1F-444E-A9E5-AC6B774FF0DE}|{2492BAC4-DA07-4C86-87F0-9873D40E2276}|{9C6D53E3-FE57-4638-AF7B-6D68304C7A94}|{3836D951-BB14-43AC-9231-649B7F245DC5}|{45E8B532-E022-4081-87A9-576EA3D09FC7}|{32BE4E03-08DD-47EF-B653-40812FC68533}|{4A6D97FA-CA24-4A30-BA70-634D01D1D78F}|{8CEBF6E5-F0F8-42A5-81E0-7FC64C598FCE}"
+    variants:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/YourCart"
+      containerItemId: "{8C80DDF2-222B-4B57-8509-8802F2E8AF7D}"
+      items:
+        - { name: "Default", itemId: "{1121919F-8DE6-45BD-9B69-DFB0021FEE26}" }
+        - { name: "Columns", itemId: "{6A55E7CE-5EC0-4B8D-9F2A-C45CBA386BFD}" }
+        - { name: "Rows", itemId: "{3E9977A9-443F-4A3B-BB51-A8A462C61418}" }
+    content:
+      americanCanyon:
+        locationItemId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+        yourCartPageId: "{31E4C106-CE15-4367-9992-345ED4D38881}"
+        renderingInstanceId: "{14904678-088E-42F2-AE4A-76DE0FB6F95F}"
+        datasourceId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+      arcata:
+        locationItemId: "{CFC8E85F-7F59-467F-9CFB-BAAEFD71E42A}"
+        yourCartPageId: "{EB94BE0D-3F5A-4BE3-8598-221E811CF761}"
+        renderingInstanceId: "{FFA15E66-D6D6-42CB-8112-9EE91B691916}"
+        datasourceId: "{CFC8E85F-7F59-467F-9CFB-BAAEFD71E42A}"
+      ashland:
+        locationItemId: "{39ACC2A5-448A-44B5-891C-10C586B12FC7}"
+        yourCartPageId: "{7ECA39F7-FA90-461C-83E8-C40AF7200E10}"
+        renderingInstanceId: "{EE529C45-D846-44E8-A069-F6B43138C80C}"
+        datasourceId: "{39ACC2A5-448A-44B5-891C-10C586B12FC7}"
+      carnation:
+        locationItemId: "{5B881265-F69D-4E9F-9B8B-177016C8405C}"
+        yourCartPageId: "{6D56D56E-76CE-43E2-824E-172D086129CF}"
+        renderingInstanceId: "{2362ED82-D5CA-464B-9014-8D683E72F3F8}"
+        datasourceId: "{5B881265-F69D-4E9F-9B8B-177016C8405C}"
+      newRegionBranch:
+        locationItemId: "{155150FD-E5E7-4020-8946-1FFAF3F90BC9}"
+        yourCartPageId: "{768D5314-9B25-4A18-9D5E-3ADFB1641E99}"
+        renderingInstanceId: "{25FE24E7-2F94-43DD-8AF3-8697C9DA61D0}"
+        datasourceId: "{155150FD-E5E7-4020-8946-1FFAF3F90BC9}"
+      assets:
+        - "public/carts/food-yard-waste.png"
+        - "public/carts/recycling.jpg"
+        - "public/carts/garbage.jpg"
+    verification:
+      checkedAt: "2026-10-26T18:45:00Z"
+      passed:
+        - "LocationItem CTAs section + ModifyServiceLink / NewCustomersLink General Link fields"
+        - "CartType Image field {E42E76C7}"
+        - "JSON Rendering YourCart with CartTypes/CartSizes MultilistField ComponentQuery"
+        - "Registered on Available Renderings/Page Content"
+        - "Headless Variants YourCart/Default"
+        - "React YourCart + Jest (1 passed)"
+        - "Your Cart pages under all locations with YourCart → parent LocationItem datasource"
+        - "37 remaining pages wired (KC cities + other locations) to parent LocationItem"
+      failed: []
+      pendingManual:
+        - "Populate CartTypes/CartSizes + CTA links on locations that still have empty multilists"
+        - "Optional: upload CartType.Image media and prefer over public/carts fallbacks"
+        - "Publish rendering, variants, LocationItem template changes, and Your Cart pages to Edge"
+        - "Optional: delete unused local Your_Cart datasources under page Data folders"

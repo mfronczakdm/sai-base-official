@@ -12,6 +12,7 @@ import * as RatesCartsDetail from 'src/components/uiim/rates/RatesCartsDetail';
 import * as NewsListing from 'src/components/uiim/news/NewsListing';
 import * as ResolveRegionalFaq from 'src/components/uiim/faq/resolve-regional-faq';
 import * as RegionalFAQ from 'src/components/uiim/faq/RegionalFAQ';
+import * as YourCart from 'src/components/uiim/carts/YourCart';
 import * as ArticleEngagementclient from 'src/components/uiim/article/ArticleEngagement.client';
 import * as ArticleContent from 'src/components/uiim/article/ArticleContent';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
@@ -228,6 +229,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['NewsListing', { ...NewsListing, componentType: 'client' }],
   ['resolve-regional-faq', { ...ResolveRegionalFaq }],
   ['RegionalFAQ', { ...RegionalFAQ, componentType: 'client' }],
+  ['YourCart', { ...YourCart }],
   ['ArticleEngagement', { ...ArticleEngagementclient }],
   ['ArticleContent', { ...ArticleContent }],
   ['TopicListing', { ...TopicListing }],
