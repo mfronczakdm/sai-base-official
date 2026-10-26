@@ -7,6 +7,7 @@ import {
   Centered as HeroSTCentered,
   SplitScreen as HeroSTSplitScreen,
   Stacked as HeroSTStacked,
+  Version3 as HeroSTVersion3,
 } from '@/components/site-three/HeroST';
 
 // Mock useContainerOffsets hook
@@ -248,6 +249,36 @@ describe('HeroST', () => {
       const { container } = render(<HeroSTStacked {...mockProps} />);
       const section = container.querySelector('section');
       expect(section).toHaveClass('test-styles');
+    });
+  });
+
+  describe('Version3 variant', () => {
+    it('centers the title, supporting line, and primary link on the photo', () => {
+      render(<HeroSTVersion3 {...mockProps} />);
+
+      const panel = screen.getByTestId('hero-st-version3');
+      expect(panel.className).toContain('justify-center');
+      const overlay = screen.getByTestId('hero-st-version3-panel');
+      expect(overlay.style.backgroundColor).toContain('color-mix');
+      expect(overlay.style.backgroundColor).toContain('--color-secondary');
+      expect(screen.getByText('Premium Audio Experience')).toBeInTheDocument();
+      expect(screen.getByText('New Collection')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Shop Now' })).toHaveClass('btn-primary');
+      expect(screen.getByRole('link', { name: 'Learn More' })).toBeInTheDocument();
+    });
+
+    it('hides a link that has no destination', () => {
+      render(
+        <HeroSTVersion3
+          {...mockProps}
+          fields={{
+            ...mockProps.fields,
+            Link2: { value: { href: '', text: 'Second' } },
+          }}
+        />
+      );
+
+      expect(screen.queryByRole('link', { name: 'Second' })).not.toBeInTheDocument();
     });
   });
 

@@ -242,6 +242,54 @@ export const SplitScreen = (props: PageHeaderSTProps) => {
   );
 };
 
+export const Version3 = (props: PageHeaderSTProps) => {
+  const fields = getDatasource(props.fields);
+  const link1 = getFieldValue(fields?.Link1);
+  const link2 = getFieldValue(fields?.Link2);
+
+  return (
+    <section
+      className={`relative flex min-h-[28rem] items-center justify-center lg:min-h-[38rem] ${props?.params?.styles || ''}`}
+      data-class-change
+      data-testid="hero-st-version3"
+    >
+      <div className="absolute inset-0">
+        <ContentSdkImage
+          field={getFieldValue(fields?.Image1)}
+          width={1920}
+          height={1080}
+          priority={true}
+          fetchPriority="high"
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div
+        className="relative z-10 mx-4 w-full max-w-3xl px-6 py-8 text-center text-white sm:px-10 sm:py-10"
+        data-testid="hero-st-version3-panel"
+        style={{
+          // Explicit mix so the green panel always paints (Tailwind /opacity on theme hex can no-op).
+          backgroundColor: 'color-mix(in srgb, var(--color-secondary, #71bf45) 85%, transparent)',
+        }}
+      >
+        <h1 className="text-xl font-bold leading-snug sm:text-2xl">
+          <ContentSdkText field={getFieldValue(fields?.Title)} />
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed sm:text-base">
+          <ContentSdkText field={getFieldValue(fields?.Eyebrow)} />
+        </p>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+          {link1?.value?.href ? (
+            <ContentSdkLink field={link1} prefetch={false} className="btn btn-primary" />
+          ) : null}
+          {link2?.value?.href ? (
+            <ContentSdkLink field={link2} prefetch={false} className="btn btn-primary" />
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export const Stacked = (props: PageHeaderSTProps) => {
   const fields = getDatasource(props.fields);
 

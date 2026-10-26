@@ -8,6 +8,11 @@ import { Form } from '@sitecore-content-sdk/nextjs';
 // end of built-in import section
 import * as ZipcodeModaldev from 'src/components/zipcode-modal/zipcode-modal.dev';
 import * as VerticalImageAccordion from 'src/components/vertical-image-accordion/VerticalImageAccordion';
+import * as RatesCartsDetail from 'src/components/uiim/rates/RatesCartsDetail';
+import * as NewsListing from 'src/components/uiim/news/NewsListing';
+import * as ResolveRegionalFaq from 'src/components/uiim/faq/resolve-regional-faq';
+import * as RegionalFAQ from 'src/components/uiim/faq/RegionalFAQ';
+import * as ArticleEngagementclient from 'src/components/uiim/article/ArticleEngagement.client';
 import * as ArticleContent from 'src/components/uiim/article/ArticleContent';
 import * as TopicListing from 'src/components/topic-listing/TopicListing';
 import * as TopicItemdev from 'src/components/topic-listing/TopicItem.dev';
@@ -219,6 +224,11 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Form', { ...Form, componentType: 'client' }],
   ['zipcode-modal', { ...ZipcodeModaldev }],
   ['VerticalImageAccordion', { ...VerticalImageAccordion, componentType: 'client' }],
+  ['RatesCartsDetail', { ...RatesCartsDetail }],
+  ['NewsListing', { ...NewsListing, componentType: 'client' }],
+  ['resolve-regional-faq', { ...ResolveRegionalFaq }],
+  ['RegionalFAQ', { ...RegionalFAQ, componentType: 'client' }],
+  ['ArticleEngagement', { ...ArticleEngagementclient }],
   ['ArticleContent', { ...ArticleContent }],
   ['TopicListing', { ...TopicListing }],
   ['TopicItem', { ...TopicItemdev }],

@@ -1,8 +1,10 @@
-import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
+import type { Field, ImageField, RichTextField } from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps } from '@/lib/component-props';
 
 export type ArticleContentRouteFields = {
   Content?: RichTextField;
+  image?: ImageField;
+  pageThumbnail?: ImageField;
   pageHeaderTitle?: Field<string>;
   pageShortTitle?: Field<string>;
   pageSubtitle?: Field<string>;
@@ -12,4 +14,15 @@ export type ArticleContentRouteFields = {
   pageReadTime?: Field<string>;
 };
 
-export type ArticleContentProps = ComponentProps;
+export type ArticleContentParams = {
+  styles?: string;
+  RenderingIdentifier?: string;
+  /** Advanced styling checkbox — "1" when enabled */
+  LikesAndShares?: string;
+  ShowContent?: string;
+  [key: string]: string | undefined;
+};
+
+export type ArticleContentProps = ComponentProps & {
+  params?: ArticleContentParams;
+};

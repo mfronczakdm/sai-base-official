@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-24T23:40:00Z"
+lastUpdatedAt: "2026-10-25T12:25:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -10495,6 +10495,45 @@ ia:
         - "Publish HeroST Parameters template (ImageLayout field {A5CA6340-E864-480C-A868-51B5CFB7D1D0}) so Edge and other environments pick up Source change"
         - "Home HeroST Version1 Design → Image Layout = Primary Image (MCP cannot set rendering params)"
 
+  - name: "recology-herost-version3"
+    kind: "update"
+    category: "Banners"
+    status: "complete"
+    createdAt: "2026-10-25T12:10:00Z"
+    updatedAt: "2026-10-25T12:10:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    componentName: "HeroST"
+    notes: >
+      Version3 is the Recology homepage hero: full-bleed Image1, centered green panel,
+      Title, Eyebrow as the sentence under the title, and Link1 as the blue button.
+      Link2 renders only when it has an href. Default and the other variants are unchanged.
+      Version1 remains the Atlanta Apparel collage export name in other starters; this
+      starter file did not include that export, so the new layout is Version3.
+    react:
+      filePath: "src/components/site-three/HeroST.tsx"
+      variants:
+        - "Default"
+        - "Right"
+        - "Centered"
+        - "SplitScreen"
+        - "Stacked"
+        - "Version3"
+    headlessVariants:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/HeroST"
+      containerId: "{4DE3557D-1572-471D-987C-1DFAF5D9112D}"
+      variants:
+        - { name: "Version3", itemId: "{26CABC49-63BF-433F-9499-CFEB490BE899}" }
+    verification:
+      checkedAt: "2026-10-25T12:10:00Z"
+      passed:
+        - "Version3 Variant Definition verified at Recology Headless Variants/HeroST"
+      failed: []
+      pendingManual:
+        - "Select HeroST variant Version3 on the Recology homepage in Pages"
+        - "Put the supporting sentence in Eyebrow and the button in Link1"
+        - "Publish Presentation/Headless Variants/HeroST/Version3"
+
   - name: "amkor-header-cascade-megamenu"
     kind: "content-update"
     category: "Navigation"
@@ -13818,3 +13857,297 @@ externalImageOptimizerAudit:
         - "Set Secondary Links FieldNames to FooterCtas {F6713F30}"
         - "Publish Footer partial design and Data folder for Edge"
         - "MCP cannot set FieldNames; variantId on set_component_datasource is personalization only"
+
+  - name: "RatesCartsDetail"
+    kind: "list"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-25T12:50:00Z"
+    updatedAt: "2026-10-25T14:00:00Z"
+    siteName: "recology"
+    siteCollection: "recology"
+    notes: >
+      Datasource is the LocationItem. ComponentQuery uses $datasource with Rates*
+      fields plus CartRates / AdditionalServices MultilistField targetItems (nested
+      children { children } exceeds Edge layout complexity and sets
+      isContentResolved=false). LocationCartRate also has Dimensions +
+      TypicalWeeklyNeeds copied from Data/Cart Sizes. American Canyon Residential
+      Rates page datasource = {F013BB48}. Live rates from
+      https://www.recology.com/recology-american-canyon/residential-rates/
+    react:
+      filePath: "src/components/uiim/rates/RatesCartsDetail.tsx"
+      propsPath: "src/components/uiim/rates/rates-carts-detail.props.ts"
+      componentMapKey: "RatesCartsDetail"
+      variants:
+        - "Default"
+      tests:
+        - "src/__tests__/uiim/rates/RatesCartsDetail.test.tsx"
+    templates:
+      locationItemRatesSection:
+        path: "/sitecore/templates/Project/recology/LocationItem/Rates"
+        itemId: "{23EE0E9C-122A-4181-87C3-579F1F4F2C0C}"
+        fields:
+          - { name: "RatesHeading", itemId: "{5665F5AE-0AC8-4A2E-8389-3DFD45D5F942}", type: "Single-Line Text" }
+          - { name: "RatesIntro", itemId: "{987A292E-A6BF-4302-A0AF-DC3707A1D3A3}", type: "Rich Text" }
+          - { name: "ImportantNotes", itemId: "{85818388-F642-489D-B87D-1E918791B77E}", type: "Rich Text" }
+          - { name: "CareProgramHeading", itemId: "{F434A7C7-ABFA-4CBB-BD97-3F7C2C7697FF}", type: "Single-Line Text" }
+          - { name: "CareProgramContent", itemId: "{C28CD421-F100-4172-9575-7AB0321E4777}", type: "Rich Text" }
+          - { name: "CartRates", itemId: "{E9C55AC3-7686-4B5F-8CEF-0E8C629F5B08}", type: "Multilist" }
+          - { name: "AdditionalServices", itemId: "{A6D14362-E605-4965-B2F3-5A0BA20461F2}", type: "Multilist" }
+      locationCartRate:
+        path: "/sitecore/templates/Project/click-click-launch/Site/LocationCartRate"
+        itemId: "{D039EE04-D7C8-4D29-A244-D28318A0CA82}"
+        standardValues:
+          itemId: "{CF406BF2-21C2-41C7-A37D-7378ED589EF0}"
+        fields:
+          - { name: "CartSize", itemId: "{F7A9DB1B-0B8D-4E91-8604-83763E1D2B36}", type: "Droplink" }
+          - { name: "MonthlyRate", itemId: "{FE9B5CDA-D04F-4308-8F34-A6EF7971D495}", type: "Single-Line Text" }
+          - { name: "Dimensions", itemId: "{E9D239B5-BEE2-4289-92AB-7147DC0234ED}", type: "Single-Line Text" }
+          - { name: "TypicalWeeklyNeeds", itemId: "{C0C90166-0D24-40F9-B390-545E9469AD29}", type: "Single-Line Text" }
+      locationAdditionalService:
+        path: "/sitecore/templates/Project/click-click-launch/Site/LocationAdditionalService"
+        itemId: "{584AA718-960C-4DB5-B5D6-82672C243859}"
+        standardValues:
+          itemId: "{5FE9D365-1C65-48D0-8EB9-64395DB25477}"
+        fields:
+          - { name: "ServiceName", itemId: "{EF930029-2982-4D91-94AA-C251D30E7ED3}", type: "Single-Line Text" }
+          - { name: "Cost", itemId: "{19166AFF-D9B7-41F1-94AD-8AA15470DE94}", type: "Single-Line Text" }
+          - { name: "IsSectionHeader", itemId: "{1E6FD886-043C-4909-B84F-FD5E728B9446}", type: "Checkbox" }
+      renderingParams:
+        name: "RatesCartsDetail"
+        path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/Rendering Parameters/RatesCartsDetail"
+        itemId: "{F47875C8-CBDA-4E3E-A3FA-1C8641D2BD29}"
+        baseTemplatesSet: true
+    rendering:
+      name: "RatesCartsDetail"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/RatesCartsDetail"
+      itemId: "{32BE4E03-08DD-47EF-B653-40812FC68533}"
+      componentName: "RatesCartsDetail"
+      datasourceTemplatePath: "/sitecore/templates/Project/recology/LocationItem"
+      datasourceLocationQuery: "/sitecore/content/recology/recology/Home/Location"
+      parametersTemplateId: "{F47875C8-CBDA-4E3E-A3FA-1C8641D2BD29}"
+      addFieldEditorButton: "1"
+      useComponentQuery: true
+      componentQuery: >
+        query RatesCartsDetail($datasource: String!, $language: String!) {
+          datasource: item(path: $datasource, language: $language) {
+            ratesHeading: field(name: "RatesHeading") { jsonValue }
+            ratesIntro: field(name: "RatesIntro") { jsonValue }
+            importantNotes: field(name: "ImportantNotes") { jsonValue }
+            careProgramHeading: field(name: "CareProgramHeading") { jsonValue }
+            careProgramContent: field(name: "CareProgramContent") { jsonValue }
+            cartRates: field(name: "CartRates") {
+              ... on MultilistField {
+                targetItems {
+                  id name displayName
+                  monthlyRate: field(name: "MonthlyRate") { jsonValue }
+                  dimensions: field(name: "Dimensions") { jsonValue }
+                  typicalWeeklyNeeds: field(name: "TypicalWeeklyNeeds") { jsonValue }
+                }
+              }
+            }
+            additionalServices: field(name: "AdditionalServices") {
+              ... on MultilistField {
+                targetItems {
+                  id name displayName
+                  serviceName: field(name: "ServiceName") { jsonValue }
+                  cost: field(name: "Cost") { jsonValue }
+                  isSectionHeader: field(name: "IsSectionHeader") { jsonValue }
+                }
+              }
+            }
+          }
+        }
+      registeredInAvailableRenderings: true
+      availableRenderingsGroup: "Page Content"
+      availableRenderingsItemId: "{EAFD8A27-6723-4972-AF51-3E0632B679A1}"
+      clickClickLaunchAvailableRenderingsItemId: "{57091DD2-35D9-47BD-8D23-84D7750C9F90}"
+      lastKnownPageContentRenderings: "{C5F905F8-FD1F-444E-A9E5-AC6B774FF0DE}|{2492BAC4-DA07-4C86-87F0-9873D40E2276}|{9C6D53E3-FE57-4638-AF7B-6D68304C7A94}|{3836D951-BB14-43AC-9231-649B7F245DC5}|{45E8B532-E022-4081-87A9-576EA3D09FC7}|{32BE4E03-08DD-47EF-B653-40812FC68533}"
+    variants:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/RatesCartsDetail"
+      containerItemId: "{D16DCCD3-2F36-412F-8ADE-636C4291EF21}"
+      items:
+        - { name: "Default", itemId: "{2A3AFF0A-31B0-4822-AD63-59C7BDA921F0}" }
+    content:
+      americanCanyon:
+        locationItemId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+        cartRatesFolderId: "{57CB775B-11A6-4476-BCDF-8A1FF2ADDA91}"
+        additionalServicesFolderId: "{1E0DA70D-9930-4EFE-A944-7F6966831FAE}"
+        residentialRatesPageId: "{BF0CC516-8DB8-4462-B5A9-97F1F34FE3F0}"
+        renderingInstanceId: "{FCFC3748-7885-4626-9502-F278F870EFBD}"
+        datasourceId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+    verification:
+      checkedAt: "2026-10-25T14:00:00Z"
+      passed:
+        - "LocationItem Rates fields present on American Canyon"
+        - "CartRates + AdditionalServices Multilist fields on LocationItem"
+        - "LocationCartRate Dimensions + TypicalWeeklyNeeds populated for AC rates"
+        - "American Canyon Cart Rates (6) + Additional Services (11) populated from live Recology rates"
+        - "JSON Rendering RatesCartsDetail $datasource + MultilistField targetItems ComponentQuery"
+        - "Residential Rates component datasource = American Canyon LocationItem"
+        - "Edge layout isContentResolved=true with monthlyRate targetItems"
+        - "Localhost renders rates-cart-table rows including $34.80 and Lifeline32-Gal"
+        - "React RatesCartsDetail reads multilist targetItems (folder children fallback kept)"
+        - "4/4 unit tests passed"
+      failed: []
+      pendingManual:
+        - "Confirm __Standard values links on LocationCartRate / LocationAdditionalService in Content Editor (MCP silent-write)"
+        - "Confirm folder __Masters insert options on Cart Rates / Additional Services in Content Editor"
+        - "Populate CartRates/AdditionalServices multilists when cloning New Region locations"
+
+  - name: "New Region page branch"
+    kind: "scaffolding"
+    category: "Page Branches"
+    status: "complete"
+    createdAt: "2026-10-25T13:15:00Z"
+    updatedAt: "2026-10-25T13:20:00Z"
+    siteName: "recology"
+    siteCollection: "recology"
+    notes: >
+      Populated Presentation/Page Branches/New Region/$name from Recology American Canyon
+      skeleton: 13 Page children (titles only), Cart Rates + Additional Services folders,
+      RatesHeading default on LocationItem root, RatesCartsDetail on Residential Rates.
+      Vallejo MRF renamed to Materials Recovery Facility for reuse across regions.
+      2026-10-25: Added 3 sample Cart Rates (32/64/96-Gal) and 3 sample Additional
+      Services (section header, Cart Exchange, Overages); wired $name CartRates and
+      AdditionalServices multilists to those items for RatesCartsDetail.
+    sitecore:
+      branch:
+        path: "/sitecore/content/recology/recology/Presentation/Page Branches/New Region"
+        itemId: "{0D352633-3AB9-44BF-889B-70D7E5CA6A0A}"
+      root:
+        path: "/sitecore/content/recology/recology/Presentation/Page Branches/New Region/$name"
+        itemId: "{155150FD-E5E7-4020-8946-1FFAF3F90BC9}"
+        templateId: "{F38AF42C-AC5C-41AC-9E7A-5BFA2DEF4E66}"
+      folders:
+        - { name: "Cart Rates", itemId: "{F4C11FEF-29B1-4132-BBB0-2CBEB0B7AC5A}" }
+        - { name: "Additional Services", itemId: "{2DA8C874-15BC-4922-A716-AEB2B97A3894}" }
+      sampleCartRates:
+        - { name: "32-Gal", itemId: "{51115D7A-6918-4B57-81A9-EBE8B2C022BF}", monthlyRate: "$34.80" }
+        - { name: "64-Gal", itemId: "{6EC58797-C8FA-4023-80C8-7D33EC621D27}", monthlyRate: "$52.91" }
+        - { name: "96-Gal", itemId: "{0A5EB547-0C24-47BF-9789-8782A1E2C7E7}", monthlyRate: "$76.86" }
+      sampleAdditionalServices:
+        - { name: "Extra Collection Services Header", itemId: "{851A5D77-E297-4F6F-AF46-7CF6724391F2}" }
+        - { name: "Cart Exchange", itemId: "{EB488E26-F2BA-4120-A702-3F0813242AEC}", cost: "$49.59" }
+        - { name: "Overages per cart", itemId: "{7512B80D-42B5-477A-A9B7-1B91758DBA89}", cost: "$15.61" }
+      pages:
+        - { name: "Business Services", itemId: "{26A3225D-86EA-4DDD-B836-3D0D97552058}" }
+        - { name: "Commercial and Multi-Family Rates", itemId: "{23CAB1B4-1145-4865-A949-C1D703F190D1}" }
+        - { name: "Contact Us", itemId: "{66B65FC0-7938-4939-AD84-08DB1D23254A}" }
+        - { name: "Junior Recologist", itemId: "{8036EE42-0C16-4C62-8489-F998F0D468DB}" }
+        - { name: "Materials Recovery Facility", itemId: "{1F03C816-5CF5-4A9C-B855-268080CD6A7A}" }
+        - { name: "News and Events", itemId: "{9FA5B89D-DA4E-42B5-B236-4A24EA794368}" }
+        - { name: "Pay My Bill", itemId: "{55A13127-3885-48F3-8E28-3E7B8AFB8648}" }
+        - { name: "Recycling Legislation", itemId: "{688A888C-5BFD-497D-904D-2681FB6F94CB}" }
+        - { name: "Request Debris Box", itemId: "{6A87F0B6-9526-4430-BEA4-56B7BBC4E9D3}" }
+        - { name: "Residential Rates", itemId: "{6CAB2F8D-C833-4420-9044-41D43E0B70E4}" }
+        - { name: "Sorting Guides and Resources", itemId: "{A60F3D71-9B92-4689-BBDA-07EB8AC482B1}" }
+        - { name: "Street Sweeping", itemId: "{B93EF20E-19EC-49E1-8732-0058145B9DA4}" }
+        - { name: "What Bin", itemId: "{DF467DD5-D1E2-41F7-9DF8-8B6F952B7555}" }
+    verification:
+      checkedAt: "2026-10-25T14:05:00Z"
+      passed:
+        - "Branch $name has 13 Page children + Cart Rates + Additional Services"
+        - "Residential Rates Final layout includes RatesCartsDetail (Default variant)"
+        - "RatesHeading default set on branch LocationItem root"
+        - "New Region listed in Home/Location insert options via list_avail_insertopts"
+        - "3 sample Cart Rates under branch Cart Rates folder"
+        - "3 sample Additional Services under branch Additional Services folder"
+        - "$name CartRates + AdditionalServices multilists wired to samples"
+        - "Branch Residential Rates RatesCartsDetail datasource = $name"
+      failed: []
+      pendingManual:
+        - "Confirm __Masters on Cart Rates / Additional Services folders in Content Editor"
+        - "Publish Page Branches/New Region for authors to use in CM"
+        - "Optional: assign shared Page Design to non-rates branch pages"
+
+  - name: "RegionalFAQ"
+    kind: "list"
+    category: "Page Content"
+    status: "complete"
+    createdAt: "2026-10-25T15:00:00Z"
+    updatedAt: "2026-10-25T15:30:00Z"
+    siteName: "recology"
+    siteCollection: "recology"
+    notes: >
+      Region-aware FAQ: Global FAQ items referenced by Regional FAQ Configuration
+      (UseGlobal / AddRegionalInformation / Override / Exclude). Collection is the
+      component datasource. Edge-safe MultilistField ComponentQuery. Docs:
+      docs/ai/regional-faq.md
+    react:
+      filePath: "src/components/uiim/faq/RegionalFAQ.tsx"
+      propsPath: "src/components/uiim/faq/regional-faq.props.ts"
+      resolverPath: "src/components/uiim/faq/resolve-regional-faq.ts"
+      componentMapKey: "RegionalFAQ"
+      variants:
+        - "Default"
+      tests:
+        - "src/__tests__/uiim/faq/resolve-regional-faq.test.ts"
+        - "src/__tests__/uiim/faq/RegionalFAQ.test.tsx"
+    templates:
+      globalFaq:
+        path: "/sitecore/templates/Project/recology/Global FAQ"
+        itemId: "{C5B47B90-5428-415D-902B-2ED3C23AD0E6}"
+      regionalFaqConfiguration:
+        path: "/sitecore/templates/Project/recology/Regional FAQ Configuration"
+        itemId: "{3560F778-A1E2-4AB2-A562-0EC524EDE0A7}"
+      regionalFaqCollection:
+        path: "/sitecore/templates/Project/recology/Regional FAQ Collection"
+        itemId: "{DDE2369B-E743-4ED3-AD27-C5A120A60484}"
+      globalFaqFolder:
+        path: "/sitecore/templates/Project/recology/Global FAQ Folder"
+        itemId: "{FF38316F-FB12-4035-9BC5-16471862CA69}"
+      regionalFaqCollectionFolder:
+        path: "/sitecore/templates/Project/recology/Regional FAQ Collection Folder"
+        itemId: "{440E1E1B-E6B0-4771-9B6A-77328941F140}"
+      renderingParams:
+        path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/Rendering Parameters/RegionalFAQ"
+        itemId: "{F06D399F-DBB8-48BE-9CD7-CDB345D7C840}"
+    rendering:
+      name: "RegionalFAQ"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/RegionalFAQ"
+      itemId: "{4A6D97FA-CA24-4A30-BA70-634D01D1D78F}"
+      componentName: "RegionalFAQ"
+      datasourceTemplatePath: "/sitecore/templates/Project/recology/Regional FAQ Collection"
+      registeredInAvailableRenderings: true
+      availableRenderingsItemId: "{EAFD8A27-6723-4972-AF51-3E0632B679A1}"
+    variants:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/RegionalFAQ"
+      containerItemId: "{A28EA5DF-FCC9-4E6E-82E1-E65F2C00D761}"
+      items:
+        - { name: "Default", itemId: "{0A937A63-83B5-47C5-85FA-47CFC3D6564E}" }
+    content:
+      globalFaqsFolderId: "{0670C7FC-362D-42A7-8281-3631BA4B323E}"
+      collectionsFolderId: "{74DD250B-C16F-4153-84B4-468EE3EA1B14}"
+      behaviorsFolderId: "{8906AD14-467D-4B71-9652-264E00408F59}"
+      categoriesFolderId: "{9266A4C6-6519-4363-86D3-B44576B390AF}"
+      sampleCollections:
+        - { name: "Recology American Canyon", itemId: "{018FA916-1AB6-4B96-8789-D1CD3158EB24}" }
+        - { name: "Global Shared", itemId: "{30034315-1EAD-4D58-B83B-37CD3E36E965}" }
+        - { name: "San Francisco", itemId: "{AAF7CE7B-8940-40F3-BC06-818333FF8BE7}" }
+        - { name: "Portland", itemId: "{56AD454E-E277-4102-A854-9C003D6FCAFF}" }
+        - { name: "Seattle", itemId: "{71C42741-F370-4EE0-86FE-B3051F09C319}" }
+        - { name: "Example Non-Applicable Region", itemId: "{73AAFF3B-07AC-4BFF-8CE6-8067E514CF0E}" }
+      missedPickupGlobalFaqId: "{16D38C3F-F9F2-4A17-857A-2A05B2D19291}"
+      americanCanyonLocationId: "{F013BB48-B6CD-4824-8CD9-C69EEC056724}"
+      americanCanyonFaqPageId: "{35A9251B-A9DE-42F8-86FC-D081FF1473EA}"
+      globalFaqPageId: "{35B4A27E-6ACD-4167-9D97-D389DBCD2357}"
+    verification:
+      checkedAt: "2026-10-25T15:55:00Z"
+      passed:
+        - "Templates Global FAQ / Configuration / Collection created under Project/recology"
+        - "7 global FAQ sample items + 4 behavior options + 6 categories"
+        - "SF AddRegionalInformation, Portland Override, Seattle UseGlobal, Exclude demo"
+        - "Recology American Canyon collection with all four behaviors + Region → LocationItem"
+        - "Global Shared collection (all UseGlobal) for Home/FAQ"
+        - "FAQ page under Location/Recology American Canyon with RegionalFAQ datasource"
+        - "Home/FAQ updated intro + RegionalFAQ → Global Shared"
+        - "JSON Rendering RegionalFAQ with MultilistField ComponentQuery"
+        - "Registered on Available Renderings/Page Content"
+        - "React RegionalFAQ + pure resolver + docs/ai/regional-faq.md"
+      failed: []
+      pendingManual:
+        - "Confirm __Standard values links on FAQ templates in Content Editor"
+        - "Confirm __Masters insert options on Global FAQs / Regional FAQ Collections folders"
+        - "Publish FAQ templates, content, rendering, variants, and FAQ pages to Edge"
+        - "Optional: delete unused local datasources created by add_component under page Data folders"
