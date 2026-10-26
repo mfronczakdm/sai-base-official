@@ -1,10 +1,10 @@
 {
-  "name": "kit-nextjs-product-starter",
-  "description": "Application utilizing Sitecore JavaScript Services and Next.js",
+  "name": "recology",
+  "description": "Recology XM Cloud front-end (Sitecore Content SDK + Next.js)",
   "version": "1.0.0",
   "private": true,
   "config": {
-    "appName": "kit-nextjs-product-starter",
+    "appName": "recology",
     "graphQLEndpointPath": "/sitecore/api/graph/edge",
     "language": "en",
     "template": "nextjs"
