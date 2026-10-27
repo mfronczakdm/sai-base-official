@@ -317,21 +317,25 @@ const recologyMainNavClass = [
   '[&_span]:text-sm [&_span]:font-normal [&_span]:text-foreground',
 ].join(' ');
 
-const recologyLocationNavClass = [
-  'min-w-0 flex-1',
-  '[&_ul]:flex [&_ul]:flex-row [&_ul]:flex-wrap [&_ul]:items-center',
-  '[&_li]:w-auto [&_li]:basis-auto',
-  '[&_a]:px-3 [&_a]:py-2 [&_a]:text-xs [&_a]:font-bold [&_a]:uppercase [&_a]:tracking-wide [&_a]:text-foreground',
-  '[&_button]:px-3 [&_button]:py-2 [&_button]:text-xs [&_button]:font-bold [&_button]:uppercase [&_button]:tracking-wide [&_button]:text-foreground',
-  '[&_span]:text-xs [&_span]:font-bold [&_span]:uppercase [&_span]:tracking-wide [&_span]:text-foreground',
-].join(' ');
+const recologyLocationNavClass = 'min-w-0 flex-1';
+
+const locationRootFromSupportLink = (
+  supportLink?: { value?: { id?: string; href?: string; text?: string } }
+): string | undefined => {
+  const id = supportLink?.value?.id?.replace(/[{}]/g, '').trim();
+  if (id) return id;
+  // Fall back to site-relative path when id is missing (still resolves via Edge path).
+  const href = supportLink?.value?.href?.trim();
+  if (href?.startsWith('/') && href.length > 1) return href;
+  return undefined;
+};
 
 const HeaderSearchForm = ({
   searchLink,
 }: {
   searchLink?: { value?: { href?: string; text?: string } };
 }) => {
-  const action = searchLink?.value?.href || '/';
+  const action = searchLink?.value?.href || '/Search';
   const label = searchLink?.value?.text || 'Search';
 
   return (
@@ -362,6 +366,8 @@ const HeaderSTRecologyView = ({
   const placeholderId = props.params?.DynamicPlaceholderId || '1';
   const mainPlaceholder = `header-navigation-${placeholderId}`;
   const routeItemId = props.page?.layout?.sitecore?.route?.itemId;
+  // Prefer SupportLink target (LocationItem) so dropdowns resolve even from nested pages.
+  const locationNavItemId = locationRootFromSupportLink(supportLink) || routeItemId;
   const language = props.page?.locale || 'en';
   const isEditing = Boolean(props.page?.mode?.isEditing);
 
@@ -418,7 +424,11 @@ const HeaderSTRecologyView = ({
                 />
                 {showLocationNav ? (
                   <li className="border-t border-border pt-2">
-                    <LocationRegionalNav itemId={routeItemId} language={language} className="flex-col items-stretch" />
+                    <LocationRegionalNav
+                      itemId={locationNavItemId}
+                      language={language}
+                      stacked
+                    />
                   </li>
                 ) : null}
               </ul>
@@ -429,21 +439,15 @@ const HeaderSTRecologyView = ({
       </div>
 
       {showLocationNav ? (
-        <div className="border-b border-border bg-background">
-          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-6">
-            <Truck className="size-8 shrink-0 text-primary" aria-hidden data-testid="truck-icon" />
-            {supportLink?.value?.text || supportLink?.value?.href ? (
-              <ContentSdkLink
-                field={supportLink}
-                prefetch={false}
-                className="shrink-0 text-sm font-bold uppercase tracking-wide text-primary"
-              />
-            ) : null}
+        <div className="relative z-50 border-b border-border bg-background">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-1 lg:gap-3 lg:px-6">
+            <Truck className="size-9 shrink-0 text-primary" aria-hidden data-testid="truck-icon" />
             <nav className={recologyLocationNavClass} aria-label="Location">
-              <LocationRegionalNav itemId={routeItemId} language={language} />
-              {isEditing && !routeItemId ? (
+              <LocationRegionalNav itemId={locationNavItemId} language={language} />
+              {isEditing && !locationNavItemId ? (
                 <p className="px-3 py-2 text-xs text-muted-foreground">
-                  Location nav loads from LocationItem children on published location pages.
+                  Set SupportLink to the LocationItem (e.g. Recology American Canyon) so regional
+                  dropdowns can load its child pages.
                 </p>
               ) : null}
             </nav>

@@ -69,6 +69,7 @@ import * as SearchBox from 'src/components/site-three/non-sitecore/SearchBox';
 import * as MiniCart from 'src/components/site-three/non-sitecore/MiniCart';
 import * as SiteMetadata from 'src/components/site-metadata/SiteMetadata';
 import * as SecondaryNavigation from 'src/components/secondary-navigation/SecondaryNavigation';
+import * as SearchResults from 'src/components/search-results/SearchResults';
 import * as SearchExperienceLoadMore from 'src/components/search-experience/SearchExperience.LoadMore';
 import * as SearchExperience from 'src/components/search-experience/SearchExperience';
 import * as UseSearchField from 'src/components/search-experience/search-components/useSearchField';
@@ -287,6 +288,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['MiniCart', { ...MiniCart, componentType: 'client' }],
   ['SiteMetadata', { ...SiteMetadata }],
   ['SecondaryNavigation', { ...SecondaryNavigation, componentType: 'client' }],
+  ['SearchResults', { ...SearchResults, componentType: 'client' }],
   ['SearchExperience', { ...SearchExperienceLoadMore, ...SearchExperience, componentType: 'client' }],
   ['useSearchField', { ...UseSearchField, componentType: 'client' }],
   ['useRouter', { ...UseRouter, componentType: 'client' }],

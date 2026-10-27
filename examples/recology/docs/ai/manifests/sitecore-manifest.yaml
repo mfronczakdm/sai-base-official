@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-26T20:00:00Z"
+lastUpdatedAt: "2026-10-26T21:30:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -14315,3 +14315,65 @@ externalImageOptimizerAudit:
         - "Optional: upload CartType.Image media and prefer over public/carts fallbacks"
         - "Publish rendering, variants, LocationItem template changes, and Your Cart pages to Edge"
         - "Optional: delete unused local Your_Cart datasources under page Data folders"
+
+  - name: "recology-search-results"
+    kind: "content"
+    category: "Search"
+    status: "complete"
+    createdAt: "2026-10-26T21:25:00Z"
+    updatedAt: "2026-10-27T10:25:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Coveo-inspired SearchResults with Q&A answers, keyword scoring, and expanded
+      Recology catalog (San Bruno + news articles). Natural-language queries like
+      "I am moving to San Bruno…" surface a Q&A panel plus linked pages. Article Page
+      template {D52B7D7A-D83E-473C-B16A-FAA9E23013F4} used for global and regional news.
+    pages:
+      - { name: "Search", itemId: "{AA30BA7E-8837-4854-9686-27251B1F3F88}", path: "/sitecore/content/recology/recology/Home/Search", route: "/Search", renderingInstanceId: "{496161D8-6E94-4B8B-8AEF-5F386B0E21FA}" }
+      - { name: "Recology San Bruno", itemId: "{576FDDF8-75AA-432D-A488-FE2EF395C69E}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno", route: "/Location/Recology-San-Bruno" }
+      - { name: "San Bruno Your Three Carts", itemId: "{79097DC2-184B-4D46-A9F2-94ACD3C66B94}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno/All Services/Your Three Carts" }
+      - { name: "San Bruno FAQ", itemId: "{7C8FE916-4B1B-4141-B694-5D34A5AC8D52}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno/Customer Service/FAQ" }
+    exampleItems:
+      - { name: "Search Results folder", itemId: "{2EEC2194-107D-4365-87D2-2E1DE2B35B2B}", path: "/sitecore/content/recology/recology/Data/Search Results" }
+      - { name: "Recology Website Search", itemId: "{01B862C2-9FB1-4B8F-8FC6-7ACDAB8C3CB9}", path: "/sitecore/content/recology/recology/Data/Search Results/Recology Website Search" }
+      - { name: "Page-local datasource", itemId: "{63651603-B3D2-422C-B5E7-596FEE65B200}", path: "/sitecore/content/recology/recology/Home/Search/Data/Recology_Website_Search" }
+      - { name: "Global HeaderST SearchLink", itemId: "{0760895E-0700-42C2-8007-C5DF9AD82D1B}" }
+      - { name: "American Canyon HeaderST SearchLink", itemId: "{69F710BF-FE89-4629-BE2F-3B2D43B28FDB}" }
+      - { name: "Moving to San Bruno article", itemId: "{3E8109DE-9024-42D7-B2C8-FEBDA402DB1E}", path: "/sitecore/content/recology/recology/Home/News/Moving to San Bruno Waste Management Options", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
+      - { name: "Three-Cart Relocate article", itemId: "{DA162659-3F48-4FCC-8CE0-5F1F87EABBE6}", path: "/sitecore/content/recology/recology/Home/News/Understanding Your Three Cart Options When You Relocate", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
+      - { name: "Welcome New San Bruno Residents", itemId: "{41D8BE71-0B4C-453C-8FF0-838755E074C1}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno/In My Community/News and Events/Welcome New San Bruno Residents", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
+      - { name: "Why Organics Belong in the Green Cart", itemId: "{59B9652E-9964-447A-B3AD-8038E65229CB}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
+    rendering:
+      name: "SearchResults"
+      path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/SearchResults"
+      itemId: "{52E7077F-A25C-4CF7-A317-57266E5BFA38}"
+      componentName: "SearchResults"
+    variants:
+      containerPath: "/sitecore/content/recology/recology/Presentation/Headless Variants/SearchResults"
+      containerItemId: "{1DDDB3C2-2841-43A6-AA54-6C6774B5B09B}"
+      items:
+        - { name: "Default", itemId: "{32BF4288-69B9-4B7F-85DD-02AF97EE8400}" }
+    codeChanges:
+      - "src/components/search-results/SearchResults.tsx"
+      - "src/components/search-results/search-results.props.ts"
+      - "src/lib/search-packs/recology.ts"
+      - "src/lib/search-packs/search.ts"
+      - "src/lib/search-packs/index.ts"
+      - "src/lib/search-packs/types.ts"
+      - "src/__tests__/search-results/SearchResults.test.tsx"
+      - "src/__tests__/lib/search-packs.test.ts"
+    verification:
+      checkedAt: "2026-10-27T10:25:00Z"
+      passed:
+        - "Search page created with SearchResults on headless-main"
+        - "Headless Variants SearchResults/Default"
+        - "HeaderST SearchLink → Search on Global + American Canyon"
+        - "Created Recology San Bruno LocationItem + service/FAQ/news tree"
+        - "Created Article Page news (global News + San Bruno + American Canyon regional)"
+        - "Q&A + keyword scoring for NL queries (San Bruno moving example)"
+      failed: []
+      pendingManual:
+        - "Publish Search page, San Bruno tree, Article Pages, and HeaderST items for Edge"
+        - "Open /Search?q=I%20am%20moving%20to%20San%20Bruno%20area.%20What%20are%20my%20options%20for%20waste%20management"
+        - "Optional: wire Regional HeaderST for San Bruno like American Canyon"

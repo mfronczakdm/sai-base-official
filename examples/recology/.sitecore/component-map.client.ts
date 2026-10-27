@@ -41,6 +41,7 @@ import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
 import * as SearchBox from 'src/components/site-three/non-sitecore/SearchBox';
 import * as MiniCart from 'src/components/site-three/non-sitecore/MiniCart';
 import * as SecondaryNavigation from 'src/components/secondary-navigation/SecondaryNavigation';
+import * as SearchResults from 'src/components/search-results/SearchResults';
 import * as SearchExperienceLoadMore from 'src/components/search-experience/SearchExperience.LoadMore';
 import * as SearchExperience from 'src/components/search-experience/SearchExperience';
 import * as UseSearchField from 'src/components/search-experience/search-components/useSearchField';
@@ -167,6 +168,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['SearchBox', { ...SearchBox }],
   ['MiniCart', { ...MiniCart }],
   ['SecondaryNavigation', { ...SecondaryNavigation }],
+  ['SearchResults', { ...SearchResults }],
   ['SearchExperience', { ...SearchExperienceLoadMore, ...SearchExperience }],
   ['useSearchField', { ...UseSearchField }],
   ['useRouter', { ...UseRouter }],
