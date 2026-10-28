@@ -61,6 +61,7 @@ import * as LocationRegionalNav from 'src/components/site-three/LocationRegional
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as ImageBanner from 'src/components/site-three/ImageBanner';
 import * as HeroST from 'src/components/site-three/HeroST';
+import * as HeroStutils from 'src/components/site-three/hero-st.utils';
 import * as HeaderST from 'src/components/site-three/HeaderST';
 import * as FooterST from 'src/components/site-three/FooterST';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
@@ -280,6 +281,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ImageCarousel', { ...ImageCarousel, componentType: 'client' }],
   ['ImageBanner', { ...ImageBanner }],
   ['HeroST', { ...HeroST, componentType: 'client' }],
+  ['hero-st', { ...HeroStutils }],
   ['HeaderST', { ...HeaderST, componentType: 'client' }],
   ['FooterST', { ...FooterST }],
   ['FeatureBanner', { ...FeatureBanner, componentType: 'client' }],

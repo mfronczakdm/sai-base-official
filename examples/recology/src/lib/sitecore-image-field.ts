@@ -34,7 +34,8 @@ export const extractImageSrc = (field: SitecoreImageGraphField): string => {
 
 export const extractImageAlt = (field: SitecoreImageGraphField, fallback = ''): string => {
   const resolved = resolveImageFieldValue(field);
-  return (resolved?.alt && String(resolved.alt)) || fallback;
+  const alt = resolved?.alt;
+  return typeof alt === 'string' && alt.length > 0 ? alt : fallback;
 };
 
 export const resolveImageFieldValue = (
@@ -43,8 +44,14 @@ export const resolveImageFieldValue = (
   if (!field) return undefined;
 
   const asJson = getFieldValue(field as CompatibleField<ImageField>);
-  const jsonValue = asJson?.value;
-  if (jsonValue && typeof jsonValue === 'object' && typeof jsonValue.src === 'string' && jsonValue.src) {
+  // GraphQL may put DAM XML in value; SDK ImageField.value is object-only at the type level.
+  const jsonValue = asJson?.value as ImageField['value'] | string | undefined;
+  if (
+    jsonValue &&
+    typeof jsonValue === 'object' &&
+    typeof jsonValue.src === 'string' &&
+    jsonValue.src
+  ) {
     return jsonValue;
   }
   if (typeof jsonValue === 'string' && jsonValue.includes('<')) {

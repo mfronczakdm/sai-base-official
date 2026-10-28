@@ -8,14 +8,17 @@ import {
 } from '@sitecore-content-sdk/nextjs';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import type { PageHeaderSTProps } from './hero-st.props';
+import { hasHeroHeight, heroHeightStyle } from './hero-st.utils';
 
 export const Default = (props: PageHeaderSTProps) => {
   const { containerRef, rightOffset } = useContainerOffsets();
   const fields = getDatasource(props.fields);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
     >
       <div className="absolute inset-0 z-10">
@@ -28,8 +31,12 @@ export const Default = (props: PageHeaderSTProps) => {
           className="w-full h-full object-cover"
         />
       </div>
-        <div className="relative lg:container w-full lg:flex mx-auto z-20" ref={containerRef}>
-        <div className="flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 lg:min-h-[50rem] px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)]">
+        <div className="relative lg:container w-full lg:flex mx-auto z-20 h-full" ref={containerRef}>
+        <div
+          className={`flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)] ${
+            customHeight ? 'lg:min-h-full' : 'lg:min-h-[50rem]'
+          }`}
+        >
           <div className="lg:max-w-3xl">
             <h1 className="text-primary text-xl lg:text-3xl pb-4 uppercase">
               <ContentSdkText field={getFieldValue(fields?.Eyebrow)} />
@@ -72,10 +79,12 @@ export const Default = (props: PageHeaderSTProps) => {
 export const Right = (props: PageHeaderSTProps) => {
   const { containerRef, leftOffset } = useContainerOffsets();
   const fields = getDatasource(props.fields);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
     >
       <div className="absolute inset-0 z-10">
@@ -89,10 +98,14 @@ export const Right = (props: PageHeaderSTProps) => {
         />
       </div>
       <div
-        className="relative lg:container w-full lg:flex lg:flex-row-reverse mx-auto z-20"
+        className="relative lg:container w-full lg:flex lg:flex-row-reverse mx-auto z-20 h-full"
         ref={containerRef}
       >
-        <div className="flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 lg:min-h-[50rem] px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)]">
+        <div
+          className={`flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)] ${
+            customHeight ? 'lg:min-h-full' : 'lg:min-h-[50rem]'
+          }`}
+        >
           <div className="lg:max-w-3xl lg:ml-auto text-right">
             <h1 className="text-primary text-xl lg:text-3xl pb-4 uppercase">
               <ContentSdkText field={getFieldValue(fields?.Eyebrow)} />
@@ -133,10 +146,12 @@ export const Right = (props: PageHeaderSTProps) => {
 export const Centered = (props: PageHeaderSTProps) => {
   const { containerRef, rightOffset } = useContainerOffsets();
   const fields = getDatasource(props.fields);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
       className={`relative flex items-center border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
     >
       <div className="absolute inset-0 z-10">
@@ -149,8 +164,12 @@ export const Centered = (props: PageHeaderSTProps) => {
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="relative lg:container w-full lg:flex mx-auto z-20" ref={containerRef}>
-        <div className="lg:relative lg:left-1/6 flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 lg:min-h-[50rem] px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)]">
+      <div className="relative lg:container w-full lg:flex mx-auto z-20 h-full" ref={containerRef}>
+        <div
+          className={`lg:relative lg:left-1/6 flex flex-col justify-center mt-10 lg:mt-0 lg:w-2/3 px-4 py-8 lg:p-8 backdrop-blur-[20px] bg-[linear-gradient(136deg,_rgba(255,255,255,0.21)_2.61%,_rgba(255,255,255,0.42)_73.95%)] ${
+            customHeight ? 'lg:min-h-full' : 'lg:min-h-[50rem]'
+          }`}
+        >
           <div className="lg:max-w-3xl lg:mx-auto text-center">
             <h1 className="text-primary text-xl lg:text-3xl pb-4 uppercase">
               <ContentSdkText field={getFieldValue(fields?.Eyebrow)} />
@@ -190,13 +209,17 @@ export const Centered = (props: PageHeaderSTProps) => {
 
 export const SplitScreen = (props: PageHeaderSTProps) => {
   const fields = getDatasource(props.fields);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
       className={`relative bg-primary border-8 lg:border-16 border-background ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
     >
-      <div className="flex flex-col lg:flex-row lg:min-h-[50rem]">
+      <div
+        className={`flex flex-col lg:flex-row ${customHeight ? 'lg:min-h-full h-full' : 'lg:min-h-[50rem]'}`}
+      >
         <div className="p-8 lg:basis-full lg:self-center lg:p-14">
           <h1 className="text-xl lg:text-3xl pb-4 uppercase">
             <ContentSdkText field={getFieldValue(fields?.Eyebrow)} />
@@ -246,10 +269,14 @@ export const Version3 = (props: PageHeaderSTProps) => {
   const fields = getDatasource(props.fields);
   const link1 = getFieldValue(fields?.Link1);
   const link2 = getFieldValue(fields?.Link2);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
-      className={`relative flex min-h-[28rem] items-center justify-center lg:min-h-[38rem] ${props?.params?.styles || ''}`}
+      className={`relative flex items-center justify-center ${
+        customHeight ? '' : 'min-h-[28rem] lg:min-h-[38rem]'
+      } ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
       data-testid="hero-st-version3"
     >
@@ -292,10 +319,14 @@ export const Version3 = (props: PageHeaderSTProps) => {
 
 export const Stacked = (props: PageHeaderSTProps) => {
   const fields = getDatasource(props.fields);
+  const customHeight = hasHeroHeight(props.params);
 
   return (
     <section
-      className={`relative flex flex-col bg-primary lg:flex-row lg:items-center lg:min-h-[50rem] lg:bg-transparent ${props?.params?.styles || ''}`}
+      className={`relative flex flex-col bg-primary lg:flex-row lg:items-center lg:bg-transparent ${
+        customHeight ? '' : 'lg:min-h-[50rem]'
+      } ${props?.params?.styles || ''}`}
+      style={heroHeightStyle(props.params)}
       data-class-change
     >
       <div className="container px-4 mx-auto">

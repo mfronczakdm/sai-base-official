@@ -267,6 +267,15 @@ describe('HeroST', () => {
       expect(screen.getByRole('link', { name: 'Learn More' })).toBeInTheDocument();
     });
 
+    it('applies HeroHeight as viewport min-height and drops default rem mins', () => {
+      render(<HeroSTVersion3 {...mockProps} params={{ ...mockProps.params, HeroHeight: '40' }} />);
+
+      const section = screen.getByTestId('hero-st-version3');
+      expect(section.style.minHeight).toBe('40vh');
+      expect(section.className).not.toContain('min-h-[28rem]');
+      expect(section.className).not.toContain('lg:min-h-[38rem]');
+    });
+
     it('hides a link that has no destination', () => {
       render(
         <HeroSTVersion3
@@ -279,6 +288,16 @@ describe('HeroST', () => {
       );
 
       expect(screen.queryByRole('link', { name: 'Second' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('HeroHeight rendering param', () => {
+    it('sets section min-height on Default when HeroHeight is set', () => {
+      const { container } = render(
+        <HeroSTDefault {...mockProps} params={{ ...mockProps.params, HeroHeight: '35' }} />
+      );
+      const section = container.querySelector('section');
+      expect(section).toHaveStyle({ minHeight: '35vh' });
     });
   });
 

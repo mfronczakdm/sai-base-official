@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-28T11:15:00Z"
+lastUpdatedAt: "2026-10-28T12:55:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -14580,3 +14580,227 @@ externalImageOptimizerAudit:
         - "Place MultiPromo on Home; default = Audience Consideration"
         - "In Pages personalization: swap datasource by audience (UTM / customer / engagement / San Bruno)"
         - "Optional: recreate San Bruno LocationItem tree and retarget SB tiles to local FAQ/Carts pages"
+
+  - name: "recology-herost-heroheight"
+    kind: "component"
+    category: "HeroST"
+    status: "complete"
+    createdAt: "2026-10-28T12:05:00Z"
+    updatedAt: "2026-10-28T12:10:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      HeroST Parameters HeroHeight droplist (shared template) sources
+      query:$site/Presentation/Enumerations/HeroST/HeroHeight/*. Recology previously
+      had empty options so Pages showed Select option…. Enum values 25–70 map to
+      min-height Nvh in React (smaller viewport share so more page content is visible).
+      Melaleuca already had 10–100; Recology uses a compact set focused on shorter heroes.
+      React: hero-st.utils.ts + all HeroST variants honor params.HeroHeight.
+    enumerations:
+      folderId: "{4EDDE8A6-3DF2-4832-B962-AA8F6DC704D6}"
+      path: "/sitecore/content/recology/recology/Presentation/Enumerations/HeroST"
+      heroHeight:
+        folderId: "{F89A72BF-43A1-48D5-8EA6-BADDCBE490F0}"
+        values: ["25", "30", "35", "40", "45", "50", "60", "70"]
+        unit: "vh"
+    codeChanges:
+      - "src/components/site-three/hero-st.utils.ts"
+      - "src/components/site-three/HeroST.tsx"
+      - "src/__tests__/site-three/HeroST.test.tsx"
+      - "src/__tests__/site-three/hero-st.utils.test.ts"
+    verification:
+      checkedAt: "2026-10-28T12:10:00Z"
+      passed:
+        - "HeroHeight enum options 25–70 created under Recology"
+        - "HeroST variants apply minHeight from params.HeroHeight"
+      failed: []
+      pendingManual:
+        - "Hard-refresh Pages; Design → Hero height → try 35 or 40"
+        - "Publish Presentation/Enumerations/HeroST for Edge if needed"
+
+  - name: "recology-multipromo-colorbar"
+    kind: "component"
+    category: "MultiPromo"
+    status: "complete"
+    createdAt: "2026-10-28T12:15:00Z"
+    updatedAt: "2026-10-28T12:20:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      ColorBarCards + ColorBarCarousel variants (ported from ASHA pattern; user cited Melaleuca).
+      Recology theme color cycle: primary blue, secondary green, dark gray, brand red.
+      Cards include SimplePromo image above title/description; CTA bar matches title color.
+      ColorBarCarousel pages in groups of 3 with prev/next when item count > 3.
+    variants:
+      - { name: "ColorBarCards", itemId: "{23703FD5-BA30-4F31-903E-7DFBEDB44AC6}" }
+      - { name: "ColorBarCarousel", itemId: "{0A6BA1EB-55CC-4B0E-901A-02ABF9FAB0E1}" }
+    codeChanges:
+      - "src/components/site-three/MultiPromo.tsx"
+      - "src/components/site-three/multi-promo.props.ts"
+      - "src/__tests__/site-three/MultiPromo.test.tsx"
+    verification:
+      checkedAt: "2026-10-28T12:20:00Z"
+      passed:
+        - "Variant Definitions created under recology Headless Variants/MultiPromo"
+        - "Named exports ColorBarCards and ColorBarCarousel added"
+      failed: []
+      pendingManual:
+        - "In Pages, set MultiPromo variant to ColorBarCards or ColorBarCarousel"
+        - "Publish Headless Variants/MultiPromo for Edge"
+
+  - name: "recology-herost-segment-ac-sanbruno"
+    kind: "content"
+    category: "HeroST"
+    status: "complete"
+    createdAt: "2026-10-28T12:30:00Z"
+    updatedAt: "2026-10-28T12:45:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Segment HeroST datasources for Sitecore Personalization (datasource swap on HeroST).
+      Folders under Data/HeroST (HeroST Folder template). American Canyon CTAs use local
+      LocationItem pages; San Bruno CTAs use San Bruno news + global Pay/Contact/FAQ/Locations
+      because the San Bruno LocationItem tree is missing. Segments: Prospective New Mover,
+      New Customer First 90 Days, Established Resident, Business Multifamily, Contractor Debris Box.
+    folder:
+      name: "HeroST"
+      itemId: "{3EE6D7CC-0E3E-4567-B487-243042E42BD7}"
+      path: "/sitecore/content/recology/recology/Data/HeroST"
+    items:
+      - name: "American Canyon"
+        itemId: "{BF228DB9-99F2-436D-A50F-7C4D68FD4C0F}"
+        path: "/sitecore/content/recology/recology/Data/HeroST/American Canyon"
+        templateId: "{91F1954F-86D9-4859-9885-3E42E8D8A2A9}"
+        children:
+          - { name: "Prospective New Mover", itemId: "{905F707D-F951-4571-9008-10AD3DF1D499}", title: "Starting Service in American Canyon" }
+          - { name: "New Customer First 90 Days", itemId: "{D05A8C74-239E-44DB-9C88-D084A24AB520}", title: "Your First Weeks with Recology" }
+          - { name: "Established Resident", itemId: "{5A37F83F-F564-4647-90D6-322E51EBA043}", title: "Manage Your American Canyon Service" }
+          - { name: "Business Multifamily", itemId: "{B151C865-BEE8-4A4E-84A4-859C91B87E83}", title: "Commercial & Multifamily Solutions" }
+          - { name: "Contractor Debris Box", itemId: "{5FE1E548-60B7-44CC-876B-7F8B75A6C699}", title: "Order a Debris Box Fast" }
+      - name: "San Bruno"
+        itemId: "{A5D5EA79-766E-4002-91CA-8EDA0FE733D5}"
+        path: "/sitecore/content/recology/recology/Data/HeroST/San Bruno"
+        templateId: "{91F1954F-86D9-4859-9885-3E42E8D8A2A9}"
+        children:
+          - { name: "Prospective New Mover", itemId: "{E7966CA0-BAD0-4ED4-BD55-C5081DCE2D48}", title: "Starting Service in San Bruno" }
+          - { name: "New Customer First 90 Days", itemId: "{A8F0D72A-98FC-4B57-8B32-B25FFC40AFA1}", title: "Your First Weeks in San Bruno" }
+          - { name: "Established Resident", itemId: "{9D4D5E3F-576B-4C9F-BB78-594F0CA94021}", title: "Manage Your San Bruno Service" }
+          - { name: "Business Multifamily", itemId: "{0EF6A830-B104-456D-95E9-EED95FFC6B81}", title: "Commercial & Multifamily in San Bruno" }
+          - { name: "Contractor Debris Box", itemId: "{682060D4-1CCC-4B65-BD81-D4441E822188}", title: "Debris Boxes for San Bruno Jobs" }
+    verification:
+      checkedAt: "2026-10-28T12:45:00Z"
+      passed:
+        - "American Canyon + San Bruno HeroST Folders exist"
+        - "10 HeroST datasources created with Title/Eyebrow/Image1/Link1/Link2"
+      failed: []
+      pendingManual:
+        - "Publish Data/HeroST/American Canyon and Data/HeroST/San Bruno for Edge"
+        - "In Pages personalization: swap HeroST datasource by segment (UTM / new visitor / start-service / portal / commercial / debris UTM)"
+        - "Optional: recreate San Bruno LocationItem tree and retarget SB hero CTAs to local pages"
+
+  - name: "recology-multipromo-segment-ac-sanbruno"
+    kind: "content"
+    category: "MultiPromo"
+    status: "complete"
+    createdAt: "2026-10-28T12:50:00Z"
+    updatedAt: "2026-10-28T12:55:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Segment MultiPromos aligned with HeroST personalization segments (Prospective New Mover,
+      New Customer First 90 Days, Established Resident, Business Multifamily, Contractor).
+      5 MultiPromo parents × 3 SimplePromo children per location. American Canyon tiles link
+      to local LocationItem pages; San Bruno tiles use news + global Pay/Contact/FAQ/Locations
+      until the San Bruno LocationItem tree is restored. Existing Consideration/Existing/
+      Needs Engagement SB MultiPromos and older AC MultiPromos left in place.
+    items:
+      - name: "American Canyon Prospective New Mover"
+        itemId: "{C2D11A72-BE9F-4642-87DC-9D85A2048683}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Prospective New Mover"
+        title: "New to American Canyon?"
+        children:
+          - { name: "Your Cart", itemId: "{7F8A6852-6873-44F5-9880-26BA3CFC8149}" }
+          - { name: "Residential Rates", itemId: "{C036EC3D-B449-484F-B027-E1962D5A2A4D}" }
+          - { name: "Contact Us to Start", itemId: "{ECBD5170-D892-47C0-B974-717AB0F3C71A}" }
+      - name: "American Canyon New Customer"
+        itemId: "{52315B8A-EA05-4939-B646-4D6C9C488FAF}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon New Customer"
+        title: "Your First 90 Days"
+        children:
+          - { name: "What Bin", itemId: "{23E6AD6D-0D57-493D-A566-78A6C3C7DA22}" }
+          - { name: "Sorting Guides", itemId: "{9C1E9827-27BD-4E37-B81C-89ED3E8DE981}" }
+          - { name: "Local FAQ", itemId: "{F33F5C05-0464-4D89-9BE8-E82854290F7A}" }
+      - name: "American Canyon Established Resident"
+        itemId: "{2B7001EB-BA44-4F19-A973-F94C165C63E9}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Established Resident"
+        title: "American Canyon Customer Shortcuts"
+        children:
+          - { name: "Pay My Bill", itemId: "{451CC016-2330-420B-9A65-2BF2D02EFA79}" }
+          - { name: "Holiday and Bulky FAQ", itemId: "{2DC7717C-FCF7-4B20-AA84-11972BDEC509}" }
+          - { name: "Contact Customer Service", itemId: "{61A25945-4CBB-4011-AD3B-DC6AE8973480}" }
+      - name: "American Canyon Business Multifamily"
+        itemId: "{07CF1B4F-6653-43A6-9D5F-F557878E621C}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Business Multifamily"
+        title: "Business & Multifamily"
+        children:
+          - { name: "Business Services", itemId: "{21340DFA-C562-423C-B3F0-67187A48FC0F}" }
+          - { name: "Commercial Rates", itemId: "{1FC0A5BB-37BB-4338-999A-3445641E0A82}" }
+          - { name: "Talk to Commercial Service", itemId: "{53FFCC70-A842-41AC-98BF-407B0BE6A5FE}" }
+      - name: "American Canyon Contractor"
+        itemId: "{9E12B5D6-61C7-4304-910B-BF978A2E4CC8}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Contractor"
+        title: "Debris Boxes for Job Sites"
+        children:
+          - { name: "Request Debris Box", itemId: "{9F9E3DF8-B40B-4E54-9375-7007831F70A1}" }
+          - { name: "Call Customer Service", itemId: "{9AB3F06D-2DA5-4FB0-9404-0818CA8C8731}" }
+          - { name: "Business Services", itemId: "{0CB5C028-74DD-4D63-BB49-BD17094D4488}" }
+      - name: "San Bruno Prospective New Mover"
+        itemId: "{F0A7AA1C-1ED0-49AC-B475-CA29619D262D}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno/San Bruno Prospective New Mover"
+        title: "New to San Bruno?"
+        children:
+          - { name: "Moving to San Bruno", itemId: "{CE14C260-FCA2-40D2-8FC4-7DA47F9BA533}" }
+          - { name: "Three Cart Options", itemId: "{35B4D496-AF6F-4836-8CE8-9145465A1B72}" }
+          - { name: "Contact Us to Start", itemId: "{1531EDE6-B8ED-4C78-A4A6-E8B1B786AF79}" }
+      - name: "San Bruno New Customer"
+        itemId: "{1B3A2E9F-3660-4C3F-B1E0-B25750A75B77}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno/San Bruno New Customer"
+        title: "Your First 90 Days in San Bruno"
+        children:
+          - { name: "Three Cart Guide", itemId: "{4F8EFD26-845E-48C8-9E8B-A58861E02F76}" }
+          - { name: "FAQ and Holidays", itemId: "{A48EFD01-A3E0-428C-A661-9C4A9570A38A}" }
+          - { name: "Contact Customer Service", itemId: "{EAAC7189-D71F-4178-9C5C-98CD173C5E88}" }
+      - name: "San Bruno Established Resident"
+        itemId: "{FBC36A00-E493-4B62-B9A8-FF2E61B981CC}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno/San Bruno Established Resident"
+        title: "San Bruno Customer Shortcuts"
+        children:
+          - { name: "Pay My Bill", itemId: "{42A638D8-55A8-4C0C-834C-44FBA6C6304C}" }
+          - { name: "Service FAQ", itemId: "{049A98C8-6AA0-472C-A9EC-325B474A809D}" }
+          - { name: "Contact Customer Service", itemId: "{55E0C9AF-CCD6-4AEF-B600-C6FE4AFD9B4D}" }
+      - name: "San Bruno Business Multifamily"
+        itemId: "{E49E2CE8-1768-4CF2-8C3B-1D234AA85E91}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno/San Bruno Business Multifamily"
+        title: "Business & Multifamily in San Bruno"
+        children:
+          - { name: "Find San Bruno Service", itemId: "{CB30C0CE-08AA-49DC-87F9-262B60049BE7}" }
+          - { name: "Talk to Commercial Service", itemId: "{A1303A05-8C3A-4372-AEDD-17AD78583D15}" }
+          - { name: "San Bruno Service Overview", itemId: "{FB280828-D88F-4EA2-BDCE-4716BDB589D0}" }
+      - name: "San Bruno Contractor"
+        itemId: "{8423CF8A-DCC2-4CDD-A8B5-6CD4257D11A9}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno/San Bruno Contractor"
+        title: "Debris Boxes for San Bruno Jobs"
+        children:
+          - { name: "Order via Customer Service", itemId: "{35952726-4D14-450D-B6C0-587F33A2151F}" }
+          - { name: "Confirm Service Area", itemId: "{63A2D396-09F4-40F7-98D1-88249A306C1B}" }
+          - { name: "Service FAQ", itemId: "{C3679E2A-0F9D-4DDC-8430-CAD03BC033D6}" }
+    verification:
+      checkedAt: "2026-10-28T12:55:00Z"
+      passed:
+        - "10 MultiPromo parents created (5 AC + 5 SB)"
+        - "30 SimplePromo children created (3 per parent)"
+      failed: []
+      pendingManual:
+        - "Publish Data/MultiPromos/American Canyon and Data/MultiPromos/San Bruno for Edge"
+        - "In Pages personalization: swap MultiPromo datasource by same segment rules as HeroST"
+        - "Optional: retarget SB tiles to local pages once San Bruno LocationItem tree is restored"

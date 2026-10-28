@@ -6,6 +6,8 @@ import {
   Stacked as MultiPromoStacked,
   SingleColumn as MultiPromoSingleColumn,
   FlexColumn as MultiPromoFlexColumn,
+  ColorBarCards as MultiPromoColorBarCards,
+  ColorBarCarousel as MultiPromoColorBarCarousel,
 } from '@/components/site-three/MultiPromo';
 
 // Mock Sitecore SDK
@@ -20,6 +22,11 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       {children || field?.value?.text || ''}
     </a>
   ),
+}));
+
+jest.mock('lucide-react', () => ({
+  ChevronLeft: (props: any) => <svg data-testid="chevron-left" {...props} />,
+  ChevronRight: (props: any) => <svg data-testid="chevron-right" {...props} />,
 }));
 
 // Mock NoDataFallback
@@ -425,6 +432,75 @@ describe('MultiPromo', () => {
       const emptyProps = { params: {}, fields: undefined } as any;
       render(<MultiPromoFlexColumn {...emptyProps} />);
       expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    });
+  });
+
+  describe('ColorBarCards variant', () => {
+    it('renders image, title, description, and colored CTA', () => {
+      render(<MultiPromoColorBarCards {...mockProps} />);
+      expect(screen.getByTestId('multipromo-colorbar-cards')).toBeInTheDocument();
+      expect(screen.getAllByTestId('multipromo-colorbar-card')).toHaveLength(2);
+      expect(screen.getAllByRole('img')).toHaveLength(2);
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
+      expect(screen.getByText('Description 1')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'View Product 1' })).toHaveAttribute(
+        'href',
+        '/product1'
+      );
+    });
+  });
+
+  describe('ColorBarCarousel variant', () => {
+    const fourItemProps = {
+      ...mockProps,
+      fields: {
+        data: {
+          datasource: {
+            ...mockProps.fields.data.datasource,
+            children: {
+              results: [
+                ...mockProps.fields.data.datasource.children.results,
+                {
+                  id: 'promo-3',
+                  heading: { jsonValue: { value: 'Product 3' } },
+                  description: { jsonValue: { value: 'Description 3' } },
+                  image: {
+                    jsonValue: { value: { src: '/images/product3.jpg', alt: 'Product 3' } },
+                  },
+                  link: {
+                    jsonValue: { value: { href: '/product3', text: 'View Product 3' } },
+                  },
+                },
+                {
+                  id: 'promo-4',
+                  heading: { jsonValue: { value: 'Product 4' } },
+                  description: { jsonValue: { value: 'Description 4' } },
+                  image: {
+                    jsonValue: { value: { src: '/images/product4.jpg', alt: 'Product 4' } },
+                  },
+                  link: {
+                    jsonValue: { value: { href: '/product4', text: 'View Product 4' } },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    it('shows carousel controls when there are more than three cards', () => {
+      render(<MultiPromoColorBarCarousel {...fourItemProps} />);
+      expect(screen.getByTestId('multipromo-colorbar-carousel')).toBeInTheDocument();
+      expect(screen.getByTestId('multipromo-colorbar-track')).toBeInTheDocument();
+      expect(screen.getByTestId('multipromo-colorbar-next')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
+    });
+
+    it('falls back to a static grid when three or fewer cards', () => {
+      render(<MultiPromoColorBarCarousel {...mockProps} />);
+      expect(screen.getByTestId('multipromo-colorbar-grid')).toBeInTheDocument();
+      expect(screen.queryByTestId('multipromo-colorbar-track')).not.toBeInTheDocument();
     });
   });
 });
