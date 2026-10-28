@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { LocationRegionalNav } from '../../components/site-three/LocationRegionalNav';
+import { LocationRegionalNav, clearLocationNavMemoryCache } from '../../components/site-three/LocationRegionalNav';
 
 jest.mock('lucide-react', () => ({
   ChevronDown: (props: any) => <svg data-testid="chevron-down" {...props} />,
@@ -47,6 +47,8 @@ describe('LocationRegionalNav', () => {
   beforeEach(() => {
     jest.resetAllMocks();
     global.fetch = jest.fn();
+    window.sessionStorage.clear();
+    clearLocationNavMemoryCache();
   });
 
   it('renders nothing while empty or without itemId', () => {
@@ -82,5 +84,31 @@ describe('LocationRegionalNav', () => {
       '/Location/Recology-American-Canyon/Helpful-Resources/Sorting-Guides-and-Resources'
     );
     expect(screen.getByRole('menuitem', { name: 'What Bin' })).toBeInTheDocument();
+  });
+
+  it('shows the stored menu on the next page without fetching again', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => mockNav,
+    });
+
+    const { unmount } = render(
+      <LocationRegionalNav itemId="f013bb48-b6cd-4824-8cd9-c69eec056724" />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-regional-nav')).toBeInTheDocument();
+    });
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    unmount();
+    clearLocationNavMemoryCache();
+    (global.fetch as jest.Mock).mockClear();
+
+    render(<LocationRegionalNav itemId="f013bb48-b6cd-4824-8cd9-c69eec056724" />);
+
+    expect(screen.getByRole('button', { name: /Customer Service/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Helpful Resources/i })).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });

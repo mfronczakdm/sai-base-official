@@ -53,11 +53,13 @@ import * as SignupBanner from 'src/components/site-three/SignupBanner';
 import * as ProductPageHeader from 'src/components/site-three/ProductPageHeader';
 import * as ProductComparison from 'src/components/site-three/ProductComparison';
 import * as PageHeaderST from 'src/components/site-three/PageHeaderST';
+import * as MyRecologyMenu from 'src/components/site-three/MyRecologyMenu';
 import * as MultiPromo from 'src/components/site-three/MultiPromo';
 import * as MobileMenuWrapper from 'src/components/site-three/MobileMenuWrapper';
 import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrapper';
 import * as MegaMenuItem from 'src/components/site-three/MegaMenuItem';
 import * as LocationRegionalNav from 'src/components/site-three/LocationRegionalNav';
+import * as LocationNavClient from 'src/components/site-three/location-nav-client';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as ImageBanner from 'src/components/site-three/ImageBanner';
 import * as HeroST from 'src/components/site-three/HeroST';
@@ -273,11 +275,13 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ProductPageHeader', { ...ProductPageHeader, componentType: 'client' }],
   ['ProductComparison', { ...ProductComparison, componentType: 'client' }],
   ['PageHeaderST', { ...PageHeaderST }],
+  ['MyRecologyMenu', { ...MyRecologyMenu, componentType: 'client' }],
   ['MultiPromo', { ...MultiPromo, componentType: 'client' }],
   ['MobileMenuWrapper', { ...MobileMenuWrapper, componentType: 'client' }],
   ['MegaMenuItemWrapper', { ...MegaMenuItemWrapper, componentType: 'client' }],
   ['MegaMenuItem', { ...MegaMenuItem }],
   ['LocationRegionalNav', { ...LocationRegionalNav, componentType: 'client' }],
+  ['location-nav-client', { ...LocationNavClient, componentType: 'client' }],
   ['ImageCarousel', { ...ImageCarousel, componentType: 'client' }],
   ['ImageBanner', { ...ImageBanner }],
   ['HeroST', { ...HeroST, componentType: 'client' }],

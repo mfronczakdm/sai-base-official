@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useToggleWithClickOutside } from '@/hooks/useToggleWithClickOutside';
-import type { LocationNavResult, LocationNavSection } from '@/lib/location-nav-from-edge';
+import type { LocationNavSection } from '@/lib/location-nav-from-edge';
 import { cn } from '@/lib/utils';
+import { clearLocationNavMemoryCache, useLocationNav } from './location-nav-client';
+
+export { clearLocationNavMemoryCache };
 
 type LocationRegionalNavProps = {
   /** Current page item id (walks up to LocationItem) or LocationItem id directly. */
@@ -121,30 +124,7 @@ export const LocationRegionalNav = ({
   className,
   stacked = false,
 }: LocationRegionalNavProps) => {
-  const [nav, setNav] = useState<LocationNavResult | null>(null);
-
-  useEffect(() => {
-    if (!itemId) {
-      setNav(null);
-      return;
-    }
-
-    let cancelled = false;
-    const params = new URLSearchParams({ itemId, language });
-
-    fetch(`/api/location-nav?${params.toString()}`)
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: LocationNavResult | null) => {
-        if (!cancelled) setNav(data);
-      })
-      .catch(() => {
-        if (!cancelled) setNav(null);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [itemId, language]);
+  const nav = useLocationNav(itemId, language);
 
   if (!nav?.sections?.length) {
     return null;

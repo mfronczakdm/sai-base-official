@@ -14,6 +14,8 @@ import { MiniCart } from './non-sitecore/MiniCart';
 import { SearchBox } from './non-sitecore/SearchBox';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
 import { LocationRegionalNav } from './LocationRegionalNav';
+import { MyRecologyMenu, regionalUtilityHref } from './MyRecologyMenu';
+import { useLocationNav } from './location-nav-client';
 import type { HeaderSTProps } from './header-st.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import { cn } from '@/lib/utils';
@@ -301,13 +303,6 @@ export const Version4 = (props: HeaderSTProps) => (
   </HeaderSTScrollFrame>
 );
 
-const recologyUtilityLinks = [
-  { href: '/Pay-My-Bill', label: 'Pay My Bill' },
-  { href: '/FAQ', label: 'FAQ' },
-  { href: '/Contact-Us', label: 'Contact Us' },
-  { href: '/Location', label: 'My Recology' },
-];
-
 const recologyMainNavClass = [
   'hidden min-w-0 flex-1 items-center lg:flex',
   '[&_ul]:flex [&_ul]:flex-row [&_ul]:items-center',
@@ -370,23 +365,40 @@ const HeaderSTRecologyView = ({
   const locationNavItemId = locationRootFromSupportLink(supportLink) || routeItemId;
   const language = props.page?.locale || 'en';
   const isEditing = Boolean(props.page?.mode?.isEditing);
+  const locationNav = useLocationNav(showLocationNav ? locationNavItemId : undefined, language);
+  const whatBinHref = regionalUtilityHref(locationNav, 'What Bin', '');
+  const utilityLinks = [
+    { href: regionalUtilityHref(locationNav, 'Pay My Bill', '/Pay-My-Bill'), label: 'Pay My Bill' },
+    { href: regionalUtilityHref(locationNav, 'FAQ', '/FAQ'), label: 'FAQ' },
+    ...(whatBinHref ? [{ href: whatBinHref, label: 'What Bin' }] : []),
+    { href: regionalUtilityHref(locationNav, 'Contact Us', '/Contact-Us'), label: 'Contact Us' },
+  ];
 
   return (
     <header
       className={cn(props.params?.styles, 'w-full bg-background text-foreground')}
       data-class-change
-      data-testid={showLocationNav ? 'header-st-regional' : 'header-st-version5'}
+      data-testid={showLocationNav ? 'header-st-regional' : 'header-st-recology-global'}
     >
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-7xl justify-end px-4 lg:px-6">
           <ul className="flex items-center">
-            {recologyUtilityLinks.map((link) => (
-              <li key={link.href}>
+            {utilityLinks.map((link) => (
+              <li key={link.label}>
                 <Link href={link.href} className="block px-3 py-2 text-sm text-primary-foreground" prefetch={false}>
                   {link.label}
                 </Link>
               </li>
             ))}
+            {showLocationNav && locationNav ? (
+              <MyRecologyMenu nav={locationNav} language={language} />
+            ) : (
+              <li>
+                <Link href="/Location" className="block px-3 py-2 text-sm text-primary-foreground" prefetch={false}>
+                  My Recology
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -458,7 +470,10 @@ const HeaderSTRecologyView = ({
   );
 };
 
-export const Version5 = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} />;
+/** Recology corporate header. Version5 remains an alias for pages still assigned to that name. */
+export const RecologyGlobal = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} />;
+
+export const Version5 = RecologyGlobal;
 
 /** Regional location header: utility + main nav + truck row with tree-driven dropdowns. */
 export const Regional = (props: HeaderSTProps) => <HeaderSTRecologyView {...props} showLocationNav />;

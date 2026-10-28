@@ -1,4 +1,4 @@
-import { fetchLocationNavFromEdge } from '@/lib/location-nav-from-edge';
+import { fetchLocationNavFromEdge, toSiteRelativeHref } from '@/lib/location-nav-from-edge';
 
 jest.mock('@/lib/sitecore-client', () => ({
   __esModule: true,
@@ -13,6 +13,19 @@ jest.mock('sitecore.config', () => ({
 }));
 
 const client = require('@/lib/sitecore-client').default;
+
+describe('toSiteRelativeHref', () => {
+  it('strips the Recology host so header links stay on this site', () => {
+    expect(
+      toSiteRelativeHref(
+        '//www.recology.com//Location/Recology-American-Canyon/Customer-Service/FAQ'
+      )
+    ).toBe('/Location/Recology-American-Canyon/Customer-Service/FAQ');
+    expect(toSiteRelativeHref('/Location/Recology-American-Canyon')).toBe(
+      '/Location/Recology-American-Canyon'
+    );
+  });
+});
 
 describe('fetchLocationNavFromEdge', () => {
   beforeEach(() => {
@@ -98,7 +111,9 @@ describe('fetchLocationNavFromEdge', () => {
     expect(nav?.locationLabel).toBe('Recology American Canyon');
     expect(nav?.sections).toHaveLength(2);
     expect(nav?.sections[0].title).toBe('Customer Service');
-    expect(nav?.sections[0].children[0].href).toContain('FAQ');
+    expect(nav?.sections[0].children[0].href).toBe(
+      '/Location/Recology-American-Canyon/Customer-Service/FAQ'
+    );
     expect(nav?.sections[1].title).toBe('All Services');
     expect(nav?.sections[1].children[0].title).toBe('Your Cart');
     expect(client.getData).toHaveBeenCalledTimes(4);

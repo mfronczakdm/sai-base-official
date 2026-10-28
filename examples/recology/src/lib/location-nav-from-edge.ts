@@ -73,8 +73,30 @@ const readTitle = (item: EdgeNavItem): string =>
     ''
   ).trim();
 
+/**
+ * Edge `url.path` is often host-qualified (`//www.recology.com//Location/...`).
+ * Regional header links must stay on this site (localhost or the Vercel host).
+ */
+export const toSiteRelativeHref = (raw?: string): string => {
+  const href = (raw || '').trim();
+  if (!href) return '';
+
+  let path = href;
+  if (href.startsWith('//') || /^https?:\/\//i.test(href)) {
+    try {
+      path = new URL(href.startsWith('//') ? `https:${href}` : href).pathname;
+    } catch {
+      path = href;
+    }
+  }
+
+  const normalized = path.replace(/\/{2,}/g, '/');
+  if (!normalized) return '';
+  return normalized.startsWith('/') ? normalized : `/${normalized}`;
+};
+
 const toLink = (item: EdgeNavItem): LocationNavLink | null => {
-  const href = item.url?.path?.trim();
+  const href = toSiteRelativeHref(item.url?.path);
   if (!href) return null;
   const title = readTitle(item);
   if (!title) return null;

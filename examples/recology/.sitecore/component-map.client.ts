@@ -29,10 +29,12 @@ import * as SlideCarouseldev from 'src/components/slide-carousel/SlideCarousel.d
 import * as TextSlider from 'src/components/site-three/TextSlider';
 import * as ProductPageHeader from 'src/components/site-three/ProductPageHeader';
 import * as ProductComparison from 'src/components/site-three/ProductComparison';
+import * as MyRecologyMenu from 'src/components/site-three/MyRecologyMenu';
 import * as MultiPromo from 'src/components/site-three/MultiPromo';
 import * as MobileMenuWrapper from 'src/components/site-three/MobileMenuWrapper';
 import * as MegaMenuItemWrapper from 'src/components/site-three/MegaMenuItemWrapper';
 import * as LocationRegionalNav from 'src/components/site-three/LocationRegionalNav';
+import * as LocationNavClient from 'src/components/site-three/location-nav-client';
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as HeaderST from 'src/components/site-three/HeaderST';
@@ -156,10 +158,12 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['TextSlider', { ...TextSlider }],
   ['ProductPageHeader', { ...ProductPageHeader }],
   ['ProductComparison', { ...ProductComparison }],
+  ['MyRecologyMenu', { ...MyRecologyMenu }],
   ['MultiPromo', { ...MultiPromo }],
   ['MobileMenuWrapper', { ...MobileMenuWrapper }],
   ['MegaMenuItemWrapper', { ...MegaMenuItemWrapper }],
   ['LocationRegionalNav', { ...LocationRegionalNav }],
+  ['location-nav-client', { ...LocationNavClient }],
   ['ImageCarousel', { ...ImageCarousel }],
   ['HeroST', { ...HeroST }],
   ['HeaderST', { ...HeaderST }],

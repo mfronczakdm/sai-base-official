@@ -9680,7 +9680,7 @@ ia:
     category: "Global Elements"
     status: "complete"
     createdAt: "2026-08-19T18:30:00Z"
-    updatedAt: "2026-10-24T23:40:00Z"
+    updatedAt: "2026-10-28T17:55:00Z"
 
     react:
       filePath: "src/components/site-three/HeaderST.tsx"
@@ -9693,6 +9693,7 @@ ia:
         - "Version3"
         - "Version4"
         - "Version5"
+        - "RecologyGlobal"
         - "Version6"
         - "Regional"
 
@@ -9801,6 +9802,7 @@ ia:
       containerId: "{A8FB6DF1-7D63-420D-86A9-D2DDCF4A50D8}"
       variants:
         - { name: "Version5", itemId: "{84360F32-FD87-48B6-91D1-DAB1063F40CF}" }
+        - { name: "RecologyGlobal", itemId: "{98F6AA8E-E170-47E4-8095-EBFCE1754569}" }
         - { name: "Version6", itemId: "{32188657-4A33-4C8C-B39D-1F26E33C9AF1}" }
         - { name: "Regional", itemId: "{D3A5B630-4789-4DCB-A472-F0D8B014DDBE}" }
       partialDesigns:
@@ -9813,7 +9815,16 @@ ia:
         2026-10-26: Regional variant added (tree-driven location dropdowns via
         /api/location-nav). Version6 export aliases Regional. Prefer FieldNames=Regional
         on the American Canyon header partial; Version6 still works. Publish location
-        pages so Edge returns children. Version5 remains corporate header.
+        pages so Edge returns children. Version5 remains an alias of RecologyGlobal.
+        2026-10-28: RecologyGlobal variant definition {98F6AA8E-E170-47E4-8095-EBFCE1754569}.
+        Regional utility bar treats the current LocationItem as My Recology home.
+        See All Locations lists LocationItem pages under Home/Location. Logo links to /.
+        2026-10-28: Edge url.path for American Canyon was host-qualified
+        (//www.recology.com//Location/...), so Regional dropdowns left this site.
+        location-nav now keeps the site path
+        (/Location/Recology-American-Canyon/Customer-Service/FAQ).
+        2026-10-28: Regional menu is stored in sessionStorage after the first
+        read so FAQ / What Bin pages reuse it for the demo visit.
 
     datasourceExample:
       name: "Header"
