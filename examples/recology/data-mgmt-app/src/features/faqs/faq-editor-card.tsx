@@ -12,7 +12,7 @@ import {
   formatDisplayDate,
 } from "@/lib/sitecore/field-utils";
 import { FAQ_BEHAVIORS } from "@/lib/sitecore/paths";
-import type { FaqRow, RegionalFaqBehavior } from "@/types/content";
+import type { FaqRow, RegionalFaqBehavior, RegionalFaqSaveInput } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -29,12 +29,7 @@ import { Separator } from "@/components/ui/separator";
 type Props = {
   row: FaqRow;
   compact?: boolean;
-  onSaveRegional: (input: {
-    configId?: string;
-    behavior: RegionalFaqBehavior;
-    regionalSupportingInformation: string;
-    regionalAnswer: string;
-  }) => Promise<void>;
+  onSaveRegional: (input: RegionalFaqSaveInput) => Promise<void>;
   onUpdateGlobal: (id: string, values: GlobalFaqFormValues) => Promise<void>;
   onDeleteGlobal: (id: string) => Promise<void>;
 };
@@ -74,6 +69,7 @@ export function FaqEditorCard({
     setError(null);
     try {
       await onSaveRegional({
+        globalFaqId: row.global.id,
         configId: row.config?.id,
         behavior,
         regionalSupportingInformation: plainTextToHtml(supporting),
@@ -267,11 +263,10 @@ export function FaqEditorCard({
         )}
 
         {!row.config && (
-          <Alert variant="warning">
+          <Alert>
             <AlertDescription>
-              No Regional FAQ Configuration item exists for this Global FAQ in
-              the selected region&apos;s collection yet. Saving regional updates
-              only works when a configuration item already exists.
+              No Regional FAQ Configuration exists for this question yet. Saving
+              creates one under this region&apos;s collection.
             </AlertDescription>
           </Alert>
         )}
@@ -280,7 +275,7 @@ export function FaqEditorCard({
           <Button
             className="rounded-full text-white"
             onClick={() => void handleSaveRegional()}
-            disabled={savingRegional || !row.config}
+            disabled={savingRegional}
           >
             {savingRegional ? "Saving..." : "Save regional"}
           </Button>

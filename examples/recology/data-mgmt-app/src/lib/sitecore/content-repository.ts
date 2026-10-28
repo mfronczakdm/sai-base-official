@@ -27,12 +27,14 @@ import type {
   CartRate,
   CartSize,
   CartType,
+  EnsureRegionalFaqResult,
   FaqRow,
   GlobalFaq,
   RegionOption,
   RegionOverviewStats,
   RegionRatesSummary,
   RegionalFaqConfig,
+  RegionalFaqSaveInput,
   SitecoreItemSummary,
 } from "@/types/content";
 
@@ -274,6 +276,136 @@ export class ContentRepository {
         active: isChecked(fieldValue(item.fields, "Active")),
       };
     });
+  }
+
+  /**
+   * Creates the region's Regional FAQ Collection when none is linked, and a
+   * UseGlobal configuration for every Global FAQ that does not have one yet.
+   * Existing collections and configurations are left as authored.
+   */
+  async ensureRegionalFaqCollection(
+    region: RegionOption,
+  ): Promise<EnsureRegionalFaqResult> {
+    let createdCollection = false;
+    let collection = await this.findCollectionForRegion(region);
+
+    if (!collection) {
+      const folder = await this.requireFolder(
+        RECOLOGY_PATHS.regionalFaqCollections,
+        "Regional FAQ Collections",
+      );
+      try {
+        collection = await this.createChildItem({
+          parentId: folder.itemId!,
+          templateId: RECOLOGY_TEMPLATES.regionalFaqCollection,
+          name: region.name,
+          fields: [
+            { name: "Title", value: `${region.name} FAQs` },
+            { name: "Heading", value: "Frequently Asked Questions" },
+            {
+              name: "IntroductoryText",
+              value: `<p>Answers for the ${region.name} service area.</p>`,
+            },
+            { name: "ExpandFirstItem", value: "1" },
+            { name: "ShowCategories", value: "1" },
+            {
+              name: "EmptyStateMessage",
+              value: "No FAQs are available for this region.",
+            },
+            { name: "Region", value: formatGuidBraced(region.id) },
+          ],
+        });
+        createdCollection = true;
+      } catch (error) {
+        collection = await this.findCollectionForRegion(region);
+        if (!collection) throw error;
+      }
+    } else if (!guidsEqual(fieldValue(collection.fields, "Region"), region.id)) {
+      await this.updateItemFields(collection.id, [
+        { name: "Region", value: formatGuidBraced(region.id) },
+      ]);
+    }
+
+    const collectionPath =
+      collection.path ||
+      `${RECOLOGY_PATHS.regionalFaqCollections}/${collection.name}`;
+    const globals = await this.listGlobalFaqs();
+    const existing = await this.listRegionalFaqConfigs(collectionPath);
+    const usedNames = new Set(existing.map((config) => config.name.toLowerCase()));
+    const createdIds: string[] = [];
+
+    for (const global of globals) {
+      if (existing.some((config) => guidsEqual(config.globalFaqId, global.id))) {
+        continue;
+      }
+      const created = await this.createChildItem({
+        parentId: collection.id,
+        templateId: RECOLOGY_TEMPLATES.regionalFaqConfiguration,
+        name: uniqueConfigName(global.question, usedNames),
+        fields: [
+          { name: "GlobalFAQ", value: formatGuidBraced(global.id) },
+          { name: "Behavior", value: "UseGlobal" },
+          { name: "SortOrder", value: String(global.sortOrder) },
+          { name: "Active", value: "1" },
+        ],
+      });
+      createdIds.push(created.id);
+    }
+
+    if (createdIds.length > 0) {
+      await this.updateItemFields(collection.id, [
+        {
+          name: "FAQConfigurations",
+          value: toMultilistValue([...existing.map((config) => config.id), ...createdIds]),
+        },
+      ]);
+    }
+
+    return {
+      region: {
+        ...region,
+        faqCollectionId: collection.id,
+        faqCollectionPath: collectionPath,
+      },
+      createdCollection,
+      createdConfigurationCount: createdIds.length,
+    };
+  }
+
+  async saveRegionalFaq(
+    region: RegionOption,
+    input: RegionalFaqSaveInput,
+  ): Promise<RegionOption> {
+    let nextRegion = region;
+    let configId = input.configId;
+
+    if (!configId || !nextRegion.faqCollectionPath) {
+      const ensured = await this.ensureRegionalFaqCollection(nextRegion);
+      nextRegion = ensured.region;
+      const configs = nextRegion.faqCollectionPath
+        ? await this.listRegionalFaqConfigs(nextRegion.faqCollectionPath)
+        : [];
+      configId = configs.find((config) =>
+        guidsEqual(config.globalFaqId, input.globalFaqId),
+      )?.id;
+    }
+
+    if (!configId) {
+      throw new Error(
+        "Could not create a Regional FAQ Configuration for this FAQ.",
+      );
+    }
+
+    await this.updateItemFields(configId, [
+      { name: "Behavior", value: input.behavior },
+      {
+        name: "RegionalSupportingInformation",
+        value: input.regionalSupportingInformation,
+      },
+      { name: "RegionalAnswer", value: input.regionalAnswer },
+    ]);
+
+    return nextRegion;
   }
 
   async getFaqRowsForRegion(region: RegionOption): Promise<FaqRow[]> {
@@ -746,6 +878,49 @@ export class ContentRepository {
     ]);
   }
 
+  private collectionBelongsToRegion(
+    collection: SitecoreItemSummary,
+    region: RegionOption,
+  ): boolean {
+    const regionField = fieldValue(collection.fields, "Region");
+    if (regionField) return guidsEqual(regionField, region.id);
+    return collection.name.toLowerCase() === region.name.toLowerCase();
+  }
+
+  private async findCollectionForRegion(
+    region: RegionOption,
+  ): Promise<SitecoreItemSummary | null> {
+    const contextId = this.requireContextId();
+    if (region.faqCollectionPath) {
+      const direct = mapItem(
+        await getItemByPath(this.client, contextId, region.faqCollectionPath, false),
+      );
+      if (direct && this.collectionBelongsToRegion(direct, region)) return direct;
+    }
+
+    const root = await getItemByPath(
+      this.client,
+      contextId,
+      RECOLOGY_PATHS.regionalFaqCollections,
+      true,
+    );
+    const collections = (root?.children?.nodes || [])
+      .map(mapItem)
+      .filter((item): item is SitecoreItemSummary => Boolean(item));
+
+    return (
+      collections.find((collection) =>
+        guidsEqual(fieldValue(collection.fields, "Region"), region.id),
+      ) ||
+      collections.find(
+        (collection) =>
+          !fieldValue(collection.fields, "Region") &&
+          collection.name.toLowerCase() === region.name.toLowerCase(),
+      ) ||
+      null
+    );
+  }
+
   private async listChildren(path: string): Promise<SitecoreItemSummary[]> {
     const contextId = this.requireContextId();
     const folder = await getItemByPath(this.client, contextId, path, true);
@@ -894,6 +1069,25 @@ function toSitecoreItemName(raw: string): string {
     .replace(/\s+/g, " ")
     .slice(0, 80);
   return cleaned || "New Item";
+}
+
+function uniqueConfigName(question: string, used: Set<string>): string {
+  const base = toSitecoreItemName(question);
+  if (!used.has(base.toLowerCase())) {
+    used.add(base.toLowerCase());
+    return base;
+  }
+
+  let index = 2;
+  let candidate = base;
+  do {
+    const suffix = ` ${index}`;
+    candidate = `${base.slice(0, 80 - suffix.length)}${suffix}`;
+    index += 1;
+  } while (used.has(candidate.toLowerCase()));
+
+  used.add(candidate.toLowerCase());
+  return candidate;
 }
 
 export { getItemById };

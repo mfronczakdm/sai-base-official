@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DEFAULT_FAQ_FILTERS,
   filterAndSortFaqs,
@@ -15,45 +15,66 @@ import {
   type GlobalFaqFormValues,
 } from "@/features/faqs/global-faq-form";
 import { useRegionContext } from "@/features/regions/region-context";
-import type { FaqRow, RegionalFaqBehavior } from "@/types/content";
+import type { FaqRow, RegionalFaqSaveInput } from "@/types/content";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function FaqsPage() {
-  const { selectedRegion, repository, connected } = useRegionContext();
+  const { selectedRegion, repository, connected, patchRegion } = useRegionContext();
   const [rows, setRows] = useState<FaqRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [filters, setFilters] = useState<FaqFilterState>(DEFAULT_FAQ_FILTERS);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const regionRef = useRef(selectedRegion);
+  regionRef.current = selectedRegion;
 
   const load = useCallback(async () => {
-    if (!repository || !selectedRegion) {
+    const region = regionRef.current;
+    if (!repository || !region) {
       setRows([]);
       return;
     }
+    const requestRegionId = region.id;
     setLoading(true);
     setError(null);
+    setNotice(null);
     try {
-      const next = await repository.getFaqRowsForRegion(selectedRegion);
+      const ensured = await repository.ensureRegionalFaqCollection(region);
+      if (regionRef.current?.id !== requestRegionId) return;
+      if (ensured.createdCollection || ensured.createdConfigurationCount > 0) {
+        patchRegion(ensured.region);
+        setNotice(
+          ensured.createdCollection
+            ? `Created the Regional FAQ Collection for ${region.name}, with a Use global answer configuration for each global FAQ.`
+            : `Added ${ensured.createdConfigurationCount} missing regional FAQ configuration${ensured.createdConfigurationCount === 1 ? "" : "s"} for ${region.name}.`,
+        );
+      }
+      const next = await repository.getFaqRowsForRegion(ensured.region);
+      if (regionRef.current?.id !== requestRegionId) return;
       setRows(next);
       setExpandedId((current) =>
         current && next.some((row) => row.global.id === current) ? current : null,
       );
     } catch (err) {
+      if (regionRef.current?.id !== region.id) return;
+      setNotice(null);
       setError(err instanceof Error ? err.message : "Failed to load FAQs");
       setRows([]);
     } finally {
-      setLoading(false);
+      if (regionRef.current?.id === requestRegionId) {
+        setLoading(false);
+      }
     }
-  }, [repository, selectedRegion]);
+  }, [repository, patchRegion]);
 
   useEffect(() => {
     void load();
-  }, [load]);
+  }, [load, selectedRegion?.id]);
 
   useEffect(() => {
     setExpandedId(null);
@@ -68,26 +89,11 @@ export default function FaqsPage() {
     [rows, filters],
   );
 
-  const handleSaveRegional = async (input: {
-    configId?: string;
-    behavior: RegionalFaqBehavior;
-    regionalSupportingInformation: string;
-    regionalAnswer: string;
-  }) => {
-    if (!repository) throw new Error("Not connected");
-    if (!input.configId) {
-      throw new Error(
-        "No Regional FAQ Configuration item for this FAQ. Create one under the region's Regional FAQ Collection first.",
-      );
-    }
-    await repository.updateItemFields(input.configId, [
-      { name: "Behavior", value: input.behavior },
-      {
-        name: "RegionalSupportingInformation",
-        value: input.regionalSupportingInformation,
-      },
-      { name: "RegionalAnswer", value: input.regionalAnswer },
-    ]);
+  const handleSaveRegional = async (input: RegionalFaqSaveInput) => {
+    const region = regionRef.current;
+    if (!repository || !region) throw new Error("Not connected");
+    const nextRegion = await repository.saveRegionalFaq(region, input);
+    patchRegion(nextRegion);
     await load();
   };
 
@@ -154,13 +160,9 @@ export default function FaqsPage() {
         )}
       </div>
 
-      {!selectedRegion.faqCollectionPath && (
-        <Alert variant="warning">
-          <AlertDescription>
-            No Regional FAQ Collection is linked to this LocationItem yet.
-            Global FAQs still appear; regional behavior saving needs a
-            collection first.
-          </AlertDescription>
+      {notice && (
+        <Alert>
+          <AlertDescription>{notice}</AlertDescription>
         </Alert>
       )}
 

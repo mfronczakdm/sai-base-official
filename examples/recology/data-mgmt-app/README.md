@@ -24,6 +24,7 @@ Upgrade Git (≥ 2.25) if you prefer `shadcn@latest` project creation.
 - **Global FAQ** `{C5B47B90-…}` — Question, Answer, Category, SortOrder, Active
 - **Regional FAQ Configuration** `{3560F778-…}` — GlobalFAQ, Behavior (`UseGlobal` \| `AddRegionalInformation` \| `Override` \| `Exclude`), RegionalSupportingInformation, RegionalAnswer, ContactCTA
 - **Regional FAQ Collection** `{DDE2369B-…}` — FAQConfigurations multilist, optional Region → LocationItem
+- Opening FAQs for a location with no collection creates `Data/Regional FAQ Collections/{Location name}`, sets Region to that LocationItem, and adds one `UseGlobal` configuration per Global FAQ. Existing regional answers are not overwritten. The public FAQ page still uses whatever RegionalFAQ datasource is assigned on the page.
 - **Cart Types (global):** `/Data/Cart Types` → `CartType` (Name, Color, Stream, Description, …) — Green / Blue / Black or Gray
 - **Cart Sizes (global):** `/Data/Cart Sizes` → `CartSize` (Name, Capacity, Dimensions, …)
 - **Regional checklist:** LocationItem `CartTypes` + `CartSizes` multilists (which globals apply)

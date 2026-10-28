@@ -25,6 +25,7 @@ type RegionContextValue = {
   error: string | null;
   repository: ContentRepository | null;
   refreshRegions: () => Promise<void>;
+  patchRegion: (region: RegionOption) => void;
   connected: boolean;
 };
 
@@ -71,6 +72,14 @@ export function RegionProvider({ children }: { children: ReactNode }) {
     }
   }, [repository, connecting]);
 
+  const patchRegion = useCallback((next: RegionOption) => {
+    setRegions((current) =>
+      current.map((region) =>
+        region.id === next.id ? { ...region, ...next } : region,
+      ),
+    );
+  }, []);
+
   useEffect(() => {
     if (connecting) return;
     void refreshRegions();
@@ -88,6 +97,7 @@ export function RegionProvider({ children }: { children: ReactNode }) {
         error,
         repository,
         refreshRegions,
+        patchRegion,
         connected,
       }}
     >

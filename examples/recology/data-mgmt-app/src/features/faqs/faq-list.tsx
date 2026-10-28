@@ -8,19 +8,14 @@ import {
   displayAuthor,
   formatDisplayDate,
 } from "@/lib/sitecore/field-utils";
-import type { FaqRow, RegionalFaqBehavior } from "@/types/content";
+import type { FaqRow, RegionalFaqSaveInput } from "@/types/content";
 import { cn } from "@/lib/utils";
 
 type Props = {
   rows: FaqRow[];
   expandedId: string | null;
   onToggle: (id: string) => void;
-  onSaveRegional: (input: {
-    configId?: string;
-    behavior: RegionalFaqBehavior;
-    regionalSupportingInformation: string;
-    regionalAnswer: string;
-  }) => Promise<void>;
+  onSaveRegional: (input: RegionalFaqSaveInput) => Promise<void>;
   onUpdateGlobal: (id: string, values: GlobalFaqFormValues) => Promise<void>;
   onDeleteGlobal: (id: string) => Promise<void>;
 };

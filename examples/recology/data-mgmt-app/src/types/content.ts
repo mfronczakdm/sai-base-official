@@ -32,6 +32,20 @@ export type RegionOption = {
   faqCollectionPath?: string;
 };
 
+export type EnsureRegionalFaqResult = {
+  region: RegionOption;
+  createdCollection: boolean;
+  createdConfigurationCount: number;
+};
+
+export type RegionalFaqSaveInput = {
+  globalFaqId: string;
+  configId?: string;
+  behavior: RegionalFaqBehavior;
+  regionalSupportingInformation: string;
+  regionalAnswer: string;
+};
+
 export type GlobalFaq = {
   id: string;
   name: string;

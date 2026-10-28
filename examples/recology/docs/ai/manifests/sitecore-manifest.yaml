@@ -14132,14 +14132,17 @@ externalImageOptimizerAudit:
     category: "Page Content"
     status: "complete"
     createdAt: "2026-10-25T15:00:00Z"
-    updatedAt: "2026-10-25T15:30:00Z"
+    updatedAt: "2026-10-28T18:45:00Z"
     siteName: "recology"
     siteCollection: "recology"
     notes: >
       Region-aware FAQ: Global FAQ items referenced by Regional FAQ Configuration
       (UseGlobal / AddRegionalInformation / Override / Exclude). Collection is the
       component datasource. Edge-safe MultilistField ComponentQuery. Docs:
-      docs/ai/regional-faq.md
+      docs/ai/regional-faq.md. 2026-10-28: data-mgmt-app self-heals a missing
+      Regional FAQ Collection (plus one UseGlobal configuration per Global FAQ)
+      when FAQs are opened for a LocationItem. Does not retarget the page
+      RegionalFAQ datasource.
     react:
       filePath: "src/components/uiim/faq/RegionalFAQ.tsx"
       propsPath: "src/components/uiim/faq/regional-faq.props.ts"
