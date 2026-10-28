@@ -3,6 +3,7 @@
 import type { JSX, ReactNode } from 'react';
 import { Text } from '@sitecore-content-sdk/nextjs';
 import { getFieldValue } from '@/lib/component-props';
+import { extractImageAlt, extractImageSrc } from '@/lib/sitecore-image-field';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import type {
@@ -36,12 +37,14 @@ const articleHref = (article: NewsListingArticle): string => {
 };
 
 const articleImage = (article: NewsListingArticle): { src: string; alt: string } => {
-  const image =
-    getFieldValue(article.image)?.value || getFieldValue(article.pageThumbnail)?.value;
-  return {
-    src: typeof image?.src === 'string' ? image.src : '',
-    alt: typeof image?.alt === 'string' && image.alt ? image.alt : articleTitle(article),
-  };
+  // ComponentQuery uses field(name: "image") { value } for DAM/external XML —
+  // jsonValue.src is empty for that shape, so hydrate from raw value first.
+  const src = extractImageSrc(article.image) || extractImageSrc(article.pageThumbnail);
+  const alt =
+    extractImageAlt(article.image) ||
+    extractImageAlt(article.pageThumbnail) ||
+    articleTitle(article);
+  return { src, alt };
 };
 
 const articleSummary = (article: NewsListingArticle): string => {

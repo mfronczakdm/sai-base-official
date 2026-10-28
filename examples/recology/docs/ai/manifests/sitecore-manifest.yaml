@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-26T21:30:00Z"
+lastUpdatedAt: "2026-10-28T11:15:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -14327,8 +14327,10 @@ externalImageOptimizerAudit:
     notes: >
       Coveo-inspired SearchResults with Q&A answers, keyword scoring, and expanded
       Recology catalog (San Bruno + news articles). Natural-language queries like
-      "I am moving to San Bruno…" surface a Q&A panel plus linked pages. Article Page
-      template {D52B7D7A-D83E-473C-B16A-FAA9E23013F4} used for global and regional news.
+      "I am moving to San Bruno…" surface a Q&A panel plus linked pages.
+      2026-10-27: Recreated AI news items from Article Page {D52B7D7A} to Page
+      {4CFDBA63} with DAM image dmVr5yGjR7aI3V-zY5DzvA on image + pageThumbnail.
+      Welcome New San Bruno Residents was already absent (San Bruno tree not found).
     pages:
       - { name: "Search", itemId: "{AA30BA7E-8837-4854-9686-27251B1F3F88}", path: "/sitecore/content/recology/recology/Home/Search", route: "/Search", renderingInstanceId: "{496161D8-6E94-4B8B-8AEF-5F386B0E21FA}" }
       - { name: "Recology San Bruno", itemId: "{576FDDF8-75AA-432D-A488-FE2EF395C69E}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno", route: "/Location/Recology-San-Bruno" }
@@ -14340,10 +14342,10 @@ externalImageOptimizerAudit:
       - { name: "Page-local datasource", itemId: "{63651603-B3D2-422C-B5E7-596FEE65B200}", path: "/sitecore/content/recology/recology/Home/Search/Data/Recology_Website_Search" }
       - { name: "Global HeaderST SearchLink", itemId: "{0760895E-0700-42C2-8007-C5DF9AD82D1B}" }
       - { name: "American Canyon HeaderST SearchLink", itemId: "{69F710BF-FE89-4629-BE2F-3B2D43B28FDB}" }
-      - { name: "Moving to San Bruno article", itemId: "{3E8109DE-9024-42D7-B2C8-FEBDA402DB1E}", path: "/sitecore/content/recology/recology/Home/News/Moving to San Bruno Waste Management Options", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
-      - { name: "Three-Cart Relocate article", itemId: "{DA162659-3F48-4FCC-8CE0-5F1F87EABBE6}", path: "/sitecore/content/recology/recology/Home/News/Understanding Your Three Cart Options When You Relocate", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
-      - { name: "Welcome New San Bruno Residents", itemId: "{41D8BE71-0B4C-453C-8FF0-838755E074C1}", path: "/sitecore/content/recology/recology/Home/Location/Recology San Bruno/In My Community/News and Events/Welcome New San Bruno Residents", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
-      - { name: "Why Organics Belong in the Green Cart", itemId: "{59B9652E-9964-447A-B3AD-8038E65229CB}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{D52B7D7A-D83E-473C-B16A-FAA9E23013F4}" }
+      - { name: "Moving to San Bruno article", itemId: "{5E13BD0D-A149-4EE0-9A19-5A67D53D6793}", path: "/sitecore/content/recology/recology/Home/News/Moving to San Bruno Waste Management Options", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{3E8109DE-9024-42D7-B2C8-FEBDA402DB1E}" }
+      - { name: "Three-Cart Relocate article", itemId: "{1B8FBE75-53E0-478D-896E-52D8FA4EF32C}", path: "/sitecore/content/recology/recology/Home/News/Understanding Your Three Cart Options When You Relocate", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{DA162659-3F48-4FCC-8CE0-5F1F87EABBE6}" }
+      - { name: "Why Organics Belong in the Green Cart", itemId: "{8630324D-C221-4385-9B02-B054A83F9570}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{59B9652E-9964-447A-B3AD-8038E65229CB}" }
+      - { name: "New Region branch Why Organics", itemId: "{F0E210DC-F880-4D21-96D3-FB493085FCB8}", path: "/sitecore/content/recology/recology/Presentation/Page Branches/New Region/$name/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{CB616409-1925-4640-98A8-E54D225F5D63}" }
     rendering:
       name: "SearchResults"
       path: "/sitecore/layout/Renderings/Project/click-click-launch/Page Content/SearchResults"
@@ -14364,16 +14366,217 @@ externalImageOptimizerAudit:
       - "src/__tests__/search-results/SearchResults.test.tsx"
       - "src/__tests__/lib/search-packs.test.ts"
     verification:
-      checkedAt: "2026-10-27T10:25:00Z"
+      checkedAt: "2026-10-27T20:05:00Z"
       passed:
         - "Search page created with SearchResults on headless-main"
         - "Headless Variants SearchResults/Default"
         - "HeaderST SearchLink → Search on Global + American Canyon"
         - "Created Recology San Bruno LocationItem + service/FAQ/news tree"
-        - "Created Article Page news (global News + San Bruno + American Canyon regional)"
+        - "Recreated news items as Page {4CFDBA63} with DAM image (global + AC + New Region branch)"
+        - "Updated AC Local NewsListing Articles multilist to new Why Organics ID"
         - "Q&A + keyword scoring for NL queries (San Bruno moving example)"
       failed: []
       pendingManual:
-        - "Publish Search page, San Bruno tree, Article Pages, and HeaderST items for Edge"
+        - "Publish recreated news Pages + AC Local NewsListing for Edge"
         - "Open /Search?q=I%20am%20moving%20to%20San%20Bruno%20area.%20What%20are%20my%20options%20for%20waste%20management"
         - "Optional: wire Regional HeaderST for San Bruno like American Canyon"
+        - "Approve Draft workflow on recreated news Pages if required before publish"
+
+  - name: "recology-multipromo-datasources"
+    kind: "content"
+    category: "MultiPromo"
+    status: "complete"
+    createdAt: "2026-10-27T18:50:00Z"
+    updatedAt: "2026-10-27T19:25:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    componentName: "MultiPromo"
+    datasourceTemplateId: "{775D6354-CF01-4F34-9713-D34645079C88}"
+    childTemplateId: "{F94C8C17-70E8-4D8B-9D35-D0465C0E0945}"
+    notes: >
+      Global MultiPromo parents (3) plus American Canyon regional MultiPromo Folder
+      with 3 region-specific MultiPromo parents (3 SimplePromo children each). Links
+      point at existing Recology pages. Pages not modified — assign datasources in Pages.
+    folder:
+      name: "MultiPromos"
+      itemId: "{58ACE658-3E2D-465E-B8BA-965E21BAE99A}"
+      path: "/sitecore/content/recology/recology/Data/MultiPromos"
+      templateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}"
+      preexisting: true
+    items:
+      - name: "Explore Recology"
+        itemId: "{FF8BA7E7-B55A-48F3-B73E-7CFA2CFF7993}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/Explore Recology"
+        title: "Explore Recology"
+        children:
+          - { name: "About Us", itemId: "{B52A445E-9385-49B6-817C-AD447AB91597}", heading: "About Us", targetId: "{D9E7B147-8800-415A-A40E-28F5D790C9F9}" }
+          - { name: "Sustainability", itemId: "{D7818B06-C6DF-4CC4-8CCF-9F200604A978}", heading: "Sustainability", targetId: "{BE481733-EFC0-4D60-92D6-CF65057F0164}" }
+          - { name: "Careers", itemId: "{2C127159-652F-4C30-AD61-41D8C0D06AA0}", heading: "Careers", targetId: "{265E8C96-383B-4886-8AE4-AD313A43CAF3}" }
+      - name: "Services at a Glance"
+        itemId: "{7FB19FC4-623F-4DD7-81D9-7527BCC6033C}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/Services at a Glance"
+        title: "Services at a Glance"
+        children:
+          - { name: "Organics", itemId: "{DC681674-B16A-426E-9FF9-0692FEB0DD09}", heading: "Organics", targetId: "{00204A3D-55D3-4795-89C9-9BDB653768F5}" }
+          - { name: "Pay My Bill", itemId: "{011651CE-77B5-4176-8C41-D6410D990C50}", heading: "Pay My Bill", targetId: "{F93AE4B7-7943-4A13-99F0-6886A0F4FF03}" }
+          - { name: "Find Your Location", itemId: "{B457C9D8-D893-43F9-8E3D-582CA861B1CB}", heading: "Find Your Location", targetId: "{6B97CC50-2F83-459A-B06C-D07D5F5D81CE}" }
+      - name: "Community and Impact"
+        itemId: "{B4A0B1E6-2A87-4C77-AF2C-CB9BFA5033C6}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/Community and Impact"
+        title: "Community and Impact"
+        children:
+          - { name: "Community Impact", itemId: "{01B11B4C-14E8-4885-A085-709FA9972963}", heading: "Community Impact", targetId: "{D226B4E6-4CF0-4185-BF8C-675E20CE8576}" }
+          - { name: "News", itemId: "{18287952-0F05-4204-96DD-162C65CF8644}", heading: "News", targetId: "{7B6B97B9-375F-4C56-BA8A-780B4F5B3CF9}" }
+          - { name: "The Art of Recology", itemId: "{187A2A86-B4DF-478E-998B-B9980CEDD4E2}", heading: "The Art of Recology", targetId: "{C1E0D831-39B6-41E1-BBB5-259ACEDAFD80}" }
+      - name: "American Canyon"
+        itemId: "{258BF22E-B661-4DB8-9595-465D7763EBE4}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon"
+        templateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}"
+        kind: "region-folder"
+        children:
+          - name: "American Canyon Customer Service"
+            itemId: "{F7402C1A-8345-4647-8BBA-5E6ECB0570AE}"
+            path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Customer Service"
+            title: "American Canyon Customer Service"
+            children:
+              - { name: "Your Cart", itemId: "{22AE3707-8038-48A8-BDB4-0E497AFE1A2E}", heading: "Your Cart", targetId: "{31E4C106-CE15-4367-9992-345ED4D38881}" }
+              - { name: "Residential Rates", itemId: "{D4F7E666-C50A-4847-9B68-CBA263A9B7B4}", heading: "Residential Rates", targetId: "{BF0CC516-8DB8-4462-B5A9-97F1F34FE3F0}" }
+              - { name: "FAQ", itemId: "{5DF90012-07F4-4A8A-BAD4-E01516CAF1C6}", heading: "FAQ", targetId: "{35A9251B-A9DE-42F8-86FC-D081FF1473EA}" }
+          - name: "American Canyon Sorting and Services"
+            itemId: "{2C1D664B-22C4-4540-8AE8-83C2D7036B3F}"
+            path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Sorting and Services"
+            title: "American Canyon Sorting and Services"
+            children:
+              - { name: "Business Services", itemId: "{B96D7650-A574-4179-B429-38AE3D099B39}", heading: "Business Services", targetId: "{E4725B6C-FBC5-494F-AE1D-4ACA6416E1F8}" }
+              - { name: "Sorting Guides and Resources", itemId: "{B6473620-EE23-4241-9178-7A4668EB8A95}", heading: "Sorting Guides and Resources", targetId: "{4D3231C7-43C6-4111-A1D8-B95C370DE55F}" }
+              - { name: "What Bin", itemId: "{516FE043-BE8A-4BDD-94B0-21A2B0D9BE0F}", heading: "What Bin", targetId: "{C36609B8-E108-4C56-83FA-415113BB2537}" }
+          - name: "American Canyon Community"
+            itemId: "{1ED3ECFB-954A-48AD-8D49-686F699CE609}"
+            path: "/sitecore/content/recology/recology/Data/MultiPromos/American Canyon/American Canyon Community"
+            title: "American Canyon Community"
+            children:
+              - { name: "News and Events", itemId: "{EF94E032-D974-4304-8D12-54DD0091356F}", heading: "News and Events", targetId: "{86AF46AE-D41A-458A-BA86-8A177E82D4B7}" }
+              - { name: "Junior Recologist", itemId: "{05BA5CA7-AC78-44AD-9103-923607890BCD}", heading: "Junior Recologist", targetId: "{C0C09FFE-7430-4444-A66E-1B7841352894}" }
+              - { name: "Contact Us", itemId: "{7F98C743-A78B-4B79-B5DD-F10AA26AA6BF}", heading: "Contact Us", targetId: "{00C886C6-D166-4E07-84A5-993E37FCC1E8}" }
+    verification:
+      checkedAt: "2026-10-27T19:25:00Z"
+      passed:
+        - "3 global MultiPromo parents + 9 SimplePromo children under Data/MultiPromos"
+        - "American Canyon MultiPromo Folder {258BF22E} with 3 regional MultiPromo parents"
+        - "9 American Canyon SimplePromo children with internal links to AC pages"
+        - "Folder tree verified via get_content_item_by_path"
+      failed: []
+      pendingManual:
+        - "Publish /sitecore/content/recology/recology/Data/MultiPromos (with subitems) for Edge"
+        - "Place MultiPromo on global pages; assign Explore Recology / Services at a Glance / Community and Impact"
+        - "Place MultiPromo on American Canyon pages; assign one AC datasource from Data/MultiPromos/American Canyon"
+        - "Optional: replace default SimplePromo images with Recology media assets"
+
+  - name: "recology-newslisting-page-image"
+    kind: "update"
+    category: "News"
+    status: "complete"
+    createdAt: "2026-10-28T10:40:00Z"
+    updatedAt: "2026-10-28T10:45:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      NewsListing ImageCards ignored Page Content.image because ComponentQuery returns
+      DAM XML via field(name:"image"){value}, while React only read jsonValue.src.
+      Added sitecore-image-field hydration; cards now use Page image (fallback pageThumbnail).
+      Also set the DAM image on the two homepage Articles that were empty (Tahoe, Sustainability).
+    renderingId: "{45E8B532-E022-4081-87A9-576EA3D09FC7}"
+    codeChanges:
+      - "src/lib/sitecore-image-field.ts"
+      - "src/components/uiim/news/NewsListing.tsx"
+      - "src/components/uiim/news/news-listing.props.ts"
+      - "src/__tests__/uiim/news/NewsListing.test.tsx"
+    verification:
+      checkedAt: "2026-10-28T10:45:00Z"
+      passed:
+        - "ComponentQuery already selects image/pageThumbnail value"
+        - "Jest NewsListing 5/5 including DAM XML hydration case"
+      failed: []
+      pendingManual:
+        - "Publish updated news Pages (Tahoe, Sustainability image) for Edge/Pages canvas"
+        - "Refresh Pages Home and confirm ImageCards show DAM images"
+
+  - name: "recology-footerst-recology-variant"
+    kind: "update"
+    category: "Footer"
+    status: "complete"
+    createdAt: "2026-10-28T10:50:00Z"
+    updatedAt: "2026-10-28T11:00:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Matched Global/Regional FooterST to www.recology.com page-footer: light bar,
+      centered socials (FB/X/LinkedIn/YouTube/IG), centered legal links, copyright.
+      Default now renders Recology layout; Sync keeps former textured footer.
+      Updated Global Footer datasource + Secondary legal links; AC Footer socials.
+    variants:
+      - { name: "Recology", itemId: "{3D16FE85-FECD-49D9-9A1C-3AF33C7794A0}" }
+      - { name: "Sync", itemId: "{1DEE5126-113C-4BE5-8533-A331AC1AB010}" }
+    codeChanges:
+      - "src/components/site-three/FooterST.tsx"
+      - "src/__tests__/site-three/FooterST.test.tsx"
+    verification:
+      checkedAt: "2026-10-28T11:00:00Z"
+      passed:
+        - "Jest FooterST 11/11"
+        - "Variant Definition items Recology + Sync created"
+        - "Global FooterST fields + Secondary Links updated"
+      failed: []
+      pendingManual:
+        - "Publish Global + AC Footer partials and FooterST variants for Edge"
+        - "Refresh a page to confirm light footer with social + legal row"
+
+  - name: "recology-multipromo-audience-sanbruno"
+    kind: "content"
+    category: "MultiPromo"
+    status: "complete"
+    createdAt: "2026-10-28T11:05:00Z"
+    updatedAt: "2026-10-28T11:15:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Audience-phase MultiPromos for Sitecore Personalization datasource swaps.
+      Global Audiences folder: Consideration / Existing Customer / Needs Engagement.
+      San Bruno folder: matching three phases (San Bruno LocationItem tree was missing;
+      SB tiles link to San Bruno news + global service pages). Place one MultiPromo on
+      a page as default, then create personalization variants that swap the datasource.
+      Suggested conditions: UTM/campaign for Consideration; visited Pay My Bill or
+      known customer for Existing Customer; repeat visits without conversion or
+      sorting/FAQ depth for Needs Engagement; geo/path San Bruno for SB datasources.
+    folder:
+      name: "MultiPromos"
+      itemId: "{58ACE658-3E2D-465E-B8BA-965E21BAE99A}"
+      path: "/sitecore/content/recology/recology/Data/MultiPromos"
+    items:
+      - name: "Audiences"
+        itemId: "{2E4631E3-A92D-4F71-84BA-0CF2BFEA4891}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/Audiences"
+        templateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}"
+        children:
+          - { name: "Audience Consideration", itemId: "{91CDC78F-247E-491F-8D9C-2F0D662183EC}", title: "Start Your Waste Zero Journey" }
+          - { name: "Audience Existing Customer", itemId: "{4ADA869B-38F3-4D5B-847E-BDE0BD8A290E}", title: "Manage Your Service" }
+          - { name: "Audience Needs Engagement", itemId: "{874B6E9A-570B-469C-9599-6CF1CB76E805}", title: "Go Further with Waste Zero" }
+      - name: "San Bruno"
+        itemId: "{E746A9BE-9944-4B00-B2B0-1426FA775399}"
+        path: "/sitecore/content/recology/recology/Data/MultiPromos/San Bruno"
+        templateId: "{17550F13-FDE0-4FC4-9B70-67BD02AF2673}"
+        children:
+          - { name: "San Bruno Consideration", itemId: "{BC3606C1-AD88-4E4C-A24D-B8A0014E2975}", title: "New to San Bruno?" }
+          - { name: "San Bruno Existing Customer", itemId: "{A91C57A1-F643-410A-AEAE-65D0BE0B95BC}", title: "San Bruno Customer Shortcuts" }
+          - { name: "San Bruno Needs Engagement", itemId: "{0ED6A503-3258-427E-9E17-C25EBAE2E849}", title: "Get Involved in San Bruno" }
+    verification:
+      checkedAt: "2026-10-28T11:15:00Z"
+      passed:
+        - "Audiences + San Bruno folders created under Data/MultiPromos"
+        - "6 MultiPromo parents + 18 SimplePromo children created"
+      failed: []
+      pendingManual:
+        - "Publish Data/MultiPromos Audiences + San Bruno for Edge"
+        - "Place MultiPromo on Home; default = Audience Consideration"
+        - "In Pages personalization: swap datasource by audience (UTM / customer / engagement / San Bruno)"
+        - "Optional: recreate San Bruno LocationItem tree and retarget SB tiles to local FAQ/Carts pages"

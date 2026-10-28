@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react';
 import {
   Default as FooterSTDefault,
   Centered as FooterSTCentered,
+  Recology as FooterSTRecology,
   Version2 as FooterSTVersion2,
 } from '@/components/site-three/FooterST';
 import { mockPage } from '../test-utils/mockPage';
@@ -84,16 +85,15 @@ describe('FooterST', () => {
     },
   };
 
-  describe('Default variant', () => {
-    it('renders footer with title', () => {
+  describe('Default variant (Recology layout)', () => {
+    it('renders the Recology.com-style footer', () => {
       render(<FooterSTDefault {...mockProps} />);
-      expect(screen.getByText('Footer Title')).toBeInTheDocument();
+      expect(screen.getByTestId('footerst-recology')).toBeInTheDocument();
     });
 
-    it('renders social media links', () => {
+    it('renders five social media icons', () => {
       render(<FooterSTDefault {...mockProps} />);
-      const icons = screen.getAllByTestId('font-awesome-icon');
-      expect(icons.length).toBe(3);
+      expect(screen.getByTestId('footerst-recology-social').querySelectorAll('[data-testid="font-awesome-icon"]')).toHaveLength(5);
     });
 
     it('renders copyright text', () => {
@@ -101,10 +101,25 @@ describe('FooterST', () => {
       expect(screen.getByText('© 2025 Company Name. All rights reserved.')).toBeInTheDocument();
     });
 
-    it('renders placeholders', () => {
+    it('renders Recology legal links', () => {
       render(<FooterSTDefault {...mockProps} />);
-      expect(screen.getByTestId('placeholder-footer-primary-links-test-id')).toBeInTheDocument();
-      expect(screen.getByTestId('placeholder-footer-secondary-links-test-id')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+        'href',
+        'https://www.recology.com/privacy/'
+      );
+      expect(screen.getByRole('link', { name: 'Terms of Use' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Compliance' })).toBeInTheDocument();
+    });
+  });
+
+  describe('Recology variant', () => {
+    it('matches Default layout and prefers authored Facebook URL', () => {
+      render(<FooterSTRecology {...mockProps} />);
+      expect(screen.getByTestId('footerst-recology')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Facebook/i)).toHaveAttribute(
+        'href',
+        'https://facebook.com/company'
+      );
     });
   });
 

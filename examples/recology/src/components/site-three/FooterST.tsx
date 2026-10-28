@@ -67,7 +67,8 @@ const SocialLinks = ({ fields }: SocialLinksProps) => (
   </div>
 );
 
-export const Default = (props: FooterSTProps) => {
+/** Legacy SYNC-style textured footer (formerly Default). */
+export const Sync = (props: FooterSTProps) => {
   const fields = getDatasource(props.fields);
 
   return (
@@ -75,6 +76,7 @@ export const Default = (props: FooterSTProps) => {
       className={`relative bg-primary pt-16 lg:pt-30 pb-8 bg-cover bg-center ${props.params.styles}`}
       style={{ backgroundImage: 'url("/footer-texture.webp")' }}
       data-class-change
+      data-testid="footerst-sync"
     >
       <div className="container mx-auto px-4">
         <h2 className="text-4xl lg:text-7xl mb-10 lg:mb-20 uppercase">
@@ -251,6 +253,109 @@ const BCAA_SOCIAL = [
   { href: 'https://www.youtube.com/user/BCAA', label: 'YouTube', icon: faYoutube },
   { href: 'https://www.instagram.com/bcaa/', label: 'Instagram', icon: faInstagram },
 ] as const;
+
+const RECOLOGY_SOCIAL = [
+  { href: 'https://www.facebook.com/Recology', label: 'Facebook', icon: faFacebook },
+  { href: 'https://twitter.com/RecologyWZ', label: 'X', icon: faXTwitter },
+  { href: 'https://www.linkedin.com/company/recology', label: 'LinkedIn', icon: faLinkedinIn },
+  { href: 'https://www.youtube.com/user/Recologize', label: 'YouTube', icon: faYoutube },
+  { href: 'https://www.instagram.com/recology', label: 'Instagram', icon: faInstagram },
+] as const;
+
+const RECOLOGY_LEGAL = [
+  { href: 'https://www.recology.com/privacy/', label: 'Privacy Policy' },
+  { href: 'https://www.recology.com/terms/', label: 'Terms of Use' },
+  {
+    href: 'https://www.recology.com/electronic-bill-payment-service-agreement/',
+    label: 'Electronic Bill Payment Service Agreement',
+  },
+  { href: 'https://www.recology.com/disclosures/', label: 'Disclosures and Notices' },
+  { href: 'https://www.recology.com/compliance/', label: 'Compliance' },
+] as const;
+
+/**
+ * Recology.com-style footer: light bar, centered social icons, then centered legal links.
+ * Matches https://www.recology.com/ page-footer (social list + footer-nav).
+ */
+export const Recology = (props: FooterSTProps) => {
+  const fields = getDatasource(props.fields);
+  const facebookField = getFieldValue(fields?.FacebookLink);
+  const linkedinField = getFieldValue(fields?.LinkedinLink);
+  const instagramField = getFieldValue(fields?.InstagramLink);
+
+  const socialItems = [
+    {
+      href: hasValidLink(facebookField) ? facebookField!.value.href! : RECOLOGY_SOCIAL[0].href,
+      label: 'Facebook',
+      icon: faFacebook,
+    },
+    RECOLOGY_SOCIAL[1],
+    {
+      href: hasValidLink(linkedinField) ? linkedinField!.value.href! : RECOLOGY_SOCIAL[2].href,
+      label: 'LinkedIn',
+      icon: faLinkedinIn,
+    },
+    RECOLOGY_SOCIAL[3],
+    {
+      href: hasValidLink(instagramField) ? instagramField!.value.href! : RECOLOGY_SOCIAL[4].href,
+      label: 'Instagram',
+      icon: faInstagram,
+    },
+  ];
+
+  return (
+    <footer
+      className={`border-t border-border bg-[#f5f5f5] text-foreground ${props.params?.styles || ''}`}
+      data-class-change
+      data-testid="footerst-recology"
+    >
+      <div className="container mx-auto px-4 py-10 lg:py-12">
+        <ul
+          className="mb-6 flex list-none flex-wrap items-center justify-center gap-5 p-0"
+          data-testid="footerst-recology-social"
+        >
+          {socialItems.map((item) => (
+            <li key={item.label}>
+              <a
+                href={item.href}
+                aria-label={`${item.label} (Opens in new window)`}
+                className="inline-flex text-foreground/80 transition-opacity hover:opacity-70"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <FontAwesomeIcon icon={item.icon} width={22} height={22} />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <nav aria-label="Footer legal" data-testid="footerst-recology-legal">
+          <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-x-6 gap-y-2 p-0">
+            {RECOLOGY_LEGAL.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  className="text-sm text-foreground/80 no-underline hover:underline"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-6 text-center text-xs leading-relaxed text-foreground/60 [&_p]:m-0">
+          <ContentSdkRichText field={getFieldValue(fields?.CopyrightText)} />
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+/** Recology.com page-footer layout — Default for Recology partials. */
+export const Default = (props: FooterSTProps) => <Recology {...props} />;
 
 export const Version2 = (props: FooterSTProps) => {
   const fields = getDatasource(props.fields);

@@ -95,6 +95,40 @@ describe('NewsListing', () => {
     expect(screen.getByTestId('news-listing-more')).toHaveTextContent('Read More News');
   });
 
+  it('hydrates DAM image XML from ComponentQuery value for ImageCards', () => {
+    const damXml =
+      '<Image src="https://mrfbasech2.sitecoresandbox.cloud/api/public/content/c16fa2cf86d64103b074a08d18cb346d?v=963c48de" dam-id="dmVr5yGjR7aI3V-zY5DzvA" width="1280" height="723" dam-content-type="Image" thumbnailsrc="https://mrfbasech2.sitecoresandbox.cloud/api/gateway/89398/thumbnail" />';
+    const damProps: NewsListingProps = {
+      ...props,
+      fields: {
+        data: {
+          datasource: {
+            title: { jsonValue: { value: 'News' } },
+            articles: {
+              targetItems: [
+                {
+                  id: 'nwra',
+                  name: 'nwra',
+                  url: { path: '/News/nwra' },
+                  pageTitle: { jsonValue: { value: '2026 NWRA Award Winners' } },
+                  pageSummary: { jsonValue: { value: 'Three employee-owners recognized.' } },
+                  image: { value: damXml },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    render(<ImageCards {...damProps} />);
+
+    expect(screen.getByTestId('news-listing-image-card').querySelector('img')).toHaveAttribute(
+      'src',
+      'https://mrfbasech2.sitecoresandbox.cloud/api/public/content/c16fa2cf86d64103b074a08d18cb346d?v=963c48de'
+    );
+  });
+
   it('lists child articles when a News page is the datasource', () => {
     const childProps: NewsListingProps = {
       rendering: { componentName: 'NewsListing' },

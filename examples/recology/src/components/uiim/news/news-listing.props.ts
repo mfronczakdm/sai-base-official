@@ -1,5 +1,6 @@
-import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
 import type { ComponentProps, GraphQLField } from '@/lib/component-props';
+import type { SitecoreImageGraphField } from '@/lib/sitecore-image-field';
 
 export type NewsListingArticle = {
   id?: string;
@@ -8,8 +9,9 @@ export type NewsListingArticle = {
   pageTitle?: GraphQLField<Field<string>>;
   pageHeaderTitle?: GraphQLField<Field<string>>;
   pageSummary?: GraphQLField<Field<string>>;
-  pageThumbnail?: GraphQLField<ImageField>;
-  image?: GraphQLField<ImageField>;
+  /** Prefer Page `image`; DAM XML arrives as `{ value: "<Image src=.../>" }` from ComponentQuery. */
+  pageThumbnail?: SitecoreImageGraphField;
+  image?: SitecoreImageGraphField;
   sourceLink?: GraphQLField<LinkField>;
   titleAccent?: GraphQLField<Field<boolean | string>>;
 };
