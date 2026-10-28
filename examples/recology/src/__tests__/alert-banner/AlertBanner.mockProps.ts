@@ -38,7 +38,7 @@ const mockExternalFields = { mock_external_data: { value: 'external' } } as unkn
 
 export const defaultAlertBannerProps: AlertBannerProps = {
   rendering: { componentName: 'AlertBanner', params: {} },
-  params: { mock_param: '' },
+  params: {},
   fields: {
     title: mockTitleField,
     description: mockDescriptionField,
@@ -50,15 +50,15 @@ export const defaultAlertBannerProps: AlertBannerProps = {
 
 export const alertBannerPropsNoFields: AlertBannerProps = {
   rendering: { componentName: 'AlertBanner', params: {} },
-  params: { mock_param: '' },
-  fields: {} as AlertBannerProps['fields'],
+  params: {},
+  fields: undefined as unknown as AlertBannerProps['fields'],
   externalFields: mockExternalFields,
   page: mockPageNormal,
 };
 
 export const alertBannerPropsMinimal: AlertBannerProps = {
   rendering: { componentName: 'AlertBanner', params: {} },
-  params: { mock_param: '' },
+  params: {},
   fields: {
     title: mockTitleField,
     description: { value: '' } as unknown as Field<string>,

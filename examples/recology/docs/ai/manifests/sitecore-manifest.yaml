@@ -14839,3 +14839,57 @@ externalImageOptimizerAudit:
       pendingManual:
         - "Publish Data/HeroST/Segment for Edge"
         - "In Pages personalization: swap HeroST datasource by CDP extensions.Segment"
+
+  - name: "recology-ac-contact-us"
+    kind: "page-composition"
+    category: "Contact"
+    status: "complete"
+    createdAt: "2026-10-28T14:30:00Z"
+    updatedAt: "2026-10-28T14:50:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      American Canyon Contact Us page wired to match recology.com contact layout:
+      AlertBanner Notice (Pay by Phone), Promo PortalCard (Account Portal),
+      Promo LocationContactCard (Locations). AlertBanner Sitecore scaffolding created
+      under Project/recology; Promo variants PortalCard/LocationContactCard/CenteredCard added.
+    page:
+      name: "Contact Us"
+      itemId: "{00C886C6-D166-4E07-84A5-993E37FCC1E8}"
+      path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/Customer Service/Contact Us"
+    alertBanner:
+      renderingId: "{F996A6AF-74C6-4611-ABD0-92CD1265C17A}"
+      renderingPath: "/sitecore/layout/Renderings/Project/recology/Banners/AlertBanner"
+      templateId: "{9D57A61A-9380-4075-BC9C-D51684CEE690}"
+      templatePath: "/sitecore/templates/Project/recology/Components/Banners/AlertBanner"
+      folderTemplateId: "{441BF812-9C22-4B94-B171-9FA326A5A0AD}"
+      dataFolderId: "{4BC185D7-D4EE-414B-BF30-06F6D3443D0F}"
+      dataFolderPath: "/sitecore/content/recology/recology/Data/AlertBanners"
+      variants:
+        - { name: "Default", itemId: "{1B8F4E8C-E47F-4B65-B6C3-C29B08F40A9A}" }
+        - { name: "Notice", itemId: "{D1AAC86D-CA03-471C-B648-F78D1FEFB1D2}" }
+      datasource:
+        name: "AC Contact Pay by Phone"
+        itemId: "{4A39DE37-8791-4B9A-A69F-F9E4FAEF8757}"
+      registeredInAvailableRenderings: true
+      availableRenderingsItemId: "{EAFD8A27-6723-4972-AF51-3E0632B679A1}"
+    promoVariants:
+      containerId: "{86DA12CA-6B23-45C2-BFAC-E107274782CF}"
+      variants:
+        - { name: "PortalCard", itemId: "{B6D06319-13BC-4342-82E6-B842E4157D02}" }
+        - { name: "LocationContactCard", itemId: "{58B99E8F-527F-4AA0-94F7-193B3D269278}" }
+        - { name: "CenteredCard", itemId: "{19FE5C4B-78D8-4331-86A8-04F5A8E0C315}" }
+      datasources:
+        - { name: "AC Contact Account Portal", itemId: "{DBBC1B54-30AD-4487-A40B-B04D90074B18}", variant: "PortalCard" }
+        - { name: "AC Contact Locations", itemId: "{342AEEE3-6BE1-4115-B5A5-65D6E4D2C82C}", variant: "LocationContactCard" }
+    verification:
+      checkedAt: "2026-10-28T14:50:00Z"
+      passed:
+        - "AlertBanner template/rendering/variants/Available Renderings created"
+        - "Promo PortalCard + LocationContactCard + CenteredCard variants created"
+        - "Contact Us Final layout has AlertBanner Notice + 2 Promos with variants"
+        - "Datasources populated with Recology American Canyon contact copy"
+      failed: []
+      pendingManual:
+        - "Publish AlertBanner rendering, Headless Variants, Data/AlertBanners, Data/Promos, Contact Us page for Edge"
+        - "Optional: swap Lucide icon fallbacks for DAM laptop/headset images on Promo datasources"

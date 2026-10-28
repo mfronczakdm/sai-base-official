@@ -1,96 +1,93 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Default as AlertBannerDefault } from '../../components/alert-banner/AlertBanner.dev';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Default as AlertBannerDefault, Notice as AlertBannerNotice } from '../../components/alert-banner/AlertBanner';
 import {
   defaultAlertBannerProps,
   alertBannerPropsNoFields,
   alertBannerPropsMinimal,
   alertBannerPropsWithLink,
-  mockUseSitecoreNormal,
 } from './AlertBanner.mockProps';
-
-// Mock lucide-react icon
-jest.mock('lucide-react', () => ({ X: () => <svg data-testid="x-icon" /> }));
-
-// Mock the Sitecore Content SDK
-import type { Field } from '@sitecore-content-sdk/nextjs';
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({
     field,
     tag: Tag = 'span',
-    className,
+    ...rest
   }: {
-    field?: Field<string>;
-    tag?: string;
-    className?: string;
-  }) => {
-    const f = field as Field<string> | undefined;
-    if (!f?.value) return null;
-    // Create element using provided tag (Tag is a string tag name in tests)
-    const tagName = Tag as string;
-    return React.createElement(tagName, { className }, f.value);
-  },
-  useSitecore: jest.fn(() => mockUseSitecoreNormal),
+    field?: { value?: string };
+    tag?: keyof JSX.IntrinsicElements;
+  }) => (field?.value ? <Tag {...rest}>{field.value}</Tag> : null),
 }));
 
-// Mock ButtonComponent and NoDataFallback
-import type { LinkField } from '@sitecore-content-sdk/nextjs';
-
-jest.mock('../../components/button-component/ButtonComponent', () => ({
-  ButtonBase: ({ buttonLink }: { buttonLink?: LinkField }) => {
-    const bl = buttonLink as LinkField | undefined;
-    return (
-      <a href={bl?.value?.href} data-testid="button-link">
-        {bl?.value?.text}
-      </a>
-    );
-  },
+jest.mock('@/components/button-component/ButtonComponent', () => ({
+  ButtonBase: ({ buttonLink }: { buttonLink?: { value?: { href?: string; text?: string } } }) =>
+    buttonLink?.value?.href ? (
+      <a href={buttonLink.value.href}>{buttonLink.value.text || 'Link'}</a>
+    ) : null,
 }));
 
-jest.mock('../../utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: { componentName: string }) => (
-    <div data-testid="no-data-fallback">{componentName}</div>
+jest.mock('@/components/ui/alert', () => ({
+  Alert: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
+    <div className={className} data-testid="alert">
+      {children}
+    </div>
+  ),
+  AlertTitle: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
+  AlertDescription: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
+}));
+
+jest.mock('@/components/ui/button', () => ({
+  Button: ({
+    children,
+    onClick,
+    ...rest
+  }: {
+    children?: React.ReactNode;
+    onClick?: () => void;
+    variant?: string;
+    size?: string;
+  }) => (
+    <button type="button" onClick={onClick} {...rest}>
+      {children}
+    </button>
   ),
 }));
 
-describe('AlertBanner Component', () => {
-  it('renders title and description', () => {
-    render(<AlertBannerDefault {...defaultAlertBannerProps} />);
+jest.mock('lucide-react', () => ({
+  X: () => <span>X</span>,
+}));
 
+describe('AlertBanner Component', () => {
+  it('renders Default with title and description', () => {
+    render(<AlertBannerDefault {...defaultAlertBannerProps} />);
     expect(screen.getByText('Site notice')).toBeInTheDocument();
     expect(screen.getByText('This is an alert banner for site-wide messages.')).toBeInTheDocument();
   });
 
-  it('renders link when provided', () => {
+  it('renders link in Default when provided', () => {
     render(<AlertBannerDefault {...alertBannerPropsWithLink} />);
-
-    expect(screen.getByTestId('button-link')).toBeInTheDocument();
-    expect(screen.getByText('Learn more')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Learn more' })).toHaveAttribute('href', '/learn-more');
   });
 
-  it('can be dismissed via close button', () => {
+  it('hides Default banner when dismiss is clicked', () => {
     const { container } = render(<AlertBannerDefault {...defaultAlertBannerProps} />);
-
-    const closeButton = container.querySelector('button');
-    expect(closeButton).toBeInTheDocument();
-
-    if (closeButton) fireEvent.click(closeButton);
-    // After clicking, the alert should have class 'hidden' (per component logic)
-    expect(container.querySelector('.hidden')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Dismiss'));
+    expect(container.querySelector('.hidden')).toBeTruthy();
   });
 
-  it('renders alert structure even when field values are empty', () => {
+  it('shows fallback when Default has no fields', () => {
     const { container } = render(<AlertBannerDefault {...alertBannerPropsNoFields} />);
-
-    // Component renders the alert structure even with empty fields
-    // This matches the component's actual behavior (it checks if (fields) which is truthy for {})
-    expect(container.querySelector('[role="alert"]')).toBeInTheDocument();
+    expect(container.textContent).toMatch(/requires a datasource/i);
   });
 
-  it('renders gracefully with minimal fields', () => {
-    render(<AlertBannerDefault {...alertBannerPropsMinimal} />);
+  it('renders Notice cream strip with title and description', () => {
+    render(<AlertBannerNotice {...defaultAlertBannerProps} />);
+    expect(screen.getByText('Site notice')).toBeInTheDocument();
+    expect(screen.getByText('This is an alert banner for site-wide messages.')).toBeInTheDocument();
+    expect(document.querySelector('.alert-banner--notice')).toBeTruthy();
+  });
 
+  it('renders Notice with empty description when minimal', () => {
+    render(<AlertBannerNotice {...alertBannerPropsMinimal} />);
     expect(screen.getByText('Site notice')).toBeInTheDocument();
   });
 });

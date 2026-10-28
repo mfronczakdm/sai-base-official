@@ -8,15 +8,15 @@ export type AlertBannerProps = ComponentProps &
 
 export type AlertBannerParams = {
   params: {
-    mock_param?: string;
+    styles?: string;
+    RenderingIdentifier?: string;
+    [key: string]: string | undefined;
   };
 };
 
-// Non-component data source fields
-// TODO_SCAFFOLD_BE: Populate if needed, remove if not
 export type AlertBannerData = {
-  externalFields: {
-    mock_external_data: Field<string>;
+  externalFields?: {
+    mock_external_data?: Field<string>;
   };
 };
 

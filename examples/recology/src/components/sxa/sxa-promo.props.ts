@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 
 export interface PromoFields {
   PromoIcon?: ImageField;
+  PromoIcon2?: ImageField;
   PromoText?: Field<string>;
   PromoLink?: LinkField;
   PromoText2?: Field<string>;

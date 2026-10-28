@@ -127,7 +127,7 @@ import * as Carousel from 'src/components/carousel/Carousel';
 import * as CardSpotlightdev from 'src/components/card-spotlight/card-spotlight.dev';
 import * as ArticleHeader from 'src/components/article-header/ArticleHeader';
 import * as AnimatedSectiondev from 'src/components/animated-section/AnimatedSection.dev';
-import * as AlertBannerdev from 'src/components/alert-banner/AlertBanner.dev';
+import * as AlertBanner from 'src/components/alert-banner/AlertBanner';
 
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCClientWrapper],
@@ -251,7 +251,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['card-spotlight', { ...CardSpotlightdev }],
   ['ArticleHeader', { ...ArticleHeader }],
   ['AnimatedSection', { ...AnimatedSectiondev }],
-  ['AlertBanner', { ...AlertBannerdev }],
+  ['AlertBanner', { ...AlertBanner }],
 ]);
 
 export default componentMap;
