@@ -38,6 +38,7 @@ import * as LocationNavClient from 'src/components/site-three/location-nav-clien
 import * as ImageCarousel from 'src/components/site-three/ImageCarousel';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as HeaderST from 'src/components/site-three/HeaderST';
+import * as GlobalHeaderLinksClient from 'src/components/site-three/global-header-links-client';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
 import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
 import * as SearchBox from 'src/components/site-three/non-sitecore/SearchBox';
@@ -167,6 +168,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['ImageCarousel', { ...ImageCarousel }],
   ['HeroST', { ...HeroST }],
   ['HeaderST', { ...HeaderST }],
+  ['global-header-links-client', { ...GlobalHeaderLinksClient }],
   ['FeatureBanner', { ...FeatureBanner }],
   ['AccordionBlock', { ...AccordionBlock }],
   ['SearchBox', { ...SearchBox }],

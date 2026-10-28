@@ -29,6 +29,9 @@ SharedFields:
               jsonValue
             }
             name
+            pageSuppressSubNav: field(name: "pageSuppressSubNav") {
+              jsonValue
+            }
             url {
               href: path
             }
@@ -45,6 +48,9 @@ SharedFields:
                 jsonValue
               }
               name
+              pageSuppressSubNav: field(name: "pageSuppressSubNav") {
+                jsonValue
+              }
               url {
                 href: path
               }

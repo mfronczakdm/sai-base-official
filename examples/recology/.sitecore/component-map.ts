@@ -65,6 +65,7 @@ import * as ImageBanner from 'src/components/site-three/ImageBanner';
 import * as HeroST from 'src/components/site-three/HeroST';
 import * as HeroStutils from 'src/components/site-three/hero-st.utils';
 import * as HeaderST from 'src/components/site-three/HeaderST';
+import * as GlobalHeaderLinksClient from 'src/components/site-three/global-header-links-client';
 import * as FooterST from 'src/components/site-three/FooterST';
 import * as FeatureBanner from 'src/components/site-three/FeatureBanner';
 import * as AccordionBlock from 'src/components/site-three/AccordionBlock';
@@ -287,6 +288,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['HeroST', { ...HeroST, componentType: 'client' }],
   ['hero-st', { ...HeroStutils }],
   ['HeaderST', { ...HeaderST, componentType: 'client' }],
+  ['global-header-links-client', { ...GlobalHeaderLinksClient, componentType: 'client' }],
   ['FooterST', { ...FooterST }],
   ['FeatureBanner', { ...FeatureBanner, componentType: 'client' }],
   ['AccordionBlock', { ...AccordionBlock, componentType: 'client' }],

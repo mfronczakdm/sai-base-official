@@ -16,6 +16,7 @@ import { MobileMenuWrapper } from './MobileMenuWrapper';
 import { LocationRegionalNav } from './LocationRegionalNav';
 import { MyRecologyMenu, regionalUtilityHref } from './MyRecologyMenu';
 import { useLocationNav } from './location-nav-client';
+import { useGlobalHeaderLinks } from './global-header-links-client';
 import type { HeaderSTProps } from './header-st.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
 import { cn } from '@/lib/utils';
@@ -303,13 +304,23 @@ export const Version4 = (props: HeaderSTProps) => (
   </HeaderSTScrollFrame>
 );
 
+const recologyNavLinkClass = [
+  '[&_a]:uppercase [&_a]:tracking-wide',
+  '[&_a]:no-underline [&_a]:hover:!no-underline',
+  '[&_a]:hover:!text-primary',
+  '[&_a]:after:!content-none',
+].join(' ');
+
 const recologyMainNavClass = [
   'hidden min-w-0 flex-1 items-center lg:flex',
-  '[&_ul]:flex [&_ul]:flex-row [&_ul]:items-center',
+  '[&_.max-w-xs]:!max-w-none [&_.max-w-xs]:!p-0 [&_.max-w-xs]:!font-[inherit]',
+  '[&_h3]:hidden',
+  '[&_ul]:m-0 [&_ul]:flex [&_ul]:list-none [&_ul]:flex-row [&_ul]:items-center [&_ul]:p-0',
   '[&_li]:w-auto [&_li]:basis-auto',
   '[&_a]:px-2.5 [&_a]:py-2 [&_a]:text-sm [&_a]:font-normal [&_a]:text-foreground',
   '[&_button]:px-2.5 [&_button]:py-2 [&_button]:text-sm [&_button]:font-normal [&_button]:text-foreground',
   '[&_span]:text-sm [&_span]:font-normal [&_span]:text-foreground',
+  recologyNavLinkClass,
 ].join(' ');
 
 const recologyLocationNavClass = 'min-w-0 flex-1';
@@ -358,14 +369,13 @@ const HeaderSTRecologyView = ({
   const searchLink = getFieldValue(fields?.SearchLink);
   const supportLink = getFieldValue(fields?.SupportLink);
   const cartLink = getFieldValue(fields?.CartLink);
-  const placeholderId = props.params?.DynamicPlaceholderId || '1';
-  const mainPlaceholder = `header-navigation-${placeholderId}`;
   const routeItemId = props.page?.layout?.sitecore?.route?.itemId;
   // Prefer SupportLink target (LocationItem) so dropdowns resolve even from nested pages.
   const locationNavItemId = locationRootFromSupportLink(supportLink) || routeItemId;
   const language = props.page?.locale || 'en';
   const isEditing = Boolean(props.page?.mode?.isEditing);
   const locationNav = useLocationNav(showLocationNav ? locationNavItemId : undefined, language);
+  const primaryLinks = useGlobalHeaderLinks(language);
   const whatBinHref = regionalUtilityHref(locationNav, 'What Bin', '');
   const utilityLinks = [
     { href: regionalUtilityHref(locationNav, 'Pay My Bill', '/Pay-My-Bill'), label: 'Pay My Bill' },
@@ -390,14 +400,12 @@ const HeaderSTRecologyView = ({
                 </Link>
               </li>
             ))}
-            {showLocationNav && locationNav ? (
-              <MyRecologyMenu nav={locationNav} language={language} />
-            ) : (
+            {showLocationNav && !locationNav ? (
               <li>
-                <Link href="/Location" className="block px-3 py-2 text-sm text-primary-foreground" prefetch={false}>
-                  My Recology
-                </Link>
+                <span className="block px-3 py-2 text-sm text-primary-foreground">My Recology</span>
               </li>
+            ) : (
+              <MyRecologyMenu nav={locationNav} language={language} />
             )}
           </ul>
         </div>
@@ -411,12 +419,13 @@ const HeaderSTRecologyView = ({
 
           <nav className={recologyMainNavClass} aria-label="Primary">
             <ul className="flex flex-row items-center">
-              <AppPlaceholder
-                name={mainPlaceholder}
-                rendering={props.rendering}
-                page={props.page}
-                componentMap={getComponentMap()}
-              />
+              {primaryLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} prefetch={false}>
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
@@ -427,13 +436,14 @@ const HeaderSTRecologyView = ({
               <ContentSdkLink field={searchLink} prefetch={false} className="btn btn-outline hidden lg:inline-flex" />
             ) : null}
             <MobileMenuWrapper className="p-2 text-foreground">
-              <ul className="flex flex-col bg-background text-foreground">
-                <AppPlaceholder
-                  name={mainPlaceholder}
-                  rendering={props.rendering}
-                  page={props.page}
-                  componentMap={getComponentMap()}
-                />
+              <ul className={cn('flex flex-col bg-background text-foreground', recologyNavLinkClass)}>
+                {primaryLinks.map((link) => (
+                  <li key={`mobile-${link.href}`}>
+                    <Link href={link.href} prefetch={false}>
+                      {link.text}
+                    </Link>
+                  </li>
+                ))}
                 {showLocationNav ? (
                   <li className="border-t border-border pt-2">
                     <LocationRegionalNav

@@ -3,6 +3,12 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as SecondaryNavigationDefault } from '../../components/secondary-navigation/SecondaryNavigation';
 import {
+  mockChildPage1,
+  mockChildPage2,
+  mockChildPage3,
+  mockParentPage1,
+  mockParentPage2,
+  mockParentPage3,
   defaultSecondaryNavigationProps,
   secondaryNavigationPropsServices,
   secondaryNavigationPropsNoChildren,
@@ -120,6 +126,91 @@ describe('SecondaryNavigation Component', () => {
       expect(screen.getByText('Products')).toBeInTheDocument();
       expect(screen.getByText('Services')).toBeInTheDocument();
       expect(screen.getByText('Support')).toBeInTheDocument();
+    });
+
+    it('omits pages with Suppress in Sub Navigation checked', () => {
+      const props = {
+        ...defaultSecondaryNavigationProps,
+        fields: {
+          data: {
+            datasource: {
+              ...defaultSecondaryNavigationProps.fields.data.datasource,
+              children: {
+                results: [
+                  mockChildPage1,
+                  {
+                    ...mockChildPage2,
+                    pageSuppressSubNav: { jsonValue: { value: '1' } },
+                  },
+                  mockChildPage3,
+                ],
+              },
+              parent: {
+                children: {
+                  results: [
+                    mockParentPage1,
+                    {
+                      ...mockParentPage2,
+                      navigationTitle: { jsonValue: { value: 'News' } },
+                      pageSuppressSubNav: { jsonValue: { value: '1' } },
+                    },
+                    mockParentPage3,
+                  ],
+                },
+              },
+            },
+          },
+        },
+      };
+
+      render(<SecondaryNavigationDefault {...props} />);
+
+      expect(screen.queryByText('News')).not.toBeInTheDocument();
+      expect(screen.queryByText('Speakers')).not.toBeInTheDocument();
+      expect(screen.getByText('Products')).toBeInTheDocument();
+      expect(screen.getByText('Headphones')).toBeInTheDocument();
+    });
+
+    it('still shows child links when the current page is suppressed', () => {
+      const props = {
+        ...defaultSecondaryNavigationProps,
+        fields: {
+          data: {
+            datasource: {
+              id: 'home',
+              children: {
+                results: [
+                  mockChildPage1,
+                  {
+                    ...mockChildPage2,
+                    navigationTitle: { jsonValue: { value: 'News' } },
+                    pageSuppressSubNav: { jsonValue: { value: true } },
+                  },
+                ],
+              },
+              parent: {
+                children: {
+                  results: [
+                    {
+                      id: 'home',
+                      name: 'Home',
+                      navigationTitle: { jsonValue: { value: 'Home' } },
+                      pageSuppressSubNav: { jsonValue: { value: true } },
+                      url: { href: '/' },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      };
+
+      render(<SecondaryNavigationDefault {...props} />);
+
+      expect(screen.queryByText('Home')).not.toBeInTheDocument();
+      expect(screen.queryByText('News')).not.toBeInTheDocument();
+      expect(screen.getByText('Headphones')).toBeInTheDocument();
     });
 
     it('displays child navigation items for current page', () => {

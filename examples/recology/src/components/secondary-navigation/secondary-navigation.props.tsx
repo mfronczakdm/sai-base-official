@@ -31,5 +31,7 @@ export type SecondaryNavigationPage = {
   displayName?: string;
   title?: GqlFieldString;
   navigationTitle?: GqlFieldString;
+  /** Checkbox pageSuppressSubNav. Checked values are "1" or true. */
+  pageSuppressSubNav?: { jsonValue?: { value?: string | boolean | number | null } };
   url?: LinkFieldValue;
 };

@@ -13,6 +13,14 @@ import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import type { LinkField, LinkFieldValue } from '@sitecore-content-sdk/nextjs';
 
+const isSuppressedInSubNav = (page: SecondaryNavigationPage): boolean => {
+  const value = page.pageSuppressSubNav?.jsonValue?.value;
+  return value === true || value === 1 || value === '1';
+};
+
+const visiblePages = (pages: SecondaryNavigationPage[] | undefined) =>
+  (pages ?? []).filter((page) => !isSuppressedInSubNav(page));
+
 const toLinkField = (url: LinkFieldValue | undefined, text: string): LinkField => ({
   value: {
     href: url?.href ?? '',
@@ -31,9 +39,10 @@ export const Default: React.FC<SecondaryNavigationProps> = (props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const renderChildren = (childItems: SecondaryNavigationPage[]) => {
+    const visibleChildren = visiblePages(childItems);
     return (
       <NavigationMenu.List className="mt-2 flex list-none flex-col items-start gap-2">
-        {childItems.map((child, index) => {
+        {visibleChildren.map((child, index) => {
           const title =
             child.navigationTitle?.jsonValue.value ||
             child.title?.jsonValue.value ||
@@ -60,6 +69,14 @@ export const Default: React.FC<SecondaryNavigationProps> = (props) => {
 
   const Content = (props: { className?: string }): JSX.Element => {
     const { className } = props;
+    const siblings = parent.children?.results ?? [];
+    const currentPage = siblings.find((item) => item.id === datasource.id);
+    // Home is suppressed, but its children are the header links. Keep those
+    // links when the current page itself is omitted from the sibling list.
+    const items =
+      currentPage && isSuppressedInSubNav(currentPage)
+        ? visiblePages(children.results)
+        : visiblePages(siblings);
 
     return (
       <NavigationMenu.Root
@@ -67,7 +84,7 @@ export const Default: React.FC<SecondaryNavigationProps> = (props) => {
         orientation="vertical"
       >
         <NavigationMenu.List className="m-0 flex list-none flex-col gap-2 pl-0">
-          {parent.children?.results?.map((item, index) => {
+          {items.map((item, index) => {
             const isParent = datasource.id == item.id;
             const title =
               item.navigationTitle?.jsonValue.value ||

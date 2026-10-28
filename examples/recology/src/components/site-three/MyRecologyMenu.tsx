@@ -7,11 +7,6 @@ import type { LocationNavResult } from '@/lib/location-nav-from-edge';
 import type { LocationDirectoryGroup, LocationDirectoryLink } from '@/lib/location-directory';
 import { cn } from '@/lib/utils';
 
-type MyRecologyMenuProps = {
-  nav: LocationNavResult;
-  language?: string;
-};
-
 const findHref = (nav: LocationNavResult, title: string): string | undefined => {
   const wanted = title.toLowerCase();
   for (const section of nav.sections) {
@@ -86,11 +81,15 @@ const LocationDirectoryPanel = ({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[80] overflow-y-auto bg-primary text-primary-foreground" role="dialog" aria-label="All locations">
-      <div className="mx-auto max-w-7xl px-6 py-8">
-        <div className="mb-6 flex justify-end">
-          <button type="button" className="p-2" onClick={onClose} aria-label="Close locations">
-            <X className="size-6" />
+    <div
+      className="absolute right-0 top-full z-[80] mt-1 w-[min(42rem,calc(100vw-2rem))] bg-primary text-primary-foreground shadow-lg"
+      role="dialog"
+      aria-label="All locations"
+    >
+      <div className="px-6 py-4">
+        <div className="mb-3 flex justify-end">
+          <button type="button" className="p-1" onClick={onClose} aria-label="Close locations">
+            <X className="size-5" />
           </button>
         </div>
         {groups === null ? (
@@ -112,14 +111,15 @@ const LocationDirectoryPanel = ({
   );
 };
 
-export const MyRecologyMenu = ({ nav, language = 'en' }: MyRecologyMenuProps) => {
+export const MyRecologyMenu = ({ nav, language = 'en' }: { nav?: LocationNavResult | null; language?: string }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [directoryOpen, setDirectoryOpen] = useState(false);
   const ref = useRef<HTMLLIElement>(null);
-  const place = shortLocationName(nav.locationLabel);
-  const homeHref = nav.locationHref || '/Location';
-  const accountHref = findHref(nav, 'Pay My Bill') || '/Pay-My-Bill';
-  const nearbyHref = findHref(nav, 'Nearby Locations') || homeHref;
+  const place = nav ? shortLocationName(nav.locationLabel) : '';
+  const label = place ? `My Recology (${place})` : 'My Recology';
+  const homeHref = nav?.locationHref || '/Location';
+  const accountHref = (nav && findHref(nav, 'Pay My Bill')) || '/Pay-My-Bill';
+  const nearbyHref = (nav && findHref(nav, 'Nearby Locations')) || homeHref;
 
   useEffect(() => {
     if (!isVisible) return;
@@ -139,7 +139,7 @@ export const MyRecologyMenu = ({ nav, language = 'en' }: MyRecologyMenuProps) =>
         aria-haspopup="true"
         onClick={() => setIsVisible(!isVisible)}
       >
-        My Recology ({place})
+        {label}
         <ChevronDown className={cn('size-3.5', isVisible && 'rotate-180')} aria-hidden />
       </button>
       {isVisible ? (

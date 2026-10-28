@@ -533,7 +533,13 @@ describe('HeaderST Component', () => {
       expect(screen.getByTestId('header-st-recology-global')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Pay My Bill' })).toHaveAttribute('href', '/Pay-My-Bill');
       expect(screen.getByRole('link', { name: 'Recology' })).toHaveAttribute('href', '/');
-      expect(screen.getByRole('link', { name: 'My Recology' })).toHaveAttribute('href', '/Location');
+      expect(screen.getAllByRole('link', { name: 'About Us' })[0]).toHaveAttribute('href', '/About-Us');
+      expect(screen.getAllByRole('link', { name: 'Careers' })[0]).toHaveAttribute('href', '/Careers');
+      fireEvent.click(screen.getByRole('button', { name: 'My Recology' }));
+      expect(screen.getByRole('menuitem', { name: 'My Recology Home' })).toHaveAttribute('href', '/Location');
+      expect(screen.getByRole('menuitem', { name: 'Manage My Account' })).toHaveAttribute('href', '/Pay-My-Bill');
+      expect(screen.getByRole('menuitem', { name: 'Nearby Locations' })).toHaveAttribute('href', '/Location');
+      expect(screen.getByRole('menuitem', { name: 'See All Locations' })).toBeInTheDocument();
       expect(screen.getByRole('search')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
       expect(screen.queryByTestId('header-st-regional')).not.toBeInTheDocument();

@@ -9806,7 +9806,8 @@ ia:
         - { name: "Version6", itemId: "{32188657-4A33-4C8C-B39D-1F26E33C9AF1}" }
         - { name: "Regional", itemId: "{D3A5B630-4789-4DCB-A472-F0D8B014DDBE}" }
       partialDesigns:
-        globalHeader: "{4B6C5584-D671-4378-9B58-CC67D921854B}"
+        globalHeader: "{E768092F-8766-42AC-A98A-D5B4EDCD75B6}"
+        globalHeaderLinkList: "{732277DB-211B-4F72-B9DF-88E9875077A1}"
         americanCanyonFolder: "{AB42B821-F301-431D-A778-439E2AEAB0FB}"
         americanCanyonHeader: "{54D1BD5D-4C9B-4AA4-BB4A-64C3071889E4}"
         americanCanyonFooter: "{52D2917E-F11D-409B-85A8-6F6CEE868028}"
@@ -9825,6 +9826,11 @@ ia:
         (/Location/Recology-American-Canyon/Customer-Service/FAQ).
         2026-10-28: Regional menu is stored in sessionStorage after the first
         read so FAQ / What Bin pages reuse it for the demo visit.
+        2026-10-28: Global Header Recology was recreated at
+        {E768092F-8766-42AC-A98A-D5B4EDCD75B6}. Its main nav is the Link List
+        Data/Main {732277DB-211B-4F72-B9DF-88E9875077A1} (About Us, Community
+        Impact, Sustainability, Organics, Careers). Those links stay on every
+        page. Edit each child Link field to retarget a Sitecore page, then publish.
 
     datasourceExample:
       name: "Header"
