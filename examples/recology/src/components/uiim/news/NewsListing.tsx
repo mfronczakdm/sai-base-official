@@ -30,10 +30,36 @@ const isArticle = (article?: NewsListingArticle): article is NewsListingArticle 
 const articleTitle = (article: NewsListingArticle): string =>
   fieldText(article.pageTitle) || fieldText(article.pageHeaderTitle) || article.name || '';
 
+/** Edge often returns a host-qualified path (`//www.recology.com//News/...`). Keep the site route. */
+const sitePath = (raw?: string): string => {
+  const href = (raw || '').trim();
+  if (!href) return '';
+
+  let path = href;
+  if (href.startsWith('//') || /^https?:\/\//i.test(href)) {
+    try {
+      path = new URL(href.startsWith('//') ? `https:${href}` : href).pathname;
+    } catch {
+      return '';
+    }
+  }
+
+  const normalized = path.replace(/\/{2,}/g, '/');
+  if (!normalized || normalized === '/') return '';
+  return normalized.startsWith('/') ? normalized : `/${normalized}`;
+};
+
 const articleHref = (article: NewsListingArticle): string => {
+  const itemPath = sitePath(article.url?.path);
+  if (itemPath) return itemPath;
+
   const link = getFieldValue(article.sourceLink)?.value;
-  if (typeof link?.href === 'string' && link.href) return link.href;
-  return article.url?.path || '#';
+  const href = typeof link?.href === 'string' ? link.href : '';
+  if (href && !href.startsWith('//') && !/^https?:\/\//i.test(href)) {
+    return sitePath(href) || '#';
+  }
+
+  return '#';
 };
 
 const articleImage = (article: NewsListingArticle): { src: string; alt: string } => {

@@ -162,6 +162,38 @@ describe('NewsListing', () => {
     );
   });
 
+  it('links the card to the Sitecore item when Read more link points at recology.com', () => {
+    const externalProps: NewsListingProps = {
+      ...props,
+      fields: {
+        data: {
+          datasource: {
+            title: { jsonValue: { value: 'News' } },
+            articles: {
+              targetItems: [
+                {
+                  ...article(
+                    'tahoe',
+                    'Recology to Acquire Tahoe Truckee Sierra Disposal',
+                    'https://www.recology.com/recology_news/recology-to-acquire-tahoe/'
+                  ),
+                  url: { path: '//www.recology.com//News/Recology-to-Acquire-Tahoe' },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    render(<ImageCards {...externalProps} />);
+
+    expect(screen.getByTestId('news-listing-image-card')).toHaveAttribute(
+      'href',
+      '/News/Recology-to-Acquire-Tahoe'
+    );
+  });
+
   it('asks for a datasource when fields are missing', () => {
     render(<ImageCards rendering={{ componentName: 'NewsListing' }} page={mockPage} params={{}} />);
 
