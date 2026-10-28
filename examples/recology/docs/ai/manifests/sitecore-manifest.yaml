@@ -1,5 +1,5 @@
 ﻿generatedAt: "2026-03-20T09:00:00Z"
-lastUpdatedAt: "2026-10-28T12:55:00Z"
+lastUpdatedAt: "2026-10-28T13:05:00Z"
 lastUpdatedBy: "cursor-agent"
 
 project:
@@ -14804,3 +14804,38 @@ externalImageOptimizerAudit:
         - "Publish Data/MultiPromos/American Canyon and Data/MultiPromos/San Bruno for Edge"
         - "In Pages personalization: swap MultiPromo datasource by same segment rules as HeroST"
         - "Optional: retarget SB tiles to local pages once San Bruno LocationItem tree is restored"
+
+  - name: "recology-herost-segment-global"
+    kind: "content"
+    category: "HeroST"
+    status: "complete"
+    createdAt: "2026-10-28T13:05:00Z"
+    updatedAt: "2026-10-28T13:05:00Z"
+    siteCollection: "recology"
+    siteName: "recology"
+    notes: >
+      Global Segment HeroST folder with five datasources aligned to CDP extensions.Segment
+      values (Prospective New Mover, New Customer First 90 Days, Established Resident,
+      Business Multifamily, Contractor). Location-agnostic CTAs use global Location, Contact,
+      Pay My Bill, FAQ, and three-cart news pages. Pair with location-specific AC/SB heroes
+      when Location attribute is also known.
+    folder:
+      name: "Segment"
+      itemId: "{FA3C37AA-B4BD-4CAD-A84D-858F2E2905CC}"
+      path: "/sitecore/content/recology/recology/Data/HeroST/Segment"
+      templateId: "{91F1954F-86D9-4859-9885-3E42E8D8A2A9}"
+    items:
+      - { name: "Prospective New Mover", itemId: "{D5E56A23-72C4-4041-B61D-3BC9F3B678E4}", title: "Starting Service with Recology" }
+      - { name: "New Customer First 90 Days", itemId: "{212DA197-FB10-48FE-BB6C-15FF263D87D0}", title: "Your First Weeks with Recology" }
+      - { name: "Established Resident", itemId: "{369176CC-DA31-429D-97D8-ED4F7E06E545}", title: "Manage Your Recology Service" }
+      - { name: "Business Multifamily", itemId: "{D1AB5758-C6FC-47AD-B830-FDCFD8851B7A}", title: "Commercial & Multifamily Solutions" }
+      - { name: "Contractor", itemId: "{D6DE9097-3B27-4FEB-A68D-C6DC6A06C5C8}", title: "Debris Boxes for Job Sites" }
+    verification:
+      checkedAt: "2026-10-28T13:05:00Z"
+      passed:
+        - "Segment HeroST Folder created"
+        - "5 HeroST datasources created with Title/Eyebrow/Image1/Link1/Link2"
+      failed: []
+      pendingManual:
+        - "Publish Data/HeroST/Segment for Edge"
+        - "In Pages personalization: swap HeroST datasource by CDP extensions.Segment"

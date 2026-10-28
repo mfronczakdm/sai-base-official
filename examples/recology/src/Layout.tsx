@@ -50,6 +50,7 @@ const accent = Lato({
 // multipromo-3_2
 
 import SitecoreStyles from 'components/content-sdk/SitecoreStyles';
+import GuestPanel from '@/demo/GuestPanel';
 
 interface LayoutProps {
   page: Page;
@@ -150,6 +151,7 @@ const Layout = ({ page, baseUrl: baseUrlProp }: LayoutProps): JSX.Element => {
                   )}
                 </div>
               </footer>
+              <GuestPanel />
             </>
           )}
         </div>
