@@ -3,6 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as HeaderSTDefault, Version4 as HeaderSTVersion4, RecologyGlobal as HeaderSTRecologyGlobal, Version5 as HeaderSTVersion5, Regional as HeaderSTRegional, Version6 as HeaderSTVersion6 } from '../../components/site-three/HeaderST';
 import { mockPageEditing } from '../test-utils/mockPage';
+import { clearLocationNavMemoryCache, clearRememberedLocation, rememberLocation } from '../../components/site-three/location-nav-client';
 import {
   defaultHeaderSTProps,
   headerSTPropsBasic,
@@ -527,6 +528,11 @@ describe('HeaderST Component', () => {
   });
 
   describe('RecologyGlobal and Regional', () => {
+    beforeEach(() => {
+      clearLocationNavMemoryCache();
+      clearRememberedLocation();
+    });
+
     it('renders the Recology utility bar and search form without changing Default', () => {
       render(<HeaderSTRecologyGlobal {...headerSTPropsSearchBoxOnly} />);
 
@@ -535,7 +541,8 @@ describe('HeaderST Component', () => {
       expect(screen.getByRole('link', { name: 'Recology' })).toHaveAttribute('href', '/');
       expect(screen.getAllByRole('link', { name: 'About Us' })[0]).toHaveAttribute('href', '/About-Us');
       expect(screen.getAllByRole('link', { name: 'Careers' })[0]).toHaveAttribute('href', '/Careers');
-      fireEvent.click(screen.getByRole('button', { name: 'My Recology' }));
+      expect(screen.getByRole('link', { name: 'My Recology' })).toHaveAttribute('href', '/Location');
+      fireEvent.click(screen.getByRole('button', { name: 'Open My Recology menu' }));
       expect(screen.getByRole('menuitem', { name: 'My Recology Home' })).toHaveAttribute('href', '/Location');
       expect(screen.getByRole('menuitem', { name: 'Manage My Account' })).toHaveAttribute('href', '/Pay-My-Bill');
       expect(screen.getByRole('menuitem', { name: 'Nearby Locations' })).toHaveAttribute('href', '/Location');
@@ -593,8 +600,9 @@ describe('HeaderST Component', () => {
 
       render(<HeaderSTRegional {...headerSTPropsBasic} page={pageWithRoute as any} />);
 
-      const trigger = await screen.findByRole('button', { name: /My Recology \(American Canyon\)/i });
-      fireEvent.click(trigger);
+      const home = await screen.findByRole('link', { name: /My Recology \(American Canyon\)/i });
+      expect(home).toHaveAttribute('href', '/Location/Recology-American-Canyon');
+      fireEvent.click(screen.getByRole('button', { name: /Open My Recology \(American Canyon\) menu/i }));
 
       expect(screen.getByRole('menuitem', { name: 'My Recology Home' })).toHaveAttribute(
         'href',
@@ -606,6 +614,48 @@ describe('HeaderST Component', () => {
       );
       expect(screen.getByRole('menuitem', { name: 'See All Locations' })).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Recology' })).toHaveAttribute('href', '/');
+    });
+
+    it('remembers the location on the global header after a regional visit', async () => {
+      const nav = {
+        locationLabel: 'Recology American Canyon',
+        locationHref: '/Location/Recology-American-Canyon',
+        sections: [
+          {
+            name: 'Customer Service',
+            title: 'Customer Service',
+            href: '/Location/Recology-American-Canyon/Customer-Service',
+            children: [
+              {
+                name: 'Pay My Bill',
+                title: 'Pay My Bill',
+                href: '/Location/Recology-American-Canyon/Customer-Service/Pay-My-Bill',
+              },
+            ],
+          },
+        ],
+      };
+      rememberLocation('f013bb48-b6cd-4824-8cd9-c69eec056724', 'en');
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => nav,
+      });
+
+      render(
+        <HeaderSTRecologyGlobal
+          {...headerSTPropsSearchBoxOnly}
+          page={{ ...headerSTPropsSearchBoxOnly.page, locale: 'en' } as any}
+        />
+      );
+
+      expect(await screen.findByRole('link', { name: /My Recology \(American Canyon\)/i })).toHaveAttribute(
+        'href',
+        '/Location/Recology-American-Canyon'
+      );
+      expect(screen.getByRole('link', { name: 'Pay My Bill' })).toHaveAttribute(
+        'href',
+        '/Location/Recology-American-Canyon/Customer-Service/Pay-My-Bill'
+      );
     });
 
     it('adds the location row with tree-driven nav and keeps search and cart params', () => {

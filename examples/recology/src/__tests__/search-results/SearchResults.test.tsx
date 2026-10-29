@@ -94,5 +94,27 @@ describe('SearchResults', () => {
       }).length
     ).toBeGreaterThanOrEqual(1);
   });
+
+  it('shows a moving-boxes answer and filters the cards by region', () => {
+    render(<SearchResults {...props} />);
+
+    fireEvent.change(screen.getByLabelText('Search Recology'), {
+      target: { value: 'what do I do with moving boxes' },
+    });
+    fireEvent.submit(screen.getByRole('search'));
+
+    expect(screen.getByText(/Flatten clean, dry cardboard moving boxes/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Recology American Canyon/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Recology San Bruno/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Recology American Canyon/i }));
+
+    expect(screen.getByText(/In American Canyon, flatten clean cardboard/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'What to Do with Moving Boxes' })).toHaveAttribute(
+      'href',
+      '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes'
+    );
+    expect(screen.queryByRole('link', { name: 'Your Three Carts — San Bruno' })).not.toBeInTheDocument();
+  });
 });
 

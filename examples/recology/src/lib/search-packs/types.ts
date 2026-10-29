@@ -1,4 +1,4 @@
-export type SearchFacetKey = 'topic' | 'type';
+export type SearchFacetKey = 'topic' | 'type' | 'region';
 
 export type SearchResultItem = {
   id: string;
@@ -7,6 +7,13 @@ export type SearchResultItem = {
   href: string;
   topic: string;
   type: string;
+  /**
+   * Service area for the Region facet.
+   * LocationItem pages under /Location are regions. Child pages inherit that region from the URL.
+   * Set this when an item lives outside /Location but still belongs to one region.
+   * Use an empty string when the result is company-wide even if href sits under one location.
+   */
+  region?: string;
   /** Extra terms for natural-language matching (locations, synonyms, intents). */
   keywords?: string[];
   /** Short answer shown when this item is a Q&A match. */

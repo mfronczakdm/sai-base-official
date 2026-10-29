@@ -9,6 +9,7 @@ import {
   facetCounts,
   findQaAnswers,
   getSearchPack,
+  itemRegion,
   rankSearchPackItems,
   searchPackItems,
 } from '@/lib/search-packs';
@@ -29,9 +30,14 @@ const fieldText = (field?: { value?: string } | FieldLike): string => {
 
 type FieldLike = { value?: string };
 
-const ResultCard = ({ item }: { item: SearchResultItem }) => (
+const ResultCard = ({ item }: { item: SearchResultItem }) => {
+  const region = itemRegion(item);
+  return (
   <article className="flex h-full flex-col border border-border bg-background p-5 shadow-sm transition hover:border-primary/40">
-    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">{item.type}</p>
+    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">
+      {item.type}
+      {region ? <span className="font-medium normal-case tracking-normal text-muted-foreground"> · {region}</span> : null}
+    </p>
     <h3 className="mb-2 text-lg font-semibold text-foreground">
       <a href={item.href} className="hover:underline">
         {item.title}
@@ -42,7 +48,8 @@ const ResultCard = ({ item }: { item: SearchResultItem }) => (
       Read more
     </a>
   </article>
-);
+  );
+};
 
 const QaAnswerPanel = ({ items }: { items: ScoredSearchResult[] }) => {
   if (!items.length) return null;
@@ -56,6 +63,9 @@ const QaAnswerPanel = ({ items }: { items: ScoredSearchResult[] }) => {
         >
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">
             Question &amp; answer
+            {itemRegion(item) ? (
+              <span className="font-medium normal-case tracking-normal"> · {itemRegion(item)}</span>
+            ) : null}
           </p>
           <h2 className="mb-3 text-xl font-semibold text-foreground lg:text-2xl">{item.title}</h2>
           <p className="mb-4 max-w-3xl text-sm leading-relaxed text-foreground/90 lg:text-base">
@@ -136,6 +146,7 @@ export const Default = (props: SearchResultsProps) => {
   const [draft, setDraft] = useState(initialQuery);
   const [topic, setTopic] = useState<string | undefined>();
   const [type, setType] = useState<string | undefined>();
+  const [region, setRegion] = useState<string | undefined>();
   const [sort, setSort] = useState<'relevance' | 'title'>('relevance');
   const [pageIndex, setPageIndex] = useState(0);
 
@@ -153,8 +164,8 @@ export const Default = (props: SearchResultsProps) => {
     'Search Recology';
 
   const ranked = useMemo(
-    () => rankSearchPackItems(pack, query, { topic, type }),
-    [pack, query, topic, type]
+    () => rankSearchPackItems(pack, query, { topic, type, region }),
+    [pack, query, topic, type, region]
   );
 
   const filtered = useMemo(() => {
@@ -164,19 +175,32 @@ export const Default = (props: SearchResultsProps) => {
     return ranked;
   }, [ranked, sort]);
 
-  const qaAnswers = useMemo(() => findQaAnswers(pack, query, 2), [pack, query]);
+  const qaAnswers = useMemo(
+    () => findQaAnswers(pack, query, 1, { topic, type, region }),
+    [pack, query, topic, type, region]
+  );
 
-  const topicFacets = useMemo(() => facetCounts(searchPackItems(pack, query, { type }), 'topic'), [pack, query, type]);
-  const typeFacets = useMemo(() => facetCounts(searchPackItems(pack, query, { topic }), 'type'), [pack, query, topic]);
+  const regionFacets = useMemo(
+    () => facetCounts(searchPackItems(pack, query, { topic, type }), 'region'),
+    [pack, query, topic, type]
+  );
+  const topicFacets = useMemo(
+    () => facetCounts(searchPackItems(pack, query, { type, region }), 'topic'),
+    [pack, query, type, region]
+  );
+  const typeFacets = useMemo(
+    () => facetCounts(searchPackItems(pack, query, { topic, region }), 'type'),
+    [pack, query, topic, region]
+  );
 
   const qaIds = new Set(qaAnswers.map((item) => item.id));
-  // Keep Q&A cards out of the grid when they already appear in the answer panel.
-  const listItems = filtered.filter((item) => !qaIds.has(item.id));
+  // Q&A stays in the answer panel. Region-specific answers appear there after a Region filter.
+  const listItems = filtered.filter((item) => item.type !== 'Q&A' && !qaIds.has(item.id));
   const total = listItems.length;
   const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const safePage = Math.min(pageIndex, pageCount - 1);
   const pageItems = listItems.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
-  const featured = !query && !topic && !type ? listItems.find((item) => item.featured) : undefined;
+  const featured = !query && !topic && !type && !region ? listItems.find((item) => item.featured) : undefined;
   const gridItems = featured ? pageItems.filter((item) => item.id !== featured.id) : pageItems;
   const rangeStart = total === 0 ? 0 : safePage * PAGE_SIZE + 1;
   const rangeEnd = Math.min(total, (safePage + 1) * PAGE_SIZE);
@@ -258,15 +282,27 @@ export const Default = (props: SearchResultsProps) => {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[16rem_minmax(0,1fr)] lg:px-6">
         <aside aria-label="Refine results" className="lg:sticky lg:top-6 lg:self-start">
           <h2 className="mb-2 text-base font-bold text-foreground">Refine by</h2>
+          {regionFacets.length > 0 ? (
+            <FacetGroup
+              title="Region"
+              options={regionFacets}
+              selected={region}
+              onSelect={(value) => {
+                setRegion(value);
+                setPageIndex(0);
+              }}
+            />
+          ) : null}
           <FacetGroup title="Topic" options={topicFacets} selected={topic} onSelect={(value) => { setTopic(value); setPageIndex(0); }} />
           <FacetGroup title="Resource type" options={typeFacets} selected={type} onSelect={(value) => { setType(value); setPageIndex(0); }} />
-          {(topic || type) && (
+          {(topic || type || region) && (
             <button
               type="button"
               className="mt-3 text-sm text-primary hover:underline"
               onClick={() => {
                 setTopic(undefined);
                 setType(undefined);
+                setRegion(undefined);
                 setPageIndex(0);
               }}
             >

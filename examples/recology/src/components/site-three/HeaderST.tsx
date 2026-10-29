@@ -15,7 +15,7 @@ import { SearchBox } from './non-sitecore/SearchBox';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
 import { LocationRegionalNav } from './LocationRegionalNav';
 import { MyRecologyMenu, regionalUtilityHref } from './MyRecologyMenu';
-import { useLocationNav } from './location-nav-client';
+import { useLocationNav, useRememberCurrentLocation, useRememberedLocationId } from './location-nav-client';
 import { useGlobalHeaderLinks } from './global-header-links-client';
 import type { HeaderSTProps } from './header-st.props';
 import { getDatasource, getFieldValue } from '@/lib/component-props';
@@ -370,11 +370,16 @@ const HeaderSTRecologyView = ({
   const supportLink = getFieldValue(fields?.SupportLink);
   const cartLink = getFieldValue(fields?.CartLink);
   const routeItemId = props.page?.layout?.sitecore?.route?.itemId;
-  // Prefer SupportLink target (LocationItem) so dropdowns resolve even from nested pages.
-  const locationNavItemId = locationRootFromSupportLink(supportLink) || routeItemId;
   const language = props.page?.locale || 'en';
   const isEditing = Boolean(props.page?.mode?.isEditing);
-  const locationNav = useLocationNav(showLocationNav ? locationNavItemId : undefined, language);
+  // Prefer SupportLink target (LocationItem) so dropdowns resolve even from nested pages.
+  const pageLocationId = showLocationNav
+    ? locationRootFromSupportLink(supportLink) || routeItemId
+    : undefined;
+  const rememberedLocationId = useRememberedLocationId(language, !pageLocationId);
+  const locationNavItemId = pageLocationId || rememberedLocationId;
+  const locationNav = useLocationNav(locationNavItemId, language);
+  useRememberCurrentLocation(pageLocationId, language, locationNav);
   const primaryLinks = useGlobalHeaderLinks(language);
   const whatBinHref = regionalUtilityHref(locationNav, 'What Bin', '');
   const utilityLinks = [

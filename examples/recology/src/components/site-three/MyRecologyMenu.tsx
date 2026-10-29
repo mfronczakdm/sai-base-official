@@ -132,16 +132,25 @@ export const MyRecologyMenu = ({ nav, language = 'en' }: { nav?: LocationNavResu
 
   return (
     <li ref={ref} className="relative">
-      <button
-        type="button"
-        className="inline-flex items-center gap-1 px-3 py-2 text-sm text-primary-foreground"
-        aria-expanded={isVisible}
-        aria-haspopup="true"
-        onClick={() => setIsVisible(!isVisible)}
-      >
-        {label}
-        <ChevronDown className={cn('size-3.5', isVisible && 'rotate-180')} aria-hidden />
-      </button>
+      <div className="inline-flex items-center">
+        <Link
+          href={homeHref}
+          className="px-3 py-2 text-sm text-primary-foreground"
+          prefetch={false}
+        >
+          {label}
+        </Link>
+        <button
+          type="button"
+          className="inline-flex items-center py-2 pr-2 text-primary-foreground"
+          aria-expanded={isVisible}
+          aria-haspopup="true"
+          aria-label={`Open ${label} menu`}
+          onClick={() => setIsVisible(!isVisible)}
+        >
+          <ChevronDown className={cn('size-3.5', isVisible && 'rotate-180')} aria-hidden />
+        </button>
+      </div>
       {isVisible ? (
         <ul className="absolute right-0 z-[70] min-w-[14rem] border border-border bg-background py-1 text-foreground shadow-sm" role="menu">
           <li>

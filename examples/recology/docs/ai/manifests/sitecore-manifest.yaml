@@ -14365,6 +14365,7 @@ externalImageOptimizerAudit:
       - { name: "Moving to San Bruno article", itemId: "{5E13BD0D-A149-4EE0-9A19-5A67D53D6793}", path: "/sitecore/content/recology/recology/Home/News/Moving to San Bruno Waste Management Options", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{3E8109DE-9024-42D7-B2C8-FEBDA402DB1E}" }
       - { name: "Three-Cart Relocate article", itemId: "{1B8FBE75-53E0-478D-896E-52D8FA4EF32C}", path: "/sitecore/content/recology/recology/Home/News/Understanding Your Three Cart Options When You Relocate", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{DA162659-3F48-4FCC-8CE0-5F1F87EABBE6}" }
       - { name: "Why Organics Belong in the Green Cart", itemId: "{8630324D-C221-4385-9B02-B054A83F9570}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{59B9652E-9964-447A-B3AD-8038E65229CB}" }
+      - { name: "What to Do with Moving Boxes", itemId: "{3519737C-915F-4A8A-AD84-F5D43B0C6C2D}", path: "/sitecore/content/recology/recology/Home/Location/Recology American Canyon/In My Community/News and Events/What to Do with Moving Boxes", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", pageDesign: "{079AFDFF-DFE1-4944-BCB5-E13809282584}" }
       - { name: "New Region branch Why Organics", itemId: "{F0E210DC-F880-4D21-96D3-FB493085FCB8}", path: "/sitecore/content/recology/recology/Presentation/Page Branches/New Region/$name/In My Community/News and Events/Why Organics Belong in the Green Cart", templateId: "{4CFDBA63-45F6-42E8-8787-29F48573BD58}", previousItemId: "{CB616409-1925-4640-98A8-E54D225F5D63}" }
     rendering:
       name: "SearchResults"
@@ -14395,9 +14396,13 @@ externalImageOptimizerAudit:
         - "Recreated news items as Page {4CFDBA63} with DAM image (global + AC + New Region branch)"
         - "Updated AC Local NewsListing Articles multilist to new Why Organics ID"
         - "Q&A + keyword scoring for NL queries (San Bruno moving example)"
+        - "Region facet from /Location/{LocationItem} paths; moving-boxes Q&A for American Canyon and San Bruno"
+        - "Created American Canyon page What to Do with Moving Boxes and added it to Local NewsListing Articles"
       failed: []
       pendingManual:
         - "Publish recreated news Pages + AC Local NewsListing for Edge"
+        - "Publish What to Do with Moving Boxes so the search card opens on the site"
+        - "San Bruno has no dedicated moving-boxes page; search uses Your Three Carts and the existing moving article"
         - "Open /Search?q=I%20am%20moving%20to%20San%20Bruno%20area.%20What%20are%20my%20options%20for%20waste%20management"
         - "Optional: wire Regional HeaderST for San Bruno like American Canyon"
         - "Approve Draft workflow on recreated news Pages if required before publish"

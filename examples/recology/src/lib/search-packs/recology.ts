@@ -9,6 +9,7 @@ export const recologySearchPack: SearchPack = {
   popularSearches: [
     'San Bruno',
     'moving',
+    'moving boxes',
     'Pay My Bill',
     'recycling',
     'compost',
@@ -28,6 +29,7 @@ export const recologySearchPack: SearchPack = {
       href: '/News/Moving-to-San-Bruno-Waste-Management-Options',
       topic: 'Locations',
       type: 'Q&A',
+      region: 'Recology San Bruno',
       keywords: [
         'san bruno',
         'moving',
@@ -111,6 +113,85 @@ export const recologySearchPack: SearchPack = {
         { label: 'All locations', href: '/Location' },
         { label: 'San Bruno', href: '/Location/Recology-San-Bruno' },
         { label: 'American Canyon', href: '/Location/Recology-American-Canyon' },
+      ],
+    },
+    {
+      id: 'qa-moving-boxes',
+      title: 'What do I do with moving boxes?',
+      summary:
+        'Flatten clean cardboard and put it in the blue recycling cart. Keep plastic wrap, foam, and packing peanuts out of recycling.',
+      answer:
+        'Flatten clean, dry cardboard moving boxes and place them in the blue recycling cart. If the cart is full, bundle extra flattened boxes with twine and set them beside the cart. Plastic film, bubble wrap, foam peanuts, and tape do not belong in recycling. Food-soiled paper can go in the green organics cart. Choose your region for the local cart guide.',
+      href: '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes',
+      topic: 'Resources',
+      type: 'Q&A',
+      region: '',
+      keywords: [
+        'moving boxes',
+        'cardboard',
+        'boxes',
+        'flatten',
+        'blue cart',
+        'recycling',
+        'packing',
+        'bubble wrap',
+      ],
+      relatedLinks: [
+        {
+          label: 'American Canyon moving boxes',
+          href: '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes',
+        },
+        { label: 'What Bin — American Canyon', href: '/Location/Recology-American-Canyon/Helpful-Resources/What-Bin' },
+        { label: 'Your Three Carts — San Bruno', href: '/Location/Recology-San-Bruno/All-Services/Your-Three-Carts' },
+        {
+          label: 'Moving to San Bruno guide',
+          href: '/News/Moving-to-San-Bruno-Waste-Management-Options',
+        },
+      ],
+      featured: true,
+    },
+    {
+      id: 'qa-moving-boxes-american-canyon',
+      title: 'What do I do with moving boxes in American Canyon?',
+      summary: 'American Canyon: flattened cardboard goes in the blue recycling cart.',
+      answer:
+        'In American Canyon, flatten clean cardboard moving boxes and put them in the blue recycling cart. Bundle extras with twine beside the cart if it is full. Plastic film, bubble wrap, and foam peanuts stay out of recycling. Use What Bin if you are unsure about a packing material, and Your Cart if you need a larger recycling cart after the move.',
+      href: '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes',
+      topic: 'Resources',
+      type: 'Q&A',
+      region: 'Recology American Canyon',
+      keywords: ['moving boxes', 'cardboard', 'boxes', 'american canyon', 'blue cart', 'recycling', 'flatten'],
+      relatedLinks: [
+        {
+          label: 'Moving boxes guide',
+          href: '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes',
+        },
+        { label: 'What Bin', href: '/Location/Recology-American-Canyon/Helpful-Resources/What-Bin' },
+        { label: 'Your Cart', href: '/Location/Recology-American-Canyon/All-Services/Your-Cart' },
+        {
+          label: 'Sorting guides',
+          href: '/Location/Recology-American-Canyon/Helpful-Resources/Sorting-Guides-and-Resources',
+        },
+      ],
+    },
+    {
+      id: 'qa-moving-boxes-san-bruno',
+      title: 'What do I do with moving boxes in San Bruno?',
+      summary: 'San Bruno: cardboard from a move goes in the blue recycling cart.',
+      answer:
+        'In San Bruno, break down clean cardboard moving boxes and place them in the blue recycling cart. Bundle leftover flattened boxes beside the cart on collection day. Plastic wrap and foam do not go in the blue cart. The three-cart guide covers compost, recycling, and garbage, and customer service at 650.583.8536 can help if you need a larger cart after you move.',
+      href: '/Location/Recology-San-Bruno/All-Services/Your-Three-Carts',
+      topic: 'Resources',
+      type: 'Q&A',
+      region: 'Recology San Bruno',
+      keywords: ['moving boxes', 'cardboard', 'boxes', 'san bruno', 'blue cart', 'recycling', 'flatten'],
+      relatedLinks: [
+        { label: 'Your Three Carts', href: '/Location/Recology-San-Bruno/All-Services/Your-Three-Carts' },
+        { label: 'San Bruno FAQ', href: '/Location/Recology-San-Bruno/Customer-Service/FAQ' },
+        {
+          label: 'Moving to San Bruno guide',
+          href: '/News/Moving-to-San-Bruno-Waste-Management-Options',
+        },
       ],
     },
 
@@ -237,7 +318,18 @@ export const recologySearchPack: SearchPack = {
       href: '/Location/Recology-San-Bruno/All-Services/Your-Three-Carts',
       topic: 'Services',
       type: 'Guide',
-      keywords: ['san bruno', 'carts', 'rates', 'compost', 'recycling', 'garbage'],
+      keywords: [
+        'san bruno',
+        'carts',
+        'rates',
+        'compost',
+        'recycling',
+        'garbage',
+        'moving boxes',
+        'cardboard',
+        'boxes',
+        'blue cart',
+      ],
     },
     {
       id: 'sb-faq',
@@ -287,6 +379,7 @@ export const recologySearchPack: SearchPack = {
       href: '/Location/Recology-American-Canyon/All-Services/Your-Cart',
       topic: 'Services',
       type: 'Guide',
+      keywords: ['american canyon', 'cart', 'moving boxes', 'cardboard', 'recycling'],
     },
     {
       id: 'ac-residential-rates',
@@ -319,6 +412,7 @@ export const recologySearchPack: SearchPack = {
       href: '/Location/Recology-American-Canyon/Helpful-Resources/Sorting-Guides-and-Resources',
       topic: 'Resources',
       type: 'Guide',
+      keywords: ['american canyon', 'sorting', 'cardboard', 'moving boxes', 'boxes'],
     },
     {
       id: 'ac-what-bin',
@@ -327,7 +421,7 @@ export const recologySearchPack: SearchPack = {
       href: '/Location/Recology-American-Canyon/Helpful-Resources/What-Bin',
       topic: 'Resources',
       type: 'Guide',
-      keywords: ['what bin', 'sorting'],
+      keywords: ['what bin', 'sorting', 'moving boxes', 'cardboard', 'boxes', 'american canyon'],
     },
     {
       id: 'ac-news-events',
@@ -355,9 +449,13 @@ export const recologySearchPack: SearchPack = {
       href: '/News/Moving-to-San-Bruno-Waste-Management-Options',
       topic: 'News',
       type: 'News',
+      region: 'Recology San Bruno',
       keywords: [
         'san bruno',
         'moving',
+        'moving boxes',
+        'cardboard',
+        'boxes',
         'waste management',
         'options',
         'relocate',
@@ -374,7 +472,7 @@ export const recologySearchPack: SearchPack = {
       href: '/News/Understanding-Your-Three-Cart-Options-When-You-Relocate',
       topic: 'News',
       type: 'News',
-      keywords: ['moving', 'relocate', 'three carts', 'waste management', 'article'],
+      keywords: ['moving', 'moving boxes', 'cardboard', 'boxes', 'relocate', 'three carts', 'waste management', 'article'],
     },
     {
       id: 'news-sb-welcome',
@@ -397,6 +495,26 @@ export const recologySearchPack: SearchPack = {
       keywords: ['american canyon', 'organics', 'compost', 'landfill'],
     },
     {
+      id: 'news-ac-moving-boxes',
+      title: 'What to Do with Moving Boxes',
+      summary:
+        'American Canyon guide: flatten clean cardboard into the blue recycling cart, and keep plastic film and foam out.',
+      href: '/Location/Recology-American-Canyon/In-My-Community/News-and-Events/What-to-Do-with-Moving-Boxes',
+      topic: 'News',
+      type: 'News',
+      keywords: [
+        'american canyon',
+        'moving boxes',
+        'cardboard',
+        'boxes',
+        'blue cart',
+        'recycling',
+        'flatten',
+        'packing',
+      ],
+      featured: true,
+    },
+    {
       id: 'news-coat-drive',
       title: 'Donate Coats to our 30th Annual Winter Coat Drive',
       summary:
@@ -404,6 +522,7 @@ export const recologySearchPack: SearchPack = {
       href: '/News/Donate-Coats-to-our-30th-Annual-Winter-Coat-Drive',
       topic: 'News',
       type: 'News',
+      region: 'Recology San Bruno',
       keywords: ['san bruno', 'coat drive', 'community'],
     },
     {

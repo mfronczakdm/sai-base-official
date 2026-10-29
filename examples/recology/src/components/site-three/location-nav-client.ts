@@ -4,6 +4,50 @@ import { useLayoutEffect, useState } from 'react';
 import type { LocationNavResult } from '@/lib/location-nav-from-edge';
 
 const NAV_CACHE_PREFIX = 'recology-location-nav:v1';
+const REMEMBERED_LOCATION_KEY = 'recology-remembered-location:v1';
+
+type RememberedLocation = { itemId: string; language: string };
+
+/** Last LocationItem the visitor opened. Shared by the global and regional headers. */
+let rememberedLocation: RememberedLocation | null = null;
+
+export const rememberLocation = (itemId: string, language: string) => {
+  const next = { itemId, language };
+  rememberedLocation = next;
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.setItem(REMEMBERED_LOCATION_KEY, JSON.stringify(next));
+  } catch {
+    // The in-memory value still covers this tab.
+  }
+};
+
+export const readRememberedLocationId = (language: string): string | undefined => {
+  if (rememberedLocation?.language === language && rememberedLocation.itemId) {
+    return rememberedLocation.itemId;
+  }
+  if (typeof window === 'undefined') return undefined;
+  try {
+    const raw = window.sessionStorage.getItem(REMEMBERED_LOCATION_KEY);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw) as RememberedLocation;
+    if (parsed?.language !== language || !parsed.itemId) return undefined;
+    rememberedLocation = parsed;
+    return parsed.itemId;
+  } catch {
+    return undefined;
+  }
+};
+
+export const clearRememberedLocation = () => {
+  rememberedLocation = null;
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.removeItem(REMEMBERED_LOCATION_KEY);
+  } catch {
+    // Ignore storage failures in tests and private browsing.
+  }
+};
 
 /** Survives client navigations in this tab. sessionStorage covers full page loads. */
 const memoryNavCache = new Map<string, LocationNavResult>();
@@ -71,6 +115,29 @@ export const loadLocationNav = (
 
   pendingNavLoads.set(key, request);
   return request;
+};
+
+/** Item id of the last location, used when the current page is not under a LocationItem. */
+export const useRememberedLocationId = (language: string, enabled: boolean): string | undefined => {
+  const [itemId, setItemId] = useState<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    setItemId(enabled ? readRememberedLocationId(language) : undefined);
+  }, [enabled, language]);
+
+  return itemId;
+};
+
+/** Remember a location once its nav has loaded, so later pages can show the same place. */
+export const useRememberCurrentLocation = (
+  itemId: string | undefined,
+  language: string,
+  nav: LocationNavResult | null
+) => {
+  useLayoutEffect(() => {
+    if (!itemId || !nav?.locationHref) return;
+    rememberLocation(itemId, language);
+  }, [itemId, language, nav]);
 };
 
 export const useLocationNav = (itemId?: string, language = 'en'): LocationNavResult | null => {

@@ -1,9 +1,26 @@
 import { recologySearchPack } from './recology';
-import { facetCounts, findQaAnswers, rankSearchPackItems, searchPackItems, tokenizeQuery } from './search';
+import {
+  facetCounts,
+  findQaAnswers,
+  itemRegion,
+  rankSearchPackItems,
+  regionFromHref,
+  searchPackItems,
+  tokenizeQuery,
+} from './search';
 import type { SearchPack, SearchResultItem } from './types';
 
 export type { SearchFacetKey, SearchPack, SearchResultItem, ScoredSearchResult } from './types';
-export { facetCounts, findQaAnswers, rankSearchPackItems, searchPackItems, tokenizeQuery };
+export type { SearchFilters } from './search';
+export {
+  facetCounts,
+  findQaAnswers,
+  itemRegion,
+  rankSearchPackItems,
+  regionFromHref,
+  searchPackItems,
+  tokenizeQuery,
+};
 
 const packs: Record<string, SearchPack> = {
   [recologySearchPack.siteName]: recologySearchPack,
