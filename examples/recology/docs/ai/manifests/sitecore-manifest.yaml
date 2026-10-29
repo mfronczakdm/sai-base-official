@@ -14148,7 +14148,10 @@ externalImageOptimizerAudit:
       docs/ai/regional-faq.md. 2026-10-28: data-mgmt-app self-heals a missing
       Regional FAQ Collection (plus one UseGlobal configuration per Global FAQ)
       when FAQs are opened for a LocationItem. Does not retarget the page
-      RegionalFAQ datasource.
+      RegionalFAQ datasource. 2026-10-29: first three American Canyon
+      configurations (Find Service Area, Report Missed Pickup, Cart Placement)
+      are AddRegionalInformation with Regional Supporting Information that
+      names American Canyon.
     react:
       filePath: "src/components/uiim/faq/RegionalFAQ.tsx"
       propsPath: "src/components/uiim/faq/regional-faq.props.ts"

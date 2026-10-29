@@ -77,9 +77,9 @@ Behavior = Exclude from this region. The FAQ will not appear for that collection
 
 | Global FAQ | Behavior |
 |---|---|
-| How do I find my service area? | UseGlobal |
+| How do I find my service area? | AddRegionalInformation |
 | How do I report a missed pickup? | AddRegionalInformation |
-| How should carts be placed at the curb? | UseGlobal |
+| How should carts be placed at the curb? | AddRegionalInformation |
 | How do I search for an accepted material? | UseGlobal |
 | How do I contact customer service? | AddRegionalInformation |
 | What should I do with hazardous materials? | Exclude |
